@@ -1,0 +1,14 @@
+[
+  {
+    "username": "ryan",
+    "password": "ryan2026",
+    "role": "admin",
+    "createdAt": "2026-01-23"
+  },
+  {
+    "username": "jonzey",
+    "password": "jonzey2026",
+    "role": "admin",
+    "createdAt": "2026-01-23"
+  }
+]

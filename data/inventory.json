@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1768886099797,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2026,
+    "price": 10000,
+    "mileage": 120000,
+    "vin": "1111111111111",
+    "description": "test",
+    "features": [],
+    "image": "/uploads/1768886093698-boredv6alt.png",
+    "images": [
+      "/uploads/1768886093698-boredv6alt.png"
+    ],
+    "video": "",
+    "youtubeUrl": "",
+    "trending": false,
+    "status": "Sold",
+    "type": "Sedan",
+    "specs": {
+      "Engine": "V12",
+      "Transmission": "Automatic",
+      "Drivetrain": "4WD",
+      "Fuel": "Gasoline",
+      "Color": ""
+    }
+  }
+]
