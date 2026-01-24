@@ -96,7 +96,28 @@ img {
   background-color: #0056b3;
 }
 
-/* Mobile Responsiveness */
+/* Mobile Responsiveness - Tablet */
+@media (max-width: 992px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  /* Grid layouts become 2 columns */
+  .inventory-grid,
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Mobile Responsiveness - Phone */
 @media (max-width: 768px) {
   .navbar .container {
     flex-wrap: wrap;
@@ -128,16 +149,87 @@ img {
     font-size: 1.75rem !important;
   }
 
+  h2 {
+    font-size: 1.25rem !important;
+  }
+
   .vehicle-card {
     margin-bottom: 20px;
   }
 
   .inventory-grid,
-  .details-grid {
+  .details-grid,
+  .blog-grid {
     grid-template-columns: 1fr !important;
   }
 
   .hide-on-mobile {
     display: none !important;
+  }
+
+  /* Hero section mobile */
+  section[style*="padding: 6rem"] {
+    padding: 3rem 0 !important;
+  }
+
+  /* Cards grid mobile */
+  div[style*="gridTemplateColumns: repeat(2, 1fr)"],
+  div[style*="gridTemplateColumns: repeat(3, 1fr)"],
+  div[style*="gridTemplateColumns: repeat(4, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Buttons full width on mobile */
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Footer mobile */
+  footer .container>div[style*="display: flex"] {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Form inputs full width */
+  input,
+  select,
+  textarea {
+    width: 100% !important;
+  }
+
+  /* Quick actions wrap */
+  div[style*="display: flex"][style*="gap: 1rem"] {
+    flex-wrap: wrap;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.1rem !important;
+  }
+
+  .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Reduce padding on sections */
+  section {
+    padding: 2rem 0 !important;
+  }
+
+  /* Admin cards stack */
+  div[style*="gridTemplateColumns: repeat(auto-fit"] {
+    grid-template-columns: 1fr !important;
   }
 }
