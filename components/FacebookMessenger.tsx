@@ -2,19 +2,20 @@
 
 import { useState } from 'react';
 
-// Facebook Messenger floating button
-// Links directly to your Facebook page Messenger
+// Facebook floating button
+// Links directly to your Facebook page
 
-const FACEBOOK_PAGE_USERNAME = 'ryansautosolution';
+const FACEBOOK_PAGE_ID = '683212018213046';
 
 export default function FacebookMessenger() {
     const [isHovered, setIsHovered] = useState(false);
 
-    const messengerUrl = `https://m.me/${FACEBOOK_PAGE_USERNAME}`;
+    // Link to Facebook page - works for all users
+    const facebookUrl = `https://www.facebook.com/${FACEBOOK_PAGE_ID}`;
 
     return (
         <a
-            href={messengerUrl}
+            href={facebookUrl}
             target="_blank"
             rel="noopener noreferrer"
             onMouseEnter={() => setIsHovered(true)}
@@ -39,9 +40,9 @@ export default function FacebookMessenger() {
                 textDecoration: 'none',
                 color: '#fff'
             }}
-            title="Chat with us on Messenger"
+            title="Message us on Facebook"
         >
-            {/* Messenger Icon */}
+            {/* Facebook Icon */}
             <svg
                 width="28"
                 height="28"
@@ -57,7 +58,7 @@ export default function FacebookMessenger() {
                     fontSize: '14px',
                     whiteSpace: 'nowrap'
                 }}>
-                    Chat with us
+                    Message Us
                 </span>
             )}
         </a>
