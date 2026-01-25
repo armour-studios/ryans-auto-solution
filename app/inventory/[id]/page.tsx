@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import VehicleCard from '@/components/VehicleCard';
 
 export async function generateStaticParams() {
-    const inventory = getInventory();
+    const inventory = await getInventory();
     return inventory.map((vehicle) => ({
         id: vehicle.id.toString(),
     }));
@@ -13,14 +13,14 @@ export async function generateStaticParams() {
 
 export default async function VehicleDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const vehicle = getVehicleById(parseInt(id));
+    const vehicle = await getVehicleById(parseInt(id));
 
     if (!vehicle) {
         notFound();
     }
 
     // specific type explicit cast for filtering
-    const allInventory = getInventory();
+    const allInventory = await getInventory();
     const relatedVehicles = allInventory
         .filter(v => v.type === vehicle.type && v.id !== vehicle.id)
         .slice(0, 3);

@@ -7,8 +7,8 @@ export const metadata = {
     description: 'Latest automotive news, tips, and inventory updates from Ryan\'s Auto Solution.',
 };
 
-export default function BlogPage() {
-    const allPosts = getBlogPosts();
+export default async function BlogPage() {
+    const allPosts = await getBlogPosts();
     // Sort by date desc
     const sortedPosts = [...allPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
@@ -24,7 +24,7 @@ export default function BlogPage() {
             <div className="container">
                 <header style={{ marginBottom: '4rem', textAlign: 'center' }}>
                     <h1 style={{ fontSize: '3rem', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '2px' }}>
-                        Latest News <span style={{ color: 'var(--primary-color)' }}>& Tips</span>
+                        Latest News <span style={{ color: 'var(--primary-color)' }}>&amp; Tips</span>
                     </h1>
                     <p style={{ color: '#888', fontSize: '1.1rem' }}>Insights from the auto experts at Ryan's Auto Solution</p>
                     <div style={{ width: '60px', height: '4px', backgroundColor: 'var(--primary-color)', margin: '1.5rem auto 0' }}></div>

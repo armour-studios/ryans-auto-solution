@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FormSteps } from './FormSteps';
@@ -37,6 +37,8 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
     const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
     const [uploading, setUploading] = useState(false);
+    const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+    const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
     const [formData, setFormData] = useState<VehicleFormData>(initialData ? {
         ...initialData,
@@ -120,6 +122,64 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
         }
     };
 
+    // Drag and drop handlers
+    const handleDragStart = (e: React.DragEvent, index: number) => {
+        setDraggedIndex(index);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e: React.DragEvent, index: number) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        setDragOverIndex(index);
+    };
+
+    const handleDragEnd = () => {
+        setDraggedIndex(null);
+        setDragOverIndex(null);
+    };
+
+    const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+        e.preventDefault();
+        if (draggedIndex === null || draggedIndex === dropIndex) {
+            handleDragEnd();
+            return;
+        }
+
+        const newImages = [...formData.images];
+        const [draggedImage] = newImages.splice(draggedIndex, 1);
+        newImages.splice(dropIndex, 0, draggedImage);
+
+        setFormData(prev => ({
+            ...prev,
+            images: newImages,
+            image: newImages[0] // First image is always the main image
+        }));
+
+        handleDragEnd();
+    };
+
+    const handleSetAsMain = (index: number) => {
+        const newImages = [...formData.images];
+        const [mainImage] = newImages.splice(index, 1);
+        newImages.unshift(mainImage);
+
+        setFormData(prev => ({
+            ...prev,
+            images: newImages,
+            image: mainImage
+        }));
+    };
+
+    const handleRemoveImage = (index: number) => {
+        const newImages = formData.images.filter((_, i) => i !== index);
+        setFormData(prev => ({
+            ...prev,
+            images: newImages,
+            image: newImages[0] || '' // Update main image to first remaining
+        }));
+    };
+
     const handleSubmit = async () => {
         const payload = {
             ...formData,
@@ -136,11 +196,14 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
+
+            const json = await res.json();
+
             if (res.ok) {
                 router.push('/admin/inventory');
                 router.refresh();
             } else {
-                alert('Failed to save');
+                alert(json.error || 'Failed to save');
             }
         } catch (err) {
             console.error(err);
@@ -254,14 +317,129 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label>Photos</label>
                             <input type="file" multiple onChange={handleImageUpload} accept="image/*" className="form-input" />
-                            {uploading && <span>Uploading...</span>}
-                            <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', marginTop: '1rem' }}>
+                            {uploading && <span style={{ color: 'var(--primary-color)', marginLeft: '0.5rem' }}>Uploading...</span>}
+
+                            <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '0.5rem' }}>
+                                Drag images to reorder • First image = Main photo • Click ⭐ to set as main
+                            </p>
+
+                            {/* Draggable Image Grid */}
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                                gap: '0.75rem',
+                                marginTop: '1rem'
+                            }}>
                                 {formData.images.map((img, idx) => (
-                                    <div key={idx} style={{ position: 'relative', width: '100px', height: '80px', flexShrink: 0 }}>
-                                        <Image src={img} alt={`img-${idx}`} fill style={{ objectFit: 'cover', borderRadius: '4px', border: idx === 0 ? '2px solid var(--primary-color)' : 'none' }} />
+                                    <div
+                                        key={img + idx}
+                                        draggable
+                                        onDragStart={(e) => handleDragStart(e, idx)}
+                                        onDragOver={(e) => handleDragOver(e, idx)}
+                                        onDragEnd={handleDragEnd}
+                                        onDrop={(e) => handleDrop(e, idx)}
+                                        style={{
+                                            position: 'relative',
+                                            aspectRatio: '4/3',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            cursor: 'grab',
+                                            border: idx === 0 ? '3px solid var(--primary-color)' : '2px solid #444',
+                                            opacity: draggedIndex === idx ? 0.5 : 1,
+                                            transform: dragOverIndex === idx && draggedIndex !== idx ? 'scale(1.05)' : 'scale(1)',
+                                            transition: 'transform 0.2s, border-color 0.2s',
+                                            boxShadow: dragOverIndex === idx ? '0 0 10px var(--primary-color)' : 'none'
+                                        }}
+                                    >
+                                        <Image
+                                            src={img}
+                                            alt={`Vehicle photo ${idx + 1}`}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                            draggable={false}
+                                        />
+
+                                        {/* Main Badge */}
+                                        {idx === 0 && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 4,
+                                                left: 4,
+                                                backgroundColor: 'var(--primary-color)',
+                                                color: '#000',
+                                                padding: '2px 6px',
+                                                borderRadius: '4px',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 'bold'
+                                            }}>
+                                                MAIN
+                                            </div>
+                                        )}
+
+                                        {/* Action buttons */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            display: 'flex',
+                                            gap: '2px',
+                                            padding: '4px',
+                                            background: 'linear-gradient(transparent, rgba(0,0,0,0.8))'
+                                        }}>
+                                            {idx !== 0 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleSetAsMain(idx)}
+                                                    title="Set as main photo"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '4px',
+                                                        backgroundColor: 'rgba(255,255,255,0.2)',
+                                                        border: 'none',
+                                                        borderRadius: '4px',
+                                                        color: '#fff',
+                                                        cursor: 'pointer',
+                                                        fontSize: '0.75rem'
+                                                    }}
+                                                >
+                                                    ⭐
+                                                </button>
+                                            )}
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveImage(idx)}
+                                                title="Remove photo"
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '4px',
+                                                    backgroundColor: 'rgba(201, 42, 55, 0.8)',
+                                                    border: 'none',
+                                                    borderRadius: '4px',
+                                                    color: '#fff',
+                                                    cursor: 'pointer',
+                                                    fontSize: '0.75rem'
+                                                }}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
+
+                            {formData.images.length === 0 && (
+                                <div style={{
+                                    textAlign: 'center',
+                                    padding: '2rem',
+                                    backgroundColor: '#333',
+                                    borderRadius: '8px',
+                                    marginTop: '1rem',
+                                    color: '#666'
+                                }}>
+                                    No photos uploaded yet
+                                </div>
+                            )}
                         </div>
 
                         <div style={{ marginBottom: '1.5rem' }}>

@@ -1,9 +1,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getTestimonials } from '@/lib/testimonials';
+import { getInventory } from '@/lib/inventory';
+import FeaturedVehicles from '@/components/FeaturedVehicles';
 
-export default function Home() {
-  const testimonials = getTestimonials().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3); // Get top 3 latest
+export default async function Home() {
+  const allTestimonials = await getTestimonials();
+  const testimonials = allTestimonials.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3);
+
+  // Get featured/trending vehicles
+  const inventory = await getInventory();
+  const featuredVehicles = inventory.filter(v => v.trending && v.status === 'Available').slice(0, 6);
 
   return (
     <main>
@@ -54,6 +61,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Featured Vehicles Carousel */}
+      {featuredVehicles.length > 0 && (
+        <FeaturedVehicles vehicles={featuredVehicles} />
+      )}
 
       {/* Features Section */}
       <section style={{ padding: '4rem 0', backgroundColor: '#000' }}>

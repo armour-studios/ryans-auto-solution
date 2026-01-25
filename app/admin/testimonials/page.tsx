@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import { getTestimonials } from '@/lib/testimonials';
+import DeleteButton from '@/components/DeleteButton';
 
 export const metadata = {
     title: 'Manage Testimonials | Admin',
 };
 
-export default function AdminTestimonialsPage() {
-    const testimonials = getTestimonials();
+export const dynamic = 'force-dynamic';
+
+export default async function AdminTestimonialsPage() {
+    const testimonials = await getTestimonials();
 
     // Sort by date desc
     const sortedTestimonials = [...testimonials].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -45,14 +48,11 @@ export default function AdminTestimonialsPage() {
                                 <p style={{ color: '#ccc', fontStyle: 'italic', marginBottom: '1.5rem', lineHeight: '1.6' }}>
                                     "{t.content.length > 100 ? t.content.substring(0, 100) + '...' : t.content}"
                                 </p>
-                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                     <Link href={`/admin/testimonials/edit/${t.id}`} className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}>
                                         Edit
                                     </Link>
-                                    <form action={`/api/testimonials/${t.id}`} method="POST" style={{ display: 'inline' }}>
-                                        {/* Note: In a real app we'd use a client component for delete or a server action. For simplicity, we'll assume the edit page has delete or use a client deletion button component. Actually, let's just use the edit page to delete or keep it simple. */}
-                                    </form>
-                                    {/* Since delete needs JS or a form action, let's stick to Edit for now which can have a delete button inside or just Link to edit. */}
+                                    <DeleteButton id={t.id} endpoint="/api/testimonials" itemName="this testimonial" />
                                 </div>
                             </div>
                         ))}

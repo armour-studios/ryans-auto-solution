@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 
 export async function generateStaticParams() {
-    const posts = getBlogPosts();
+    const posts = await getBlogPosts();
     return posts.map((post) => ({
         slug: post.slug,
     }));
@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
-    const post = getBlogPostBySlug(slug);
+    const post = await getBlogPostBySlug(slug);
     if (!post) return { title: 'Blog Not Found' };
 
     return {
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const post = getBlogPostBySlug(slug);
+    const post = await getBlogPostBySlug(slug);
 
     if (!post) {
         notFound();

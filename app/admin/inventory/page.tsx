@@ -6,8 +6,10 @@ export const metadata = {
     title: 'Inventory Management',
 };
 
-export default function InventoryAdminPage() {
-    const inventory = getInventory();
+export const dynamic = 'force-dynamic'; // Always fetch fresh data
+
+export default async function InventoryAdminPage() {
+    const inventory = await getInventory();
 
     return (
         <div style={{ padding: '4rem 0' }}>

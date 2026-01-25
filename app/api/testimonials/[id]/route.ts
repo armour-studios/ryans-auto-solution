@@ -5,7 +5,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     try {
         const { id } = await params;
         const body = await request.json();
-        const testimonials = getTestimonials();
+        const testimonials = await getTestimonials();
         const index = testimonials.findIndex(t => t.id === Number(id));
 
         if (index === -1) {
@@ -13,10 +13,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         }
 
         testimonials[index] = { ...testimonials[index], ...body, id: Number(id) };
-        saveTestimonials(testimonials);
+        await saveTestimonials(testimonials);
 
         return NextResponse.json(testimonials[index]);
     } catch (error) {
+        console.error('Error updating testimonial:', error);
         return NextResponse.json({ error: 'Failed to update testimonial' }, { status: 500 });
     }
 }
@@ -24,12 +25,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
-        const testimonials = getTestimonials();
+        const testimonials = await getTestimonials();
         const filtered = testimonials.filter(t => t.id !== Number(id));
-        saveTestimonials(filtered);
+        await saveTestimonials(filtered);
 
         return NextResponse.json({ success: true });
     } catch (error) {
+        console.error('Error deleting testimonial:', error);
         return NextResponse.json({ error: 'Failed to delete testimonial' }, { status: 500 });
     }
 }

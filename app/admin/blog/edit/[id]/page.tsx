@@ -6,9 +6,11 @@ export const metadata = {
     title: 'Edit Blog Post',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditBlogPostPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const post = getBlogPostById(parseInt(id));
+    const post = await getBlogPostById(parseInt(id));
 
     if (!post) {
         notFound();

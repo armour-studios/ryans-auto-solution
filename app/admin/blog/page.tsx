@@ -6,8 +6,10 @@ export const metadata = {
     title: 'Blog Management',
 };
 
-export default function BlogAdminPage() {
-    const blogPosts = getBlogPosts();
+export const dynamic = 'force-dynamic';
+
+export default async function BlogAdminPage() {
+    const blogPosts = await getBlogPosts();
 
     return (
         <div style={{ padding: '4rem 0' }}>
