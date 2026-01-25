@@ -30,30 +30,36 @@ function getRedisClient(): Redis | null {
     // Check for various Upstash/Vercel KV environment variable patterns
     const url = process.env.KV_REST_API_URL ||
         process.env.UPSTASH_REDIS_REST_URL ||
+        process.env.KV_URL ||
         process.env.REDIS_URL;
     const token = process.env.KV_REST_API_TOKEN ||
         process.env.UPSTASH_REDIS_REST_TOKEN ||
+        process.env.KV_TOKEN ||
         process.env.REDIS_TOKEN;
 
+    console.log('[Redis] URL env check:', url ? 'Found' : 'Not found');
+    console.log('[Redis] Token env check:', token ? 'Found' : 'Not found');
+
     if (url && token && !url.includes('provisioning')) {
-        return new Redis({ url, token });
+        try {
+            return new Redis({ url, token });
+        } catch (e) {
+            console.error('[Redis] Failed to create client:', e);
+            return null;
+        }
     }
     return null;
 }
 
-// Check if we have a working Redis connection
-const hasRedis = () => {
-    const client = getRedisClient();
-    return client !== null;
-};
+// Check if we're on Vercel (read-only filesystem)
+const isVercel = () => Boolean(process.env.VERCEL);
 
-// Local filesystem functions
+// Check if we have a working Redis connection
+const hasRedis = () => getRedisClient() !== null;
+
+// Local filesystem functions (only works locally, not on Vercel)
 function getInventoryLocal(): Vehicle[] {
     if (!fs.existsSync(dataFilePath)) {
-        return [];
-    }
-    const fileStats = fs.statSync(dataFilePath);
-    if (fileStats.size === 0) {
         return [];
     }
     try {
@@ -89,7 +95,9 @@ async function getInventoryRedis(): Promise<Vehicle[]> {
 
 async function saveInventoryRedis(inventory: Vehicle[]) {
     const redis = getRedisClient();
-    if (!redis) throw new Error('Redis not configured');
+    if (!redis) {
+        throw new Error('Redis not configured. Please set up Vercel KV or Upstash Redis.');
+    }
 
     await redis.set(KV_KEY, inventory);
 }
@@ -97,15 +105,22 @@ async function saveInventoryRedis(inventory: Vehicle[]) {
 // Export unified async functions
 export async function getInventory(): Promise<Vehicle[]> {
     if (hasRedis()) {
+        console.log('[Inventory] Using Redis');
         return getInventoryRedis();
     }
+    console.log('[Inventory] Using Local filesystem');
     return getInventoryLocal();
 }
 
 export async function saveInventory(inventory: Vehicle[]) {
     if (hasRedis()) {
+        console.log('[Inventory] Saving to Redis');
         await saveInventoryRedis(inventory);
+    } else if (isVercel()) {
+        // On Vercel without Redis, we can't save
+        throw new Error('Database not configured. Please set up Vercel KV in your Vercel dashboard: Project → Storage → Create Database → KV');
     } else {
+        console.log('[Inventory] Saving to Local filesystem');
         saveInventoryLocal(inventory);
     }
 }
