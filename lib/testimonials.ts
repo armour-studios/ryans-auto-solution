@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import fs from 'fs';
 import path from 'path';
 
@@ -14,10 +14,22 @@ export type Testimonial = {
 const dataFilePath = path.join(process.cwd(), 'data/testimonials.json');
 const KV_KEY = 'testimonials';
 
-// Check if we're running on Vercel with KV configured
-const isVercelKV = () => {
-    return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
-};
+// Create Redis client with flexible env var detection
+function getRedisClient(): Redis | null {
+    const url = process.env.KV_REST_API_URL ||
+        process.env.UPSTASH_REDIS_REST_URL ||
+        process.env.REDIS_URL;
+    const token = process.env.KV_REST_API_TOKEN ||
+        process.env.UPSTASH_REDIS_REST_TOKEN ||
+        process.env.REDIS_TOKEN;
+
+    if (url && token && !url.includes('provisioning')) {
+        return new Redis({ url, token });
+    }
+    return null;
+}
+
+const hasRedis = () => getRedisClient() !== null;
 
 // Local filesystem functions
 function getTestimonialsLocal(): Testimonial[] {
@@ -34,7 +46,6 @@ function getTestimonialsLocal(): Testimonial[] {
 }
 
 function saveTestimonialsLocal(testimonials: Testimonial[]) {
-    // Ensure data directory exists
     const dir = path.dirname(dataFilePath);
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
@@ -42,32 +53,38 @@ function saveTestimonialsLocal(testimonials: Testimonial[]) {
     fs.writeFileSync(dataFilePath, JSON.stringify(testimonials, null, 2));
 }
 
-// Vercel KV functions
-async function getTestimonialsKV(): Promise<Testimonial[]> {
+// Redis functions
+async function getTestimonialsRedis(): Promise<Testimonial[]> {
+    const redis = getRedisClient();
+    if (!redis) return [];
+
     try {
-        const data = await kv.get<Testimonial[]>(KV_KEY);
+        const data = await redis.get<Testimonial[]>(KV_KEY);
         return data || [];
     } catch (error) {
-        console.error("Error reading testimonials from KV:", error);
+        console.error("Error reading testimonials from Redis:", error);
         return [];
     }
 }
 
-async function saveTestimonialsKV(testimonials: Testimonial[]) {
-    await kv.set(KV_KEY, testimonials);
+async function saveTestimonialsRedis(testimonials: Testimonial[]) {
+    const redis = getRedisClient();
+    if (!redis) throw new Error('Redis not configured');
+
+    await redis.set(KV_KEY, testimonials);
 }
 
 // Export unified async functions
 export async function getTestimonials(): Promise<Testimonial[]> {
-    if (isVercelKV()) {
-        return getTestimonialsKV();
+    if (hasRedis()) {
+        return getTestimonialsRedis();
     }
     return getTestimonialsLocal();
 }
 
 export async function saveTestimonials(testimonials: Testimonial[]) {
-    if (isVercelKV()) {
-        await saveTestimonialsKV(testimonials);
+    if (hasRedis()) {
+        await saveTestimonialsRedis(testimonials);
     } else {
         saveTestimonialsLocal(testimonials);
     }

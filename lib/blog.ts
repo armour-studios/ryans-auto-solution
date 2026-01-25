@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import fs from 'fs';
 import path from 'path';
 
@@ -19,10 +19,22 @@ export type BlogPost = {
 const dataFilePath = path.join(process.cwd(), 'data/blog.json');
 const KV_KEY = 'blog_posts';
 
-// Check if we're running on Vercel with KV configured
-const isVercelKV = () => {
-    return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
-};
+// Create Redis client with flexible env var detection
+function getRedisClient(): Redis | null {
+    const url = process.env.KV_REST_API_URL ||
+        process.env.UPSTASH_REDIS_REST_URL ||
+        process.env.REDIS_URL;
+    const token = process.env.KV_REST_API_TOKEN ||
+        process.env.UPSTASH_REDIS_REST_TOKEN ||
+        process.env.REDIS_TOKEN;
+
+    if (url && token && !url.includes('provisioning')) {
+        return new Redis({ url, token });
+    }
+    return null;
+}
+
+const hasRedis = () => getRedisClient() !== null;
 
 // Local filesystem functions
 function getBlogPostsLocal(): BlogPost[] {
@@ -42,32 +54,38 @@ function saveBlogPostsLocal(posts: BlogPost[]) {
     fs.writeFileSync(dataFilePath, JSON.stringify(posts, null, 2));
 }
 
-// Vercel KV functions
-async function getBlogPostsKV(): Promise<BlogPost[]> {
+// Redis functions
+async function getBlogPostsRedis(): Promise<BlogPost[]> {
+    const redis = getRedisClient();
+    if (!redis) return [];
+
     try {
-        const data = await kv.get<BlogPost[]>(KV_KEY);
+        const data = await redis.get<BlogPost[]>(KV_KEY);
         return data || [];
     } catch (error) {
-        console.error("Error reading blog from KV:", error);
+        console.error("Error reading blog from Redis:", error);
         return [];
     }
 }
 
-async function saveBlogPostsKV(posts: BlogPost[]) {
-    await kv.set(KV_KEY, posts);
+async function saveBlogPostsRedis(posts: BlogPost[]) {
+    const redis = getRedisClient();
+    if (!redis) throw new Error('Redis not configured');
+
+    await redis.set(KV_KEY, posts);
 }
 
 // Export unified async functions
 export async function getBlogPosts(): Promise<BlogPost[]> {
-    if (isVercelKV()) {
-        return getBlogPostsKV();
+    if (hasRedis()) {
+        return getBlogPostsRedis();
     }
     return getBlogPostsLocal();
 }
 
 export async function saveBlogPosts(posts: BlogPost[]) {
-    if (isVercelKV()) {
-        await saveBlogPostsKV(posts);
+    if (hasRedis()) {
+        await saveBlogPostsRedis(posts);
     } else {
         saveBlogPostsLocal(posts);
     }

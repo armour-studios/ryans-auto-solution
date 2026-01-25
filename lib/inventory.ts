@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import fs from 'fs';
 import path from 'path';
 
@@ -14,8 +14,8 @@ export type Vehicle = {
     image: string;
     images: string[];
     video?: string;
-    youtubeUrl?: string; // YouTube integration
-    vin?: string; // VIN support
+    youtubeUrl?: string;
+    vin?: string;
     trending?: boolean;
     description: string;
     specs: Record<string, string>;
@@ -25,9 +25,26 @@ export type Vehicle = {
 const dataFilePath = path.join(process.cwd(), 'data/inventory.json');
 const KV_KEY = 'inventory';
 
-// Check if we're running on Vercel with KV configured
-const isVercelKV = () => {
-    return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+// Create Redis client with flexible env var detection
+function getRedisClient(): Redis | null {
+    // Check for various Upstash/Vercel KV environment variable patterns
+    const url = process.env.KV_REST_API_URL ||
+        process.env.UPSTASH_REDIS_REST_URL ||
+        process.env.REDIS_URL;
+    const token = process.env.KV_REST_API_TOKEN ||
+        process.env.UPSTASH_REDIS_REST_TOKEN ||
+        process.env.REDIS_TOKEN;
+
+    if (url && token && !url.includes('provisioning')) {
+        return new Redis({ url, token });
+    }
+    return null;
+}
+
+// Check if we have a working Redis connection
+const hasRedis = () => {
+    const client = getRedisClient();
+    return client !== null;
 };
 
 // Local filesystem functions
@@ -43,43 +60,53 @@ function getInventoryLocal(): Vehicle[] {
         const jsonData = fs.readFileSync(dataFilePath, 'utf8');
         return JSON.parse(jsonData);
     } catch (error) {
-        console.error("Error reading inventory:", error);
+        console.error("Error reading inventory data:", error);
         return [];
     }
 }
 
-function saveInventoryLocal(data: Vehicle[]) {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
+function saveInventoryLocal(inventory: Vehicle[]) {
+    const dir = path.dirname(dataFilePath);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(dataFilePath, JSON.stringify(inventory, null, 2));
 }
 
-// Vercel KV functions
-async function getInventoryKV(): Promise<Vehicle[]> {
+// Redis functions
+async function getInventoryRedis(): Promise<Vehicle[]> {
+    const redis = getRedisClient();
+    if (!redis) return [];
+
     try {
-        const data = await kv.get<Vehicle[]>(KV_KEY);
+        const data = await redis.get<Vehicle[]>(KV_KEY);
         return data || [];
     } catch (error) {
-        console.error("Error reading inventory from KV:", error);
+        console.error("Error reading inventory from Redis:", error);
         return [];
     }
 }
 
-async function saveInventoryKV(data: Vehicle[]) {
-    await kv.set(KV_KEY, data);
+async function saveInventoryRedis(inventory: Vehicle[]) {
+    const redis = getRedisClient();
+    if (!redis) throw new Error('Redis not configured');
+
+    await redis.set(KV_KEY, inventory);
 }
 
 // Export unified async functions
 export async function getInventory(): Promise<Vehicle[]> {
-    if (isVercelKV()) {
-        return getInventoryKV();
+    if (hasRedis()) {
+        return getInventoryRedis();
     }
     return getInventoryLocal();
 }
 
-export async function saveInventory(data: Vehicle[]) {
-    if (isVercelKV()) {
-        await saveInventoryKV(data);
+export async function saveInventory(inventory: Vehicle[]) {
+    if (hasRedis()) {
+        await saveInventoryRedis(inventory);
     } else {
-        saveInventoryLocal(data);
+        saveInventoryLocal(inventory);
     }
 }
 
