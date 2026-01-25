@@ -86,23 +86,35 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
     };
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files?.[0]) return;
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
         setUploading(true);
-        const file = e.target.files[0];
-        const data = new FormData();
-        data.append('file', file);
 
         try {
-            const res = await fetch('/api/upload', { method: 'POST', body: data });
-            if (!res.ok) throw new Error('Upload failed');
-            const json = await res.json();
+            const uploadPromises = Array.from(files).map(async (file) => {
+                const data = new FormData();
+                data.append('file', file);
+
+                const res = await fetch('/api/upload', { method: 'POST', body: data });
+                const json = await res.json();
+
+                if (!res.ok || !json.success) {
+                    throw new Error(json.error || 'Upload failed');
+                }
+
+                return json.url;
+            });
+
+            const uploadedUrls = await Promise.all(uploadPromises);
+
             setFormData(prev => ({
                 ...prev,
-                image: prev.image ? prev.image : json.url, // Set main if empty
-                images: [...prev.images, json.url]
+                image: prev.image || uploadedUrls[0], // Set main if empty
+                images: [...prev.images, ...uploadedUrls]
             }));
         } catch (err) {
-            alert('Error uploading image');
+            console.error('Upload error:', err);
+            alert(err instanceof Error ? err.message : 'Error uploading image');
         } finally {
             setUploading(false);
         }
