@@ -15,11 +15,39 @@
     ],
     "video": "",
     "youtubeUrl": "",
-    "trending": false,
+    "trending": true,
     "status": "Available",
     "type": "Sedan",
     "specs": {
       "Engine": "V12",
+      "Transmission": "Automatic",
+      "Drivetrain": "4WD",
+      "Fuel": "Gasoline",
+      "Color": ""
+    }
+  },
+  {
+    "id": 1769846326328,
+    "make": "Dodge",
+    "model": "Ram 1500 Express",
+    "year": 2026,
+    "price": 25000,
+    "mileage": 12000,
+    "vin": "2222222",
+    "description": "",
+    "features": [],
+    "image": "https://etfygntrnnmschzt.public.blob.vercel-storage.com/1769846305430-render3.png",
+    "images": [
+      "https://etfygntrnnmschzt.public.blob.vercel-storage.com/1769846305430-render3.png",
+      "https://etfygntrnnmschzt.public.blob.vercel-storage.com/1769846305439-render5.png"
+    ],
+    "video": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=PX1p3qTmkl0",
+    "trending": true,
+    "status": "Available",
+    "type": "",
+    "specs": {
+      "Engine": "",
       "Transmission": "Automatic",
       "Drivetrain": "4WD",
       "Fuel": "Gasoline",

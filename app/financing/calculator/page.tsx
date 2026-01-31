@@ -227,9 +227,9 @@ export default function PaymentCalculatorPage() {
 
                         {/* CTA */}
                         <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem' }}>
-                            <Link href="/financing/apply" className="btn btn-primary" style={{ flex: 1, textAlign: 'center', padding: '1rem' }}>
+                            <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ flex: 1, textAlign: 'center', padding: '1rem' }}>
                                 Apply Now
-                            </Link>
+                            </a>
                             <Link href="/inventory" className="btn btn-secondary" style={{ flex: 1, textAlign: 'center', padding: '1rem' }}>
                                 Browse Inventory
                             </Link>

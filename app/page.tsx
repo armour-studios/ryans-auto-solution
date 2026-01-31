@@ -55,9 +55,9 @@ export default async function Home() {
             <Link href="/inventory" className="btn btn-primary" style={{ fontSize: '1.2rem', padding: '1rem 2rem' }}>
               View Inventory
             </Link>
-            <Link href="/financing" className="btn btn-secondary" style={{ fontSize: '1.2rem', padding: '1rem 2rem' }}>
+            <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ fontSize: '1.2rem', padding: '1rem 2rem' }}>
               Get Financing
-            </Link>
+            </a>
           </div>
         </div>
       </section>

@@ -22,52 +22,45 @@ export default function FinancingPage() {
 
                 {/* Financing Tools Cards */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '5rem' }}>
-                    {/* Apply For Financing - Coming Soon */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, rgba(100,100,100,0.15) 0%, rgba(100,100,100,0.05) 100%)',
-                        border: '1px solid rgba(100,100,100,0.3)',
-                        borderRadius: '16px',
-                        padding: '2.5rem',
-                        height: '100%',
-                        position: 'relative',
-                        overflow: 'hidden',
-                        opacity: 0.7
-                    }}>
+                    {/* Apply For Financing - Link to Lotus PF */}
+                    <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
                         <div style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            height: '4px',
-                            background: 'linear-gradient(90deg, #666, #888)'
-                        }} />
-                        <div style={{
-                            position: 'absolute',
-                            top: '1rem',
-                            right: '1rem',
-                            padding: '0.25rem 0.75rem',
-                            backgroundColor: '#f59e0b',
-                            color: '#000',
-                            borderRadius: '20px',
-                            fontSize: '0.7rem',
-                            fontWeight: 'bold',
-                            textTransform: 'uppercase'
-                        }}>Coming Soon</div>
-                        <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>📝</div>
-                        <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#888' }}>Apply For Financing</h2>
-                        <p style={{ color: '#666', lineHeight: '1.7', marginBottom: '1.5rem' }}>
-                            Online financing applications coming soon. Call us directly to discuss financing options.
-                        </p>
-                        <span style={{
-                            color: '#666',
-                            fontWeight: 'bold',
-                            textTransform: 'uppercase',
-                            letterSpacing: '1px',
-                            fontSize: '0.9rem'
+                            background: 'linear-gradient(135deg, rgba(0,123,255,0.15) 0%, rgba(0,123,255,0.05) 100%)',
+                            border: '1px solid rgba(0,123,255,0.3)',
+                            borderRadius: '16px',
+                            padding: '2.5rem',
+                            height: '100%',
+                            transition: 'all 0.3s ease',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}>
-                            Call (218) 469-0183
-                        </span>
-                    </div>
+                            <div style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: '4px',
+                                background: 'linear-gradient(90deg, var(--primary-color), #00d4ff)'
+                            }} />
+                            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>📝</div>
+                            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>Apply For Financing</h2>
+                            <p style={{ color: '#999', lineHeight: '1.7', marginBottom: '1.5rem' }}>
+                                Apply online through our financing partner. Quick approval process with competitive rates for all credit situations.
+                            </p>
+                            <span style={{
+                                color: 'var(--primary-color)',
+                                fontWeight: 'bold',
+                                textTransform: 'uppercase',
+                                letterSpacing: '1px',
+                                fontSize: '0.9rem',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}>
+                                Apply Now →
+                            </span>
+                        </div>
+                    </a>
 
                     {/* Value Your Trade - Kelly Blue Book */}
                     <a href="https://www.kbb.com/whats-my-car-worth/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>

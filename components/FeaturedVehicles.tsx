@@ -4,6 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Helper to extract YouTube video ID from various URL formats
+function getYouTubeId(url: string): string {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : '';
+}
+
 type Vehicle = {
     id: number;
     make: string;
@@ -13,6 +20,8 @@ type Vehicle = {
     mileage: number;
     status: string;
     image: string;
+    video?: string;
+    youtubeUrl?: string;
     trending?: boolean;
 };
 
@@ -20,28 +29,33 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
     const [activeIndex, setActiveIndex] = useState(0);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Auto-rotate carousel
+    const currentVehicle = vehicles[activeIndex];
+    const hasVideo = currentVehicle?.video || currentVehicle?.youtubeUrl;
+
+    // Auto-rotate carousel (pause when showing a video)
     useEffect(() => {
         if (vehicles.length <= 1) return;
 
-        intervalRef.current = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % vehicles.length);
-        }, 5000);
-
-        return () => {
-            if (intervalRef.current) clearInterval(intervalRef.current);
-        };
-    }, [vehicles.length]);
-
-    const goToSlide = (index: number) => {
-        setActiveIndex(index);
-        // Reset interval on manual navigation
+        // Clear any existing interval
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+
+        // Only auto-rotate if current vehicle doesn't have video
+        if (!hasVideo) {
             intervalRef.current = setInterval(() => {
                 setActiveIndex((prev) => (prev + 1) % vehicles.length);
             }, 5000);
         }
+
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
+    }, [vehicles.length, activeIndex, hasVideo]);
+
+    const goToSlide = (index: number) => {
+        setActiveIndex(index);
     };
 
     const nextSlide = () => {
@@ -55,8 +69,6 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
     if (vehicles.length === 0) {
         return null;
     }
-
-    const currentVehicle = vehicles[activeIndex];
 
     return (
         <section style={{ padding: '4rem 0', backgroundColor: '#0a0a0a' }}>
@@ -95,15 +107,41 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                             border: '1px solid #333',
                             transition: 'transform 0.3s ease'
                         }}>
-                            {/* Image */}
+                            {/* Video or Image */}
                             <div style={{ position: 'relative', height: '450px' }}>
-                                <Image
-                                    src={currentVehicle.image}
-                                    alt={`${currentVehicle.year} ${currentVehicle.make} ${currentVehicle.model}`}
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    priority
-                                />
+                                {currentVehicle.video ? (
+                                    <video
+                                        src={currentVehicle.video}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover'
+                                        }}
+                                    />
+                                ) : currentVehicle.youtubeUrl ? (
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${getYouTubeId(currentVehicle.youtubeUrl)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeId(currentVehicle.youtubeUrl)}&controls=0&showinfo=0&rel=0&modestbranding=1`}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            border: 'none'
+                                        }}
+                                        allow="autoplay; encrypted-media"
+                                        allowFullScreen
+                                    />
+                                ) : (
+                                    <Image
+                                        src={currentVehicle.image}
+                                        alt={`${currentVehicle.year} ${currentVehicle.make} ${currentVehicle.model}`}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        priority
+                                    />
+                                )}
 
                                 {/* Gradient overlay */}
                                 <div style={{
@@ -112,7 +150,8 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                                     left: 0,
                                     right: 0,
                                     height: '50%',
-                                    background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)'
+                                    background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)',
+                                    pointerEvents: 'none'
                                 }} />
 
                                 {/* Featured Badge */}
@@ -127,10 +166,32 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                                     fontSize: '0.8rem',
                                     fontWeight: 'bold',
                                     textTransform: 'uppercase',
-                                    letterSpacing: '1px'
+                                    letterSpacing: '1px',
+                                    zIndex: 10
                                 }}>
                                     ⭐ Featured
                                 </div>
+
+                                {/* Video Badge */}
+                                {(currentVehicle.video || currentVehicle.youtubeUrl) && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '20px',
+                                        right: '20px',
+                                        background: 'rgba(0,0,0,0.7)',
+                                        color: '#fff',
+                                        padding: '0.5rem 1rem',
+                                        borderRadius: '6px',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 'bold',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                        zIndex: 10
+                                    }}>
+                                        ▶ Video
+                                    </div>
+                                )}
                             </div>
 
                             {/* Content */}
