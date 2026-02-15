@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
 import { getInventory, saveInventory, Vehicle } from '@/lib/inventory';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -33,16 +34,14 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
-        let inventory = await getInventory();
+        const { error } = await supabase
+            .from('inventory')
+            .delete()
+            .eq('id', id);
 
-        const initialLength = inventory.length;
-        inventory = inventory.filter(v => v.id.toString() !== id);
-
-        if (inventory.length === initialLength) {
-            return NextResponse.json({ error: 'Vehicle not found' }, { status: 404 });
+        if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
         }
-
-        await saveInventory(inventory);
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Error deleting vehicle:', error);

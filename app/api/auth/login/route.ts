@@ -5,7 +5,7 @@ export async function POST(request: Request) {
     const { username, password } = await request.json();
 
     // Find matching user
-    const user = getUserByUsername(username);
+    const user = await getUserByUsername(username);
 
     if (user && user.password === password) {
         const response = NextResponse.json({ success: true, username: user.username, role: user.role });

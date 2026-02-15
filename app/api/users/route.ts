@@ -3,16 +3,15 @@ import { getUsers, addUser, deleteUser, type User } from '@/lib/users';
 
 // GET - List all users
 export async function GET() {
-    const users = getUsers();
-    // Don't return passwords
-    const safeUsers = users.map(({ password, ...user }) => user);
-    return NextResponse.json(safeUsers);
+    const users = await getUsers();
+    // Passwords are already excluded in lib/getUsers
+    return NextResponse.json(users);
 }
 
 // POST - Create new user
 export async function POST(request: Request) {
     try {
-        const { username, password, role = 'admin' } = await request.json();
+        const { username, password, role = 'editor' } = await request.json();
 
         if (!username || !password) {
             return NextResponse.json({ error: 'Username and password are required' }, { status: 400 });
@@ -26,17 +25,17 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 });
         }
 
-        const newUser: User = {
+        const newUser = {
             username: username.toLowerCase(),
             password,
             role,
-            createdAt: new Date().toISOString().split('T')[0]
+            createdAt: new Date().toISOString()
         };
 
-        const success = addUser(newUser);
+        const success = await addUser(newUser);
 
         if (!success) {
-            return NextResponse.json({ error: 'Username already exists' }, { status: 409 });
+            return NextResponse.json({ error: 'Username already exists or database error' }, { status: 409 });
         }
 
         return NextResponse.json({ success: true, username: newUser.username });
@@ -55,7 +54,7 @@ export async function DELETE(request: Request) {
         }
 
         // Prevent deleting the last admin
-        const users = getUsers();
+        const users = await getUsers();
         const admins = users.filter(u => u.role === 'admin');
         const userToDelete = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
@@ -63,7 +62,7 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'Cannot delete the last admin user' }, { status: 400 });
         }
 
-        const success = deleteUser(username);
+        const success = await deleteUser(username);
 
         if (!success) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
