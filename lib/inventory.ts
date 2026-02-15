@@ -20,6 +20,7 @@ export type Vehicle = {
     description: string;
     specs: Record<string, string>;
     features: string[];
+    created_at?: string;
 };
 
 const dataFilePath = path.join(process.cwd(), 'data/inventory.json');
@@ -66,18 +67,16 @@ async function getInventorySupabase(): Promise<Vehicle[]> {
 }
 
 async function saveInventorySupabase(inventory: Vehicle[]) {
-    // This is a bit complex because Supabase is relational.
-    // If the input is the entire inventory array, we should probably upsert each item.
-    // Or, if this function is intending to overwrite the whole state, we might need a different approach.
-    // Given the previous KV implementation which overwrote the key, the user likely expects full sync.
-    // HOWEVER, deleting everything and re-inserting is risky and inefficient.
-    // A better approach for now might be to Upsert all items.
+    const now = new Date().toISOString();
+    const inventoryToSave = inventory.map(v => ({
+        ...v,
+        created_at: v.created_at || now
+    }));
 
-    // Check if we can just upsert.
     try {
         const { error } = await supabase
             .from('inventory')
-            .upsert(inventory, { onConflict: 'id' });
+            .upsert(inventoryToSave, { onConflict: 'id' });
 
         if (error) {
             throw new Error(`Supabase error: ${error.message}`);

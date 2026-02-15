@@ -14,6 +14,7 @@ export async function POST(request: Request) {
 
         const newVehicle = {
             id: Date.now(),
+            created_at: new Date().toISOString(),
             ...body
         };
 
