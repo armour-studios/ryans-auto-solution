@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase, supabaseAdmin } from './supabase';
 
 export type User = {
     username: string;
@@ -52,7 +52,7 @@ export async function getUserByUsername(username: string): Promise<User | undefi
 
 export async function addUser(user: { username: string; password?: string; role: string; createdAt: string }): Promise<boolean> {
     try {
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('admin_users')
             .insert({
                 username: user.username.toLowerCase(),
@@ -62,7 +62,7 @@ export async function addUser(user: { username: string; password?: string; role:
             });
 
         if (error) {
-            console.error("Error adding user to Supabase:", error);
+            console.error("Error adding user to Supabase (check RLS/Service Key):", error.message);
             return false;
         }
         return true;
@@ -74,13 +74,13 @@ export async function addUser(user: { username: string; password?: string; role:
 
 export async function deleteUser(username: string): Promise<boolean> {
     try {
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('admin_users')
             .delete()
             .eq('username', username.toLowerCase());
 
         if (error) {
-            console.error("Error deleting user from Supabase:", error);
+            console.error("Error deleting user from Supabase (check RLS/Service Key):", error.message);
             return false;
         }
         return true;
@@ -92,7 +92,7 @@ export async function deleteUser(username: string): Promise<boolean> {
 
 export async function updateUser(username: string, updates: Partial<User & { password?: string }>): Promise<boolean> {
     try {
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('admin_users')
             .update({
                 ...(updates.role && { role: updates.role }),
@@ -102,7 +102,7 @@ export async function updateUser(username: string, updates: Partial<User & { pas
             .eq('username', username.toLowerCase());
 
         if (error) {
-            console.error("Error updating user in Supabase:", error);
+            console.error("Error updating user in Supabase (check RLS/Service Key):", error.message);
             return false;
         }
         return true;

@@ -25,40 +25,100 @@ export default async function Home() {
         color: '#fff',
         overflow: 'hidden'
       }}>
-        {/* Background Image Placeholder */}
+        {/* Background Video */}
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundColor: '#111',
-          zIndex: -1
+          backgroundColor: '#000',
+          zIndex: -2
         }}>
-          <Image
-            src="/hero-bg.png"
-            alt="RAM 1500 Truck"
-            fill
-            style={{ objectFit: 'cover' }}
-            priority
+          <video
+            src="/uploads/main.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              filter: 'brightness(0.5)' // Darken the video
+            }}
           />
         </div>
 
-        <div className="container">
-          <h1 style={{ fontSize: '4rem', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '2px' }}>
-            Find Your <span style={{ color: 'var(--primary-color)' }}>Dream Ride</span>
-          </h1>
-          <p style={{ fontSize: '1.5rem', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
-            Quality pre-owned vehicles at unbeatable prices. Experience the Ryan's Auto Solution difference today.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <Link href="/inventory" className="btn btn-primary" style={{ fontSize: '1.2rem', padding: '1rem 2rem' }}>
-              View Inventory
-            </Link>
-            <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ fontSize: '1.2rem', padding: '1rem 2rem' }}>
-              Get Financing
-            </a>
+        {/* Blue Tinted Overlay */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(135deg, rgba(15, 113, 177, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
+          zIndex: -1
+        }} />
+
+        <div className="container animate-fade-in" style={{ zIndex: 1, position: 'relative' }}>
+          <div className="glass-card" style={{ maxWidth: '850px', margin: '0 auto' }}>
+            <h1 className="animate-fade-in-up" style={{
+              fontSize: '4.5rem',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              marginBottom: '1rem',
+              letterSpacing: '3px',
+              background: 'linear-gradient(to bottom, #ffffff 30%, #a0a0a0 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              textShadow: '0 10px 20px rgba(0,0,0,0.2)'
+            }}>
+              Find Your <span style={{ color: 'var(--primary-color)', WebkitTextFillColor: 'initial' }}>Dream Ride</span>
+            </h1>
+            <p className="animate-fade-in-up" style={{
+              fontSize: '1.4rem',
+              marginBottom: '2.5rem',
+              maxWidth: '650px',
+              margin: '0 auto 2.5rem',
+              color: 'rgba(255,255,255,0.9)',
+              animationDelay: '0.2s'
+            }}>
+              Quality pre-owned vehicles at unbeatable prices. Experience the Ryan&apos;s Auto Solution difference today.
+            </p>
+            <div className="animate-fade-in-up" style={{
+              display: 'flex',
+              gap: '1.5rem',
+              justifyContent: 'center',
+              animationDelay: '0.4s'
+            }}>
+              <Link href="/inventory" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1.2rem 2.5rem', borderRadius: '50px' }}>
+                View Inventory
+              </Link>
+              <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{
+                fontSize: '1.1rem',
+                padding: '1.2rem 2.5rem',
+                borderRadius: '50px',
+                background: 'transparent',
+                border: '2px solid rgba(255,255,255,0.2)'
+              }}>
+                Get Financing
+              </a>
+            </div>
           </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="animate-bounce" style={{
+          position: 'absolute',
+          bottom: '30px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 2,
+          color: 'rgba(255,255,255,0.5)',
+          fontSize: '2rem'
+        }}>
+          ↓
         </div>
       </section>
 

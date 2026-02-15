@@ -3,8 +3,11 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 // Create a lazy-loaded Supabase client to avoid build errors with placeholder env vars
 let _supabase: SupabaseClient | null = null;
+let _supabaseAdmin: SupabaseClient | null = null;
 
 export function getSupabaseClient(): SupabaseClient {
     if (_supabase) return _supabase;
@@ -21,5 +24,22 @@ export function getSupabaseClient(): SupabaseClient {
     return _supabase;
 }
 
-// Export the Supabase client directly
+/**
+ * Returns a Supabase client with administrative privileges (bypasses RLS).
+ * Only for server-side use. Falls back to anon client if service key is missing.
+ */
+export function getSupabaseAdminClient(): SupabaseClient {
+    if (_supabaseAdmin) return _supabaseAdmin;
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+        console.warn('SUPABASE_SERVICE_ROLE_KEY is missing. Admin operations may fail.');
+        return getSupabaseClient();
+    }
+
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    return _supabaseAdmin;
+}
+
+// Export the clients
 export const supabase = getSupabaseClient();
+export const supabaseAdmin = getSupabaseAdminClient();
