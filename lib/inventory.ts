@@ -1,4 +1,4 @@
-import { Redis } from '@upstash/redis';
+import { supabase } from '@/lib/supabase';
 import fs from 'fs';
 import path from 'path';
 
@@ -23,41 +23,8 @@ export type Vehicle = {
 };
 
 const dataFilePath = path.join(process.cwd(), 'data/inventory.json');
-const KV_KEY = 'inventory';
 
-// Create Redis client with flexible env var detection
-function getRedisClient(): Redis | null {
-    // Check for various Upstash/Vercel KV environment variable patterns
-    const url = process.env.KV_REST_API_URL ||
-        process.env.UPSTASH_REDIS_REST_URL ||
-        process.env.KV_URL ||
-        process.env.REDIS_URL;
-    const token = process.env.KV_REST_API_TOKEN ||
-        process.env.UPSTASH_REDIS_REST_TOKEN ||
-        process.env.KV_TOKEN ||
-        process.env.REDIS_TOKEN;
-
-    console.log('[Redis] URL env check:', url ? 'Found' : 'Not found');
-    console.log('[Redis] Token env check:', token ? 'Found' : 'Not found');
-
-    if (url && token && !url.includes('provisioning')) {
-        try {
-            return new Redis({ url, token });
-        } catch (e) {
-            console.error('[Redis] Failed to create client:', e);
-            return null;
-        }
-    }
-    return null;
-}
-
-// Check if we're on Vercel (read-only filesystem)
-const isVercel = () => Boolean(process.env.VERCEL);
-
-// Check if we have a working Redis connection
-const hasRedis = () => getRedisClient() !== null;
-
-// Local filesystem functions (only works locally, not on Vercel)
+// Local filesystem functions (fallback/dev)
 function getInventoryLocal(): Vehicle[] {
     if (!fs.existsSync(dataFilePath)) {
         return [];
@@ -79,53 +46,95 @@ function saveInventoryLocal(inventory: Vehicle[]) {
     fs.writeFileSync(dataFilePath, JSON.stringify(inventory, null, 2));
 }
 
-// Redis functions
-async function getInventoryRedis(): Promise<Vehicle[]> {
-    const redis = getRedisClient();
-    if (!redis) return [];
-
+// Supabase functions
+async function getInventorySupabase(): Promise<Vehicle[]> {
     try {
-        const data = await redis.get<Vehicle[]>(KV_KEY);
-        return data || [];
+        const { data, error } = await supabase
+            .from('inventory')
+            .select('*')
+            .order('id', { ascending: true }); // Assuming 'id' is a good sort key
+
+        if (error) {
+            console.error("Error reading inventory from Supabase:", error);
+            return [];
+        }
+        return data as Vehicle[] || [];
     } catch (error) {
-        console.error("Error reading inventory from Redis:", error);
+        console.error("Error calling Supabase:", error);
         return [];
     }
 }
 
-async function saveInventoryRedis(inventory: Vehicle[]) {
-    const redis = getRedisClient();
-    if (!redis) {
-        throw new Error('Redis not configured. Please set up Vercel KV or Upstash Redis.');
-    }
+async function saveInventorySupabase(inventory: Vehicle[]) {
+    // This is a bit complex because Supabase is relational.
+    // If the input is the entire inventory array, we should probably upsert each item.
+    // Or, if this function is intending to overwrite the whole state, we might need a different approach.
+    // Given the previous KV implementation which overwrote the key, the user likely expects full sync.
+    // HOWEVER, deleting everything and re-inserting is risky and inefficient.
+    // A better approach for now might be to Upsert all items.
 
-    await redis.set(KV_KEY, inventory);
+    // Check if we can just upsert.
+    try {
+        const { error } = await supabase
+            .from('inventory')
+            .upsert(inventory, { onConflict: 'id' });
+
+        if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
+        }
+    } catch (e) {
+        console.error("Failed to save inventory to Supabase", e);
+        throw e;
+    }
 }
 
 // Export unified async functions
 export async function getInventory(): Promise<Vehicle[]> {
-    if (hasRedis()) {
-        console.log('[Inventory] Using Redis');
-        return getInventoryRedis();
+    // Try Supabase first
+    try {
+        const data = await getInventorySupabase();
+        if (data && data.length > 0) return data;
+    } catch (e) {
+        console.warn("Failed to fetch from Supabase, falling back to local if available", e);
     }
-    console.log('[Inventory] Using Local filesystem');
+
+    // Fallback to local if Supabase fails or is empty (optional, maybe we want to always use Supabase?)
+    // The user said "not using KV", implying a switch. 
+    // If Supabase returns empty, it might just be empty.
+    // But for safety during migration, let's return local if Supabase is empty?
+    // Actually, if Supabase is working, we should rely on it.
+
+    // Let's assume if Supabase returns [], it's empty.
+    // But if connection fails, we might want local.
+    // For now, I'll stick to Supabase primarily.
+
+    // If we're local (dev), we might want to seed Supabase from local?
+    // I'll add a quick check: if Supabase is empty, maybe try loading local?
+    // For now, simple logic:
+    const data = await getInventorySupabase();
+    if (data && data.length > 0) return data;
     return getInventoryLocal();
 }
 
 export async function saveInventory(inventory: Vehicle[]) {
-    if (hasRedis()) {
-        console.log('[Inventory] Saving to Redis');
-        await saveInventoryRedis(inventory);
-    } else if (isVercel()) {
-        // On Vercel without Redis, we can't save
-        throw new Error('Database not configured. Please set up Vercel KV in your Vercel dashboard: Project → Storage → Create Database → KV');
-    } else {
-        console.log('[Inventory] Saving to Local filesystem');
+    await saveInventorySupabase(inventory);
+    // Optionally save local as backup?
+    if (process.env.NODE_ENV === 'development') {
         saveInventoryLocal(inventory);
     }
 }
 
 export async function getVehicleById(id: number): Promise<Vehicle | undefined> {
-    const inventory = await getInventory();
-    return inventory.find(v => v.id === id);
+    // Optimization: query directly by ID
+    const { data, error } = await supabase
+        .from('inventory')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) {
+        return undefined;
+    }
+    return data as Vehicle;
 }
+

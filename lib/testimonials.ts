@@ -1,4 +1,4 @@
-import { Redis } from '@upstash/redis';
+import { supabase } from '@/lib/supabase';
 import fs from 'fs';
 import path from 'path';
 
@@ -12,26 +12,8 @@ export type Testimonial = {
 };
 
 const dataFilePath = path.join(process.cwd(), 'data/testimonials.json');
-const KV_KEY = 'testimonials';
 
-// Create Redis client with flexible env var detection
-function getRedisClient(): Redis | null {
-    const url = process.env.KV_REST_API_URL ||
-        process.env.UPSTASH_REDIS_REST_URL ||
-        process.env.REDIS_URL;
-    const token = process.env.KV_REST_API_TOKEN ||
-        process.env.UPSTASH_REDIS_REST_TOKEN ||
-        process.env.REDIS_TOKEN;
-
-    if (url && token && !url.includes('provisioning')) {
-        return new Redis({ url, token });
-    }
-    return null;
-}
-
-const hasRedis = () => getRedisClient() !== null;
-
-// Local filesystem functions
+// Local filesystem functions (fallback/dev)
 function getTestimonialsLocal(): Testimonial[] {
     if (!fs.existsSync(dataFilePath)) {
         return [];
@@ -53,44 +35,65 @@ function saveTestimonialsLocal(testimonials: Testimonial[]) {
     fs.writeFileSync(dataFilePath, JSON.stringify(testimonials, null, 2));
 }
 
-// Redis functions
-async function getTestimonialsRedis(): Promise<Testimonial[]> {
-    const redis = getRedisClient();
-    if (!redis) return [];
-
+// Supabase functions
+async function getTestimonialsSupabase(): Promise<Testimonial[]> {
     try {
-        const data = await redis.get<Testimonial[]>(KV_KEY);
-        return data || [];
+        const { data, error } = await supabase
+            .from('testimonials')
+            .select('*')
+            .order('date', { ascending: false });
+
+        if (error) {
+            console.error("Error reading testimonials from Supabase:", error);
+            return [];
+        }
+        return data as Testimonial[] || [];
     } catch (error) {
-        console.error("Error reading testimonials from Redis:", error);
+        console.error("Error calling Supabase:", error);
         return [];
     }
 }
 
-async function saveTestimonialsRedis(testimonials: Testimonial[]) {
-    const redis = getRedisClient();
-    if (!redis) throw new Error('Redis not configured');
+async function saveTestimonialsSupabase(testimonials: Testimonial[]) {
+    try {
+        const { error } = await supabase
+            .from('testimonials')
+            .upsert(testimonials, { onConflict: 'id' });
 
-    await redis.set(KV_KEY, testimonials);
+        if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
+        }
+    } catch (e) {
+        console.error("Failed to save testimonials to Supabase", e);
+        throw e;
+    }
 }
 
 // Export unified async functions
 export async function getTestimonials(): Promise<Testimonial[]> {
-    if (hasRedis()) {
-        return getTestimonialsRedis();
-    }
+    const data = await getTestimonialsSupabase();
+    if (data && data.length > 0) return data;
+
     return getTestimonialsLocal();
 }
 
 export async function saveTestimonials(testimonials: Testimonial[]) {
-    if (hasRedis()) {
-        await saveTestimonialsRedis(testimonials);
-    } else {
+    await saveTestimonialsSupabase(testimonials);
+    if (process.env.NODE_ENV === 'development') {
         saveTestimonialsLocal(testimonials);
     }
 }
 
 export async function getTestimonialById(id: number): Promise<Testimonial | undefined> {
-    const testimonials = await getTestimonials();
-    return testimonials.find(t => t.id === id);
+    const { data, error } = await supabase
+        .from('testimonials')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) {
+        return undefined;
+    }
+    return data as Testimonial;
 }
+

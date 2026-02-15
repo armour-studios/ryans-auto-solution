@@ -1,4 +1,4 @@
-import { Redis } from '@upstash/redis';
+import { supabase } from '@/lib/supabase';
 import fs from 'fs';
 import path from 'path';
 
@@ -17,26 +17,8 @@ export type BlogPost = {
 };
 
 const dataFilePath = path.join(process.cwd(), 'data/blog.json');
-const KV_KEY = 'blog_posts';
 
-// Create Redis client with flexible env var detection
-function getRedisClient(): Redis | null {
-    const url = process.env.KV_REST_API_URL ||
-        process.env.UPSTASH_REDIS_REST_URL ||
-        process.env.REDIS_URL;
-    const token = process.env.KV_REST_API_TOKEN ||
-        process.env.UPSTASH_REDIS_REST_TOKEN ||
-        process.env.REDIS_TOKEN;
-
-    if (url && token && !url.includes('provisioning')) {
-        return new Redis({ url, token });
-    }
-    return null;
-}
-
-const hasRedis = () => getRedisClient() !== null;
-
-// Local filesystem functions
+// Local filesystem functions (fallback/dev)
 function getBlogPostsLocal(): BlogPost[] {
     if (!fs.existsSync(dataFilePath)) {
         return [];
@@ -51,52 +33,90 @@ function getBlogPostsLocal(): BlogPost[] {
 }
 
 function saveBlogPostsLocal(posts: BlogPost[]) {
+    const dir = path.dirname(dataFilePath);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
     fs.writeFileSync(dataFilePath, JSON.stringify(posts, null, 2));
 }
 
-// Redis functions
-async function getBlogPostsRedis(): Promise<BlogPost[]> {
-    const redis = getRedisClient();
-    if (!redis) return [];
-
+// Supabase functions
+async function getBlogPostsSupabase(): Promise<BlogPost[]> {
     try {
-        const data = await redis.get<BlogPost[]>(KV_KEY);
-        return data || [];
+        const { data, error } = await supabase
+            .from('blog_posts')
+            .select('*')
+            .order('date', { ascending: false });
+
+        if (error) {
+            console.error("Error reading blog posts from Supabase:", error);
+            // Fallback to local if error?
+            return [];
+        }
+        return data as BlogPost[] || [];
     } catch (error) {
-        console.error("Error reading blog from Redis:", error);
+        console.error("Error calling Supabase:", error);
         return [];
     }
 }
 
-async function saveBlogPostsRedis(posts: BlogPost[]) {
-    const redis = getRedisClient();
-    if (!redis) throw new Error('Redis not configured');
+async function saveBlogPostsSupabase(posts: BlogPost[]) {
+    try {
+        const { error } = await supabase
+            .from('blog_posts')
+            .upsert(posts, { onConflict: 'id' });
 
-    await redis.set(KV_KEY, posts);
+        if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
+        }
+    } catch (e) {
+        console.error("Failed to save blog posts to Supabase", e);
+        throw e;
+    }
 }
 
 // Export unified async functions
 export async function getBlogPosts(): Promise<BlogPost[]> {
-    if (hasRedis()) {
-        return getBlogPostsRedis();
-    }
+    const data = await getBlogPostsSupabase();
+    if (data && data.length > 0) return data;
+
+    // Fallback?
     return getBlogPostsLocal();
 }
 
 export async function saveBlogPosts(posts: BlogPost[]) {
-    if (hasRedis()) {
-        await saveBlogPostsRedis(posts);
-    } else {
+    await saveBlogPostsSupabase(posts);
+    if (process.env.NODE_ENV === 'development') {
         saveBlogPostsLocal(posts);
     }
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
-    const posts = await getBlogPosts();
-    return posts.find(p => p.slug === slug);
+    const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+
+    if (error || !data) {
+        // Fallback to full list search if single query fails (e.g. if table structure mismatch or other issue)
+        // Or checking local
+        const local = getBlogPostsLocal();
+        return local.find(p => p.slug === slug);
+    }
+    return data as BlogPost;
 }
 
 export async function getBlogPostById(id: number): Promise<BlogPost | undefined> {
-    const posts = await getBlogPosts();
-    return posts.find(p => p.id === id);
+    const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) {
+        return undefined;
+    }
+    return data as BlogPost;
 }
+
