@@ -15,8 +15,17 @@ export default function Footer() {
     useEffect(() => {
         // Check for admin session by trying to detect if we're authenticated
         // We can check by seeing if we're on admin pages (which are protected)
-        setIsLoggedIn(isAdminPage || false);
-    }, [isAdminPage]);
+        // OR if we have the admin_user cookie
+        const checkLogin = () => {
+            const hasCookie = document.cookie.split(';').some((item) => item.trim().startsWith('admin_user='));
+            setIsLoggedIn(isAdminPage || hasCookie);
+        };
+
+        checkLogin();
+
+        // Listen for storage events (logout in another tab) or just re-check periodically?
+        // simple check on mount/update is usually enough for single-tab flow
+    }, [isAdminPage, pathname]);
 
     const handleLogout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' });
