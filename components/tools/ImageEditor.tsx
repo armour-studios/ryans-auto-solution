@@ -95,7 +95,8 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                 backgroundColor: '#000',
                 borderRadius: '12px',
                 overflow: 'hidden',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                border: '1px solid #333'
             }}>
                 <Cropper
                     image={imageSrc}
@@ -103,17 +104,80 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                     rotation={rotation}
                     zoom={zoom}
                     aspect={aspect}
+                    showGrid={true}
                     onCropChange={setCrop}
                     onRotationChange={setRotation}
                     onCropComplete={onCropComplete}
                     onZoomChange={setZoom}
+                    classes={{
+                        containerClassName: 'cropper-container',
+                        mediaClassName: 'cropper-media',
+                        cropAreaClassName: 'cropper-area'
+                    }}
                 />
+
+                {/* Helper text for handles */}
+                {aspect === undefined && (
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '10px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        backgroundColor: 'rgba(0,0,0,0.7)',
+                        padding: '5px 12px',
+                        borderRadius: '20px',
+                        fontSize: '0.75rem',
+                        color: '#aaa',
+                        pointerEvents: 'none',
+                        border: '1px solid #444',
+                        zIndex: 10
+                    }}>
+                        Drag edges to resize crop area
+                    </div>
+                )}
             </div>
+
+            <style jsx global>{`
+        .cropper-area {
+          border: 2px solid var(--primary-color) !important;
+          box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6) !important;
+        }
+        .cropper-area::before, .cropper-area::after {
+          content: '';
+          position: absolute;
+          width: 15px;
+          height: 15px;
+          border: 3px solid #fff;
+          z-index: 100;
+        }
+        /* Top Left Handle */
+        .cropper-area::before { top: -3px; left: -3px; border-right: none; border-bottom: none; }
+        /* Bottom Right Handle */
+        .cropper-area::after { bottom: -3px; right: -3px; border-left: none; border-top: none; }
+        
+        input[type=range] {
+          -webkit-appearance: none;
+          background: #333;
+          height: 6px;
+          border-radius: 5px;
+          outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 18px;
+          height: 18px;
+          background: var(--primary-color);
+          border-radius: 50%;
+          cursor: pointer;
+          border: 2px solid #fff;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+      `}</style>
 
             <div style={{
                 marginTop: '1rem',
                 padding: '1.5rem',
-                backgroundColor: '#1a1a1a',
+                backgroundColor: '#111',
                 borderRadius: '12px',
                 color: '#fff',
                 display: 'flex',
@@ -127,8 +191,8 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
 
                     {/* Aspect Ratio */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        <label style={{ fontSize: '0.8rem', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Aspect Ratio</label>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#555', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Aspect Ratio</label>
+                        <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: '#000', padding: '0.4rem', borderRadius: '10px', border: '1px solid #222' }}>
                             {[
                                 { label: '4:3', value: 4 / 3 },
                                 { label: '16:9', value: 16 / 9 },
@@ -139,11 +203,11 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                                     key={opt.label}
                                     onClick={() => setAspect(opt.value)}
                                     style={{
-                                        padding: '0.5rem 1rem',
-                                        backgroundColor: aspect === opt.value ? 'var(--primary-color)' : '#333',
-                                        color: aspect === opt.value ? '#000' : '#fff',
-                                        border: 'none',
-                                        borderRadius: '6px',
+                                        padding: '0.5rem 1.25rem',
+                                        backgroundColor: aspect === opt.value ? '#222' : 'transparent',
+                                        color: aspect === opt.value ? 'var(--primary-color)' : '#666',
+                                        border: aspect === opt.value ? '1px solid #333' : '1px solid transparent',
+                                        borderRadius: '8px',
                                         cursor: 'pointer',
                                         fontSize: '0.8rem',
                                         fontWeight: 'bold',
@@ -158,8 +222,8 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
 
                     {/* Download Format */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        <label style={{ fontSize: '0.8rem', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Save As</label>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <label style={{ fontSize: '0.7rem', color: '#555', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Output Format</label>
+                        <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: '#000', padding: '0.4rem', borderRadius: '10px', border: '1px solid #222' }}>
                             {[
                                 { label: 'JPG', value: 'image/jpeg' },
                                 { label: 'PNG', value: 'image/png' },
@@ -169,11 +233,11 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                                     key={opt.label}
                                     onClick={() => setFormat(opt.value)}
                                     style={{
-                                        padding: '0.5rem 1rem',
-                                        backgroundColor: format === opt.value ? '#fff' : '#333',
-                                        color: format === opt.value ? '#000' : '#fff',
-                                        border: 'none',
-                                        borderRadius: '6px',
+                                        padding: '0.5rem 1.25rem',
+                                        backgroundColor: format === opt.value ? '#222' : 'transparent',
+                                        color: format === opt.value ? '#fff' : '#666',
+                                        border: format === opt.value ? '1px solid #333' : '1px solid transparent',
+                                        borderRadius: '8px',
                                         cursor: 'pointer',
                                         fontSize: '0.8rem',
                                         fontWeight: 'bold',
@@ -191,14 +255,21 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                    gap: '2rem',
-                    alignItems: 'center'
+                    gap: '2.5rem',
+                    alignItems: 'center',
+                    backgroundColor: '#0a0a0a',
+                    padding: '1.25rem',
+                    borderRadius: '10px',
+                    border: '1px solid #1a1a1a'
                 }}>
                     {/* Zoom */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <label style={{ fontSize: '0.8rem', color: '#888' }}>Zoom</label>
-                            <span style={{ fontSize: '0.8rem' }}>{zoom.toFixed(1)}x</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <span style={{ fontSize: '1.2rem' }}>🔍</span>
+                                <label style={{ fontSize: '0.75rem', color: '#888', fontWeight: '600' }}>ZOOM</label>
+                            </div>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontFamily: 'monospace', fontWeight: 'bold' }}>{zoom.toFixed(1)}x</span>
                         </div>
                         <input
                             type="range"
@@ -207,15 +278,18 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                             max={3}
                             step={0.1}
                             onChange={(e) => setZoom(Number(e.target.value))}
-                            style={{ width: '100%', accentColor: 'var(--primary-color)' }}
+                            style={{ width: '100%' }}
                         />
                     </div>
 
                     {/* Rotation */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <label style={{ fontSize: '0.8rem', color: '#888' }}>Rotation</label>
-                            <span style={{ fontSize: '0.8rem' }}>{rotation}°</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <span style={{ fontSize: '1.2rem' }}>🔄</span>
+                                <label style={{ fontSize: '0.75rem', color: '#888', fontWeight: '600' }}>ROTATION</label>
+                            </div>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontFamily: 'monospace', fontWeight: 'bold' }}>{rotation}°</span>
                         </div>
                         <input
                             type="range"
@@ -224,7 +298,7 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                             max={360}
                             step={1}
                             onChange={(e) => setRotation(Number(e.target.value))}
-                            style={{ width: '100%', accentColor: 'var(--primary-color)' }}
+                            style={{ width: '100%' }}
                         />
                     </div>
 
@@ -237,19 +311,23 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                                 alignItems: 'center',
                                 gap: '0.75rem',
                                 cursor: 'pointer',
-                                padding: '0.75rem 1.5rem',
-                                backgroundColor: autoEnhance ? 'var(--primary-color)' : '#333',
+                                padding: '1rem',
+                                background: autoEnhance
+                                    ? 'linear-gradient(135deg, var(--primary-color) 0%, #00d4ff 100%)'
+                                    : '#1a1a1a',
                                 color: autoEnhance ? '#000' : '#fff',
-                                border: 'none',
-                                borderRadius: '30px',
-                                transition: 'all 0.2s',
+                                border: autoEnhance ? 'none' : '1px solid #333',
+                                borderRadius: '12px',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                 fontWeight: 'bold',
                                 fontSize: '0.9rem',
                                 width: '100%',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                boxShadow: autoEnhance ? '0 4px 15px rgba(0,123,255,0.3)' : 'none'
                             }}
                         >
-                            {autoEnhance ? '✨ Auto Enhance Active' : '🪄 Apply Auto Enhance'}
+                            <span style={{ fontSize: '1.2rem' }}>{autoEnhance ? '✨' : '🪄'}</span>
+                            {autoEnhance ? 'PRO ENHANCE & SHARPEN ON' : 'APPLY AUTO ENHANCE'}
                         </button>
                     </div>
                 </div>
@@ -258,20 +336,36 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                 <button
                     onClick={handleProcessAndDownload}
                     disabled={processing}
-                    className="btn btn-primary"
                     style={{
-                        padding: '1rem',
-                        borderRadius: '8px',
+                        padding: '1.25rem',
+                        borderRadius: '12px',
                         fontSize: '1.1rem',
-                        fontWeight: 'bold',
-                        backgroundColor: processing ? '#444' : 'var(--primary-color)',
-                        color: processing ? '#888' : '#000',
+                        fontWeight: '900',
+                        letterSpacing: '1px',
+                        backgroundColor: processing ? '#222' : 'var(--primary-color)',
+                        color: processing ? '#444' : '#000',
                         border: 'none',
                         cursor: processing ? 'default' : 'pointer',
-                        transition: 'all 0.2s'
+                        transition: 'all 0.3s',
+                        boxShadow: processing ? 'none' : '0 10px 20px rgba(0,123,255,0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '1rem',
+                        textTransform: 'uppercase'
                     }}
                 >
-                    {processing ? 'Processing Final Image...' : `Download ${format.split('/')[1].toUpperCase()}`}
+                    {processing ? (
+                        <>
+                            <span className="animate-spin">⏳</span>
+                            <span>Finalizing Pro Master...</span>
+                        </>
+                    ) : (
+                        <>
+                            <span>💾</span>
+                            <span>Download {format.split('/')[1].toUpperCase()} Master</span>
+                        </>
+                    )}
                 </button>
             </div>
         </div>
