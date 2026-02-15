@@ -1,11 +1,11 @@
 :root {
   /* Dark Mode Color Palette */
-  --primary-color: #007bff;
-  /* Blue */
+  --primary-color: #0f71b1;
+  /* Updated Brand Blue */
   --secondary-color: #F0F0F0;
   /* Almost White (Text) */
-  --accent-color: #007bff;
-  /* Blue */
+  --accent-color: #0f71b1;
+  /* Updated Brand Blue */
 
   --bg-color: #111111;
   /* Deep Black/Grey */
@@ -19,9 +19,9 @@
   --border-color: #333333;
 
   /* Typography */
-  --font-main: "Inter", sans-serif;
-  --font-display: "Orbitron", sans-serif;
-  /* Tech/Auto feel */
+  --font-main: var(--font-tinos), serif;
+  --font-display: var(--font-tinos), serif;
+  /* Classic Times New Roman style */
 }
 
 * {
@@ -52,7 +52,6 @@ h6 {
   font-family: var(--font-display);
   font-weight: 700;
   color: var(--primary-color);
-  text-transform: uppercase;
 }
 
 img {

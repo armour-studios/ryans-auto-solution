@@ -19,15 +19,17 @@ export function getYouTubeId(url: string | undefined): string | null {
 /**
  * Returns a robust YouTube embed URL
  */
-export function getYouTubeEmbedUrl(url: string | undefined, options: { autoplay?: boolean; mute?: boolean; loop?: boolean } = {}): string | null {
+export function getYouTubeEmbedUrl(url: string | undefined, options: { autoplay?: boolean; mute?: boolean; loop?: boolean; controls?: boolean; disablekb?: boolean } = {}): string | null {
     const videoId = getYouTubeId(url);
     if (!videoId) return null;
 
-    let embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
+    let embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0`;
 
     if (options.autoplay) embedUrl += '&autoplay=1';
     if (options.mute) embedUrl += '&mute=1';
     if (options.loop) embedUrl += `&loop=1&playlist=${videoId}`;
+    if (options.controls === false) embedUrl += '&controls=0';
+    if (options.disablekb) embedUrl += '&disablekb=1';
 
     return embedUrl;
 }

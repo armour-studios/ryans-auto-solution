@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -24,8 +25,15 @@ export default function Navbar() {
       {/* Main Nav */}
       <nav style={{ backgroundColor: '#000', color: '#fff', padding: '1rem 0', borderBottom: '4px solid #333' }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" className="logo" style={{ fontSize: '1.8rem', fontWeight: 'bold', fontFamily: 'var(--font-display)', color: '#fff', textTransform: 'uppercase', fontStyle: 'italic' }}>
-            Ryan&apos;s Auto <span style={{ color: 'var(--primary-color)' }}>Solution</span>
+          <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center' }}>
+            <Image
+              src="/uploads/ras1+copy+2 (1).webp"
+              alt="Ryan's Auto Solution Logo"
+              width={220}
+              height={60}
+              style={{ objectFit: 'contain' }}
+              priority
+            />
           </Link>
 
           <button

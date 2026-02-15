@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Orbitron } from 'next/font/google';
+import { Tinos } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FacebookMessenger from '@/components/FacebookMessenger';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-main' });
-const orbitron = Orbitron({ subsets: ['latin'], variable: '--font-display' });
+const tinos = Tinos({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-tinos'
+});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -38,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${orbitron.variable}`} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <body className={tinos.variable} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Navbar />
         <main style={{ flex: 1 }}>{children}</main>
         <Footer />

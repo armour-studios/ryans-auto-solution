@@ -117,16 +117,36 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                                         }}
                                     />
                                 ) : currentVehicle.youtubeUrl ? (
-                                    <iframe
-                                        src={getYouTubeEmbedUrl(currentVehicle.youtubeUrl, { autoplay: true, mute: true, loop: true }) || ''}
-                                        style={{
+                                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                                        <iframe
+                                            src={getYouTubeEmbedUrl(currentVehicle.youtubeUrl, {
+                                                autoplay: true,
+                                                mute: true,
+                                                loop: true,
+                                                controls: false,
+                                                disablekb: true
+                                            }) || ''}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                border: 'none',
+                                                pointerEvents: 'none' // Basic blocking
+                                            }}
+                                            allow="autoplay; encrypted-media"
+                                            allowFullScreen
+                                        />
+                                        {/* Transparent overlay to block all interactions */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
                                             width: '100%',
                                             height: '100%',
-                                            border: 'none'
-                                        }}
-                                        allow="autoplay; encrypted-media"
-                                        allowFullScreen
-                                    />
+                                            zIndex: 5,
+                                            backgroundColor: 'transparent',
+                                            cursor: 'pointer' // Keep the cursor pointer for the parent Link
+                                        }} />
+                                    </div>
                                 ) : (
                                     <Image
                                         src={currentVehicle.image}

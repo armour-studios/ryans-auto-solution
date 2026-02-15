@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
@@ -35,8 +36,14 @@ export default function Footer() {
 
     return (
         <footer style={{ backgroundColor: '#000', color: '#fff', padding: '3rem 0', marginTop: 'auto', borderTop: '4px solid var(--primary-color)' }}>
-            <div className="container" style={{ textAlign: 'center' }}>
-                <h3 style={{ marginBottom: '1rem', color: '#fff', textTransform: 'uppercase', letterSpacing: '2px' }}>Ryan's Auto Solution</h3>
+            <div className="container" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Image
+                    src="/uploads/ras1+copy+2 (1).webp"
+                    alt="Ryan's Auto Solution Logo"
+                    width={180}
+                    height={50}
+                    style={{ objectFit: 'contain', marginBottom: '1.5rem' }}
+                />
                 <p style={{ marginBottom: '1rem' }}>Quality Used Cars | Fair Prices | Small Town Trust</p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
                     <span>📍 325 Oak Hills Rd SE, Bemidji, MN 56601</span>

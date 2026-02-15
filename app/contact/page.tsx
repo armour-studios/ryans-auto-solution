@@ -4,63 +4,115 @@ export const metadata = {
 
 export default function ContactPage() {
     return (
-        <div style={{ padding: '4rem 0' }}>
-            <div className="container">
-                <h1 style={{ textAlign: 'center', marginBottom: '3rem' }}>Contact Us</h1>
+        <div style={{ padding: '6rem 0', color: '#fff', backgroundColor: '#050505' }}>
+            <div className="container" style={{ maxWidth: '1000px', textAlign: 'center' }}>
+                <span style={{
+                    color: 'var(--primary-color)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '3px',
+                    fontWeight: 'bold',
+                    fontSize: '0.9rem',
+                    display: 'inline-block',
+                    marginBottom: '1rem'
+                }}>
+                    Get In Touch
+                </span>
+                <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+                    Ready to <span style={{ color: 'var(--primary-color)' }}>Connect?</span>
+                </h1>
+                <p style={{ fontSize: '1.2rem', color: '#aaa', maxWidth: '600px', margin: '0 auto 3rem auto', lineHeight: '1.6' }}>
+                    Have questions about our inventory or want to schedule a test drive?
+                    The fastest way to reach us is by phone.
+                </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
-                    <div>
-                        <h2 style={{ marginBottom: '1.5rem' }}>Get In Touch</h2>
-                        <p style={{ marginBottom: '2rem' }}>
-                            Have questions about a vehicle? Want to schedule a test drive?
-                            Give us a call or visit our dealership. We look forward to serving you!
+                {/* Primary CTA */}
+                <div style={{ marginBottom: '5rem' }}>
+                    <a href="tel:2184690183" className="btn" style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        fontSize: '1.8rem',
+                        padding: '1.5rem 3rem',
+                        background: 'linear-gradient(135deg, var(--primary-color), #0056b3)',
+                        border: 'none',
+                        boxShadow: '0 10px 30px rgba(0, 123, 255, 0.3)',
+                        transition: 'transform 0.3s ease'
+                    }}>
+                        <span style={{ fontSize: '2.4rem' }}>📞</span>
+                        <div>
+                            <span style={{ display: 'block', fontSize: '0.8rem', textTransform: 'uppercase', opacity: 0.8, letterSpacing: '1px' }}>Call Now</span>
+                            <span>(218) 469-0183</span>
+                        </div>
+                    </a>
+                </div>
+
+                {/* Secondary Info Grid */}
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                    gap: '2rem',
+                    textAlign: 'left'
+                }}>
+                    {/* Location */}
+                    <div style={{ backgroundColor: '#111', padding: '2rem', borderRadius: '12px', border: '1px solid #222' }}>
+                        <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>📍</div>
+                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--primary-color)' }}>Location</h3>
+                        <p style={{ color: '#ccc', lineHeight: '1.6' }}>
+                            325 Oak Hills Rd SE<br />
+                            Bemidji, MN 56601
                         </p>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            <div>
-                                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>📍 Location</h3>
-                                <p>325 Oak Hills Rd SE<br />Bemidji, MN 56601</p>
-                            </div>
-                            <div>
-                                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>📞 Phone</h3>
-                                <p><a href="tel:2184690183" style={{ color: 'var(--primary-color)' }}>(218) 469-0183</a></p>
-                            </div>
-                            <div>
-                                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>✉️ Email</h3>
-                                <p><a href="mailto:ryan@ryansautosolution.com" style={{ color: 'var(--primary-color)' }}>ryan@ryansautosolution.com</a></p>
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: '3rem' }}>
-                            <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>🕒 Business Hours</h3>
-                            <table style={{ width: '100%', maxWidth: '300px' }}>
-                                <tbody>
-                                    <tr><td style={{ padding: '0.25rem 0' }}>Monday - Friday</td><td style={{ fontWeight: 'bold' }}>9:00 AM - 6:00 PM</td></tr>
-                                    <tr><td style={{ padding: '0.25rem 0' }}>Saturday</td><td style={{ fontWeight: 'bold' }}>10:00 AM - 4:00 PM</td></tr>
-                                    <tr><td style={{ padding: '0.25rem 0' }}>Sunday</td><td style={{ fontWeight: 'bold' }}>Closed</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <a href="https://maps.google.com/?q=325+Oak+Hills+Rd+SE+Bemidji+MN+56601" target="_blank" rel="noopener noreferrer" style={{
+                            color: '#fff',
+                            textDecoration: 'none',
+                            fontSize: '0.9rem',
+                            marginTop: '1rem',
+                            display: 'inline-block',
+                            borderBottom: '1px solid var(--primary-color)'
+                        }}>
+                            Get Directions →
+                        </a>
                     </div>
 
-                    <div style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-                        <h2 style={{ marginBottom: '1.5rem' }}>Send Us a Message</h2>
-                        <form>
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem' }}>Name</label>
-                                <input type="text" style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }} placeholder="Your Name" />
-                            </div>
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem' }}>Email</label>
-                                <input type="email" style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }} placeholder="Your Email" />
-                            </div>
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem' }}>Message</label>
-                                <textarea style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', minHeight: '150px' }} placeholder="I'm interested in the 2013 Dodge Ram..."></textarea>
-                            </div>
-                            <button type="submit" className="btn" style={{ width: '100%' }}>SEND MESSAGE</button>
-                        </form>
+                    {/* Email */}
+                    <div style={{ backgroundColor: '#111', padding: '2rem', borderRadius: '12px', border: '1px solid #222' }}>
+                        <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>✉️</div>
+                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--primary-color)' }}>Email</h3>
+                        <p style={{ color: '#ccc', lineHeight: '1.6' }}>
+                            Prefer traditional messaging?<br />
+                            Drop us an inquiry via email.
+                        </p>
+                        <a href="mailto:ryan@ryansautosolution.com" style={{
+                            textDecoration: 'none',
+                            fontWeight: 'bold',
+                            fontSize: '1.1rem',
+                            marginTop: '1rem',
+                            display: 'inline-block',
+                            color: 'var(--primary-color)'
+                        }}>
+                            ryan@ryansautosolution.com
+                        </a>
                     </div>
+
+                    {/* Hours */}
+                    <div style={{ backgroundColor: '#111', padding: '2rem', borderRadius: '12px', border: '1px solid #222', gridColumn: 'span 1' }}>
+                        <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>🕒</div>
+                        <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', textTransform: 'uppercase', color: 'var(--primary-color)' }}>Business Hours</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#888' }}>Mon - Fri</span>
+                                <span style={{ fontWeight: 'bold' }}>8:00 AM - 5:00 PM</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#888' }}>Sat - Sun</span>
+                                <span style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Appointment Only</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div style={{ marginTop: '6rem', borderTop: '1px solid #222', paddingTop: '3rem', color: '#555', fontSize: '0.9rem' }}>
+                    <p>© {new Date().getFullYear()} Ryan's Auto Solution. Serving Northern Minnesota with quality inventory.</p>
                 </div>
             </div>
         </div>
