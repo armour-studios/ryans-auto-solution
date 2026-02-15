@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import VehicleCard from '@/components/VehicleCard';
 import { getYouTubeEmbedUrl } from '@/lib/youtubeUtils';
+import ImageGallery from '@/components/ImageGallery';
 
 export async function generateStaticParams() {
     const inventory = await getInventory();
@@ -43,39 +44,11 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: '4rem', alignItems: 'start' }} className="details-grid">
                     {/* Main Content (Left) */}
                     <div>
-                        {/* Main Image */}
-                        <div style={{ position: 'relative', height: '500px', borderRadius: '4px', overflow: 'hidden', marginBottom: '1rem', border: '1px solid #333' }}>
-                            <Image
-                                src={vehicle.image}
-                                alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                priority
-                            />
-                            {vehicle.status !== 'Available' && (
-                                <div style={{
-                                    position: 'absolute', top: '20px', left: '20px',
-                                    backgroundColor: vehicle.status === 'Sold' ? '#c92a37' : '#ffa500',
-                                    color: '#fff', padding: '0.5rem 1rem', fontWeight: 'bold', textTransform: 'uppercase',
-                                    borderRadius: '4px'
-                                }}>
-                                    {vehicle.status}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Thumbnails */}
-                        <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '1rem' }}>
-                            {vehicle.images && vehicle.images.map((img, idx) => (
-                                <div key={idx} style={{
-                                    position: 'relative', width: '120px', height: '80px', flexShrink: 0,
-                                    borderRadius: '4px', overflow: 'hidden', cursor: 'pointer',
-                                    border: vehicle.image === img ? '2px solid var(--primary-color)' : '1px solid #333'
-                                }}>
-                                    <Image src={img} alt="Thumbnail" fill style={{ objectFit: 'cover' }} />
-                                </div>
-                            ))}
-                        </div>
+                        <ImageGallery
+                            images={vehicle.images}
+                            mainImage={vehicle.image}
+                            vehicleName={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                        />
 
                         {/* Video Section */}
                         {(vehicle.video || vehicle.youtubeUrl) && (
