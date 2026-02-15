@@ -38,6 +38,7 @@ export async function getUserByUsername(username: string): Promise<User | undefi
         .single();
 
     if (error || !data) {
+        if (error) console.error("Error fetching user from Supabase:", error.message);
         return undefined;
     }
 
