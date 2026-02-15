@@ -61,20 +61,19 @@ export default async function Home() {
           zIndex: -1
         }} />
 
-        <div className="container animate-fade-in" style={{ zIndex: 1, position: 'relative' }}>
-          <div className="glass-card" style={{ maxWidth: '850px', margin: '0 auto' }}>
+        <div className="container animate-fade-in" style={{ zIndex: 1, position: 'relative', width: '100%' }}>
+          <div className="glass-card" style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <h1 className="animate-fade-in-up" style={{
-              fontSize: '4.5rem',
+              fontSize: '4.2rem',
               fontWeight: 'bold',
               textTransform: 'uppercase',
               marginBottom: '1rem',
-              letterSpacing: '3px',
-              background: 'linear-gradient(to bottom, #ffffff 30%, #a0a0a0 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 10px 20px rgba(0,0,0,0.2)'
+              letterSpacing: '2px',
+              color: '#ffffff',
+              whiteSpace: 'nowrap',
+              textShadow: '0 10px 20px rgba(0,0,0,0.3)'
             }}>
-              Find Your <span style={{ color: 'var(--primary-color)', WebkitTextFillColor: 'initial' }}>Dream Ride</span>
+              Find Your Dream Ride
             </h1>
             <p className="animate-fade-in-up" style={{
               fontSize: '1.4rem',

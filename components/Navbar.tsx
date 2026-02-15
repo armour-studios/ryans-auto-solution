@@ -45,10 +45,12 @@ export default function Navbar() {
           </button>
 
           <ul className={`nav-links ${isOpen ? 'open' : ''}`} style={{ display: 'flex', gap: '2rem', listStyle: 'none', margin: 0 }}>
-            {['Home', 'Inventory', 'Financing', 'Blog', 'About', 'Contact'].map((item) => (
+            {['Home', 'Inventory', 'Trailers', 'Financing', 'Blog', 'About', 'Contact'].map((item) => (
               <li key={item}>
                 <Link
-                  href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                  href={item === 'Home' ? '/' : item === 'Trailers' ? 'https://www.kingoftheroadtrailer.com' : `/${item.toLowerCase()}`}
+                  target={item === 'Trailers' ? '_blank' : undefined}
+                  rel={item === 'Trailers' ? 'noopener noreferrer' : undefined}
                   style={{
                     textTransform: 'uppercase',
                     fontWeight: 'bold',
