@@ -2,10 +2,30 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check for admin_user cookie
+    const checkAuth = () => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; admin_user=`);
+      if (parts.length === 2) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
+    checkAuth();
+
+    // Check occasionally in case of login/logout in other tabs
+    const interval = setInterval(checkAuth, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 100 }}>
@@ -45,23 +65,28 @@ export default function Navbar() {
           </button>
 
           <ul className={`nav-links ${isOpen ? 'open' : ''}`} style={{ display: 'flex', gap: '2rem', listStyle: 'none', margin: 0 }}>
-            {['Home', 'Inventory', 'Trailers', 'Financing', 'Blog', 'About', 'Contact'].map((item) => (
-              <li key={item}>
-                <Link
-                  href={item === 'Home' ? '/' : item === 'Trailers' ? 'https://www.kingoftheroadtrailer.com' : `/${item.toLowerCase()}`}
-                  target={item === 'Trailers' ? '_blank' : undefined}
-                  rel={item === 'Trailers' ? 'noopener noreferrer' : undefined}
-                  style={{
-                    textTransform: 'uppercase',
-                    fontWeight: 'bold',
-                    fontSize: '0.9rem',
-                    letterSpacing: '1px'
-                  }}
-                >
-                  {item}
-                </Link>
-              </li>
-            ))}
+            {(() => {
+              const items = ['Home', 'Inventory', 'Trailers', 'Financing', 'Blog', 'About', 'Contact'];
+              if (isAdmin) items.push('Admin');
+              return items.map((item) => (
+                <li key={item}>
+                  <Link
+                    href={item === 'Home' ? '/' : item === 'Trailers' ? 'https://www.kingoftheroadtrailer.com' : item === 'Admin' ? '/admin' : `/${item.toLowerCase()}`}
+                    target={item === 'Trailers' ? '_blank' : undefined}
+                    rel={item === 'Trailers' ? 'noopener noreferrer' : undefined}
+                    style={{
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold',
+                      fontSize: '0.9rem',
+                      letterSpacing: '1px',
+                      color: item === 'Admin' ? 'var(--primary-color)' : '#fff'
+                    }}
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ));
+            })()}
           </ul>
         </div>
       </nav>
