@@ -3,13 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
-// Helper to extract YouTube video ID from various URL formats
-function getYouTubeId(url: string): string {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : '';
-}
+import { getYouTubeId, getYouTubeEmbedUrl } from '@/lib/youtubeUtils';
 
 type Vehicle = {
     id: number;
@@ -124,7 +118,7 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                                     />
                                 ) : currentVehicle.youtubeUrl ? (
                                     <iframe
-                                        src={`https://www.youtube.com/embed/${getYouTubeId(currentVehicle.youtubeUrl)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeId(currentVehicle.youtubeUrl)}&controls=0&showinfo=0&rel=0&modestbranding=1`}
+                                        src={getYouTubeEmbedUrl(currentVehicle.youtubeUrl, { autoplay: true, mute: true, loop: true }) || ''}
                                         style={{
                                             width: '100%',
                                             height: '100%',

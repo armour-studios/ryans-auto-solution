@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import VehicleCard from '@/components/VehicleCard';
+import { getYouTubeEmbedUrl } from '@/lib/youtubeUtils';
 
 export async function generateStaticParams() {
     const inventory = await getInventory();
@@ -83,7 +84,7 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                                 <div style={{ position: 'relative', paddingTop: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden', border: '1px solid #333' }}>
                                     {vehicle.youtubeUrl ? (
                                         <iframe
-                                            src={vehicle.youtubeUrl.replace('watch?v=', 'embed/')}
+                                            src={getYouTubeEmbedUrl(vehicle.youtubeUrl) || ''}
                                             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                                             frameBorder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
