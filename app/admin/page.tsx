@@ -156,6 +156,33 @@ export default function AdminPortalPage() {
                         <p style={{ color: '#888' }}>Manage customer reviews</p>
                     </Link>
 
+                    {/* Image Tools Module */}
+                    <Link href="/admin/tools/image-editor"
+                        style={{
+                            display: 'block',
+                            padding: '2.5rem',
+                            background: 'linear-gradient(135deg, rgba(167,139,250,0.15) 0%, rgba(167,139,250,0.05) 100%)',
+                            borderRadius: '16px',
+                            textDecoration: 'none',
+                            border: '1px solid rgba(167,139,250,0.3)',
+                            transition: 'transform 0.2s, box-shadow 0.2s',
+                            position: 'relative',
+                            overflow: 'hidden'
+                        }}
+                    >
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '3px',
+                            background: 'linear-gradient(90deg, #a78bfa, #c084fc)'
+                        }} />
+                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🖼️</div>
+                        <h2 style={{ color: '#fff', marginBottom: '0.5rem', fontSize: '1.4rem' }}>Image Editing Tool</h2>
+                        <p style={{ color: '#888' }}>Crop and enhance photos for your site</p>
+                    </Link>
+
                     {/* User Management Module - Admin Only */}
                     {userRole === 'admin' && (
                         <Link href="/admin/users"
@@ -205,6 +232,9 @@ export default function AdminPortalPage() {
                         </Link>
                         <Link href="/admin/testimonials/add" className="btn btn-secondary" style={{ padding: '0.75rem 1.5rem' }}>
                             + Add Testimonial
+                        </Link>
+                        <Link href="/admin/tools/image-editor" className="btn btn-secondary" style={{ padding: '0.75rem 1.5rem', backgroundColor: '#5b21b6' }}>
+                            📸 Edit Photo
                         </Link>
                         <Link href="/" className="btn" style={{ padding: '0.75rem 1.5rem', backgroundColor: '#333' }}>
                             View Live Site
