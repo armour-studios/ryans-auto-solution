@@ -33,66 +33,62 @@ export async function getCroppedImg(
     pixelCrop: { x: number; y: number; width: number; height: number },
     rotation = 0,
     flip = { horizontal: false, vertical: false },
-    autoEnhance = false
+    autoEnhance = false,
+    mimeType = 'image/jpeg'
 ): Promise<Blob | null> {
     const image = await createImage(imageSrc);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
 
-    if (!ctx) {
-        return null;
-    }
+    // 1. Create a workspace canvas for rotation/flip
+    const workCanvas = document.createElement('canvas');
+    const workCtx = workCanvas.getContext('2d');
+    if (!workCtx) return null;
 
-    const rotRad = getRadianAngle(rotation);
-
-    // calculate bounding box of the rotated image
     const { width: bBoxWidth, height: bBoxHeight } = rotateSize(
         image.width,
         image.height,
         rotation
     );
 
-    // set canvas size to match the bounding box
-    canvas.width = bBoxWidth;
-    canvas.height = bBoxHeight;
+    workCanvas.width = bBoxWidth;
+    workCanvas.height = bBoxHeight;
 
-    // translate canvas context to a central point to allow rotating and flipping around the center
-    ctx.translate(bBoxWidth / 2, bBoxHeight / 2);
-    ctx.rotate(rotRad);
-    ctx.scale(flip.horizontal ? -1 : 1, flip.vertical ? -1 : 1);
-    ctx.translate(-image.width / 2, -image.height / 2);
+    workCtx.translate(bBoxWidth / 2, bBoxHeight / 2);
+    workCtx.rotate(getRadianAngle(rotation));
+    workCtx.scale(flip.horizontal ? -1 : 1, flip.vertical ? -1 : 1);
+    workCtx.translate(-image.width / 2, -image.height / 2);
+    workCtx.drawImage(image, 0, 0);
 
-    // draw rotated image
-    ctx.drawImage(image, 0, 0);
+    // 2. Create the final cropped canvas
+    const resultCanvas = document.createElement('canvas');
+    const resultCtx = resultCanvas.getContext('2d');
+    if (!resultCtx) return null;
 
-    // croppedAreaPixels values are bounding box relative
-    // extract the cropped image using these values
-    const data = ctx.getImageData(
+    resultCanvas.width = pixelCrop.width;
+    resultCanvas.height = pixelCrop.height;
+
+    // Apply auto-enhance filter to the context BEFORE drawing
+    if (autoEnhance) {
+        // More noticeable values for better feedback
+        resultCtx.filter = 'brightness(1.1) contrast(1.2) saturate(1.2)';
+    }
+
+    // Draw the cropped portion from workCanvas to resultCanvas
+    // drawImage SUPPORTS filters, putImageData DOES NOT
+    resultCtx.drawImage(
+        workCanvas,
         pixelCrop.x,
         pixelCrop.y,
+        pixelCrop.width,
+        pixelCrop.height,
+        0,
+        0,
         pixelCrop.width,
         pixelCrop.height
     );
 
-    // set canvas width to final desired crop size - this will clear existing context
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
-
-    // paste generated rotate image with correct offsets for x,y crop values.
-    ctx.putImageData(data, 0, 0);
-
-    // Apply Auto-Enhance Filters if enabled
-    if (autoEnhance) {
-        // Basic Auto-Enhance logic:
-        // Brightness: +5%, Contrast: +15%, Saturation: +10%
-        ctx.filter = 'brightness(1.05) contrast(1.15) saturate(1.1)';
-        ctx.drawImage(canvas, 0, 0);
-    }
-
-    // As a blob
     return new Promise((resolve) => {
-        canvas.toBlob((file) => {
+        resultCanvas.toBlob((file) => {
             resolve(file);
-        }, 'image/jpeg');
+        }, mimeType, 0.9); // 0.9 quality
     });
 }

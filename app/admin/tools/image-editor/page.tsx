@@ -7,9 +7,35 @@ import ImageEditor from '@/components/tools/ImageEditor';
 export default function ImageToolsPage() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
+            let file = e.target.files[0];
+
+            // Handle HEIC conversion
+            if (file.name.toLowerCase().endsWith('.heic') || file.type === 'image/heic') {
+                try {
+                    setIsProcessing(true);
+                    const heic2any = (await import('heic2any')).default;
+                    const result = await heic2any({
+                        blob: file,
+                        toType: 'image/jpeg',
+                        quality: 0.9
+                    });
+
+                    // result can be a blob or an array of blobs
+                    const blob = Array.isArray(result) ? result[0] : result;
+                    file = new File([blob], file.name.replace(/\.heic$/i, '.jpg'), { type: 'image/jpeg' });
+                } catch (error) {
+                    console.error('HEIC conversion failed:', error);
+                    alert('Could not convert HEIC file. Please try a JPG or PNG.');
+                    return;
+                } finally {
+                    setIsProcessing(false);
+                }
+            }
+
             const reader = new FileReader();
             reader.onload = () => {
                 setSelectedImage(reader.result as string);
@@ -55,9 +81,13 @@ export default function ImageToolsPage() {
                         cursor: 'pointer'
                     }}
                 />
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📸</div>
-                <h3 style={{ margin: '0 0 0.5rem 0', color: '#fff' }}>Click or Drag Photo Here</h3>
-                <p style={{ margin: 0, color: '#666' }}>Supports JPG, PNG, WEBP</p>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{isProcessing ? '⏳' : '📸'}</div>
+                <h3 style={{ margin: '0 0 0.5rem 0', color: '#fff' }}>
+                    {isProcessing ? 'Converting HEIC to JPG...' : 'Click or Drag Photo Here'}
+                </h3>
+                <p style={{ margin: 0, color: '#666' }}>
+                    {isProcessing ? 'Please wait a moment' : 'Supports JPG, PNG, WEBP, and HEIC (iPhone)'}
+                </p>
             </div>
 
             <div style={{ marginTop: '3rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
@@ -65,6 +95,12 @@ export default function ImageToolsPage() {
                     <h4 style={{ color: 'var(--primary-color)', margin: '0 0 1rem 0' }}>💡 Pro Tip</h4>
                     <p style={{ color: '#ccc', fontSize: '0.9rem', lineHeight: '1.6' }}>
                         Use the <strong>Auto Enhance</strong> feature to automatically adjust lighting and colors for vehicle photos. It makes them pop!
+                    </p>
+                </div>
+                <div style={{ backgroundColor: '#1a1a1a', padding: '1.5rem', borderRadius: '8px' }}>
+                    <h4 style={{ color: 'var(--primary-color)', margin: '0 0 1rem 0' }}>🩹 iPhone Photos</h4>
+                    <p style={{ color: '#ccc', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                        Uploading an <strong>HEIC</strong> photo from an iPhone? No problem! The tool will automatically convert it to a standard JPG for you.
                     </p>
                 </div>
                 <div style={{ backgroundColor: '#1a1a1a', padding: '1.5rem', borderRadius: '8px' }}>

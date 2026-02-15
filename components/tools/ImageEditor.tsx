@@ -16,6 +16,8 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
     const [autoEnhance, setAutoEnhance] = useState(false);
     const [processing, setProcessing] = useState(false);
+    const [aspect, setAspect] = useState<number | undefined>(4 / 3);
+    const [format, setFormat] = useState('image/jpeg');
 
     const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
         setCroppedAreaPixels(croppedAreaPixels);
@@ -31,14 +33,16 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                 croppedAreaPixels,
                 rotation,
                 { horizontal: false, vertical: false },
-                autoEnhance
+                autoEnhance,
+                format
             );
 
             if (croppedImageBlob) {
+                const extension = format.split('/')[1];
                 const url = URL.createObjectURL(croppedImageBlob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `edited-image-${Date.now()}.jpg`;
+                link.download = `edited-image-${Date.now()}.${extension}`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -59,36 +63,46 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.9)',
+            backgroundColor: 'rgba(0,0,0,0.95)',
             zIndex: 9999,
             display: 'flex',
             flexDirection: 'column',
-            padding: '2rem'
+            padding: '1rem'
         }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', color: '#fff' }}>
-                <h2 style={{ margin: 0 }}>Edit Image</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', color: '#fff', alignItems: 'center' }}>
+                <div>
+                    <h2 style={{ margin: 0 }}>Advanced Photo Editor</h2>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#888' }}>Crop, Rotate, and Enhance</p>
+                </div>
                 <button onClick={onClose} style={{
-                    background: 'none',
+                    background: 'rgba(255,255,255,0.1)',
                     border: 'none',
                     color: '#fff',
-                    fontSize: '1.5rem',
-                    cursor: 'pointer'
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    fontSize: '1.2rem'
                 }}>✕</button>
             </div>
 
             <div style={{
                 position: 'relative',
                 flex: 1,
-                backgroundColor: '#111',
-                borderRadius: '8px',
-                overflow: 'hidden'
+                backgroundColor: '#000',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
             }}>
                 <Cropper
                     image={imageSrc}
                     crop={crop}
                     rotation={rotation}
                     zoom={zoom}
-                    aspect={4 / 3}
+                    aspect={aspect}
                     onCropChange={setCrop}
                     onRotationChange={setRotation}
                     onCropComplete={onCropComplete}
@@ -97,89 +111,168 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
             </div>
 
             <div style={{
-                marginTop: '1.5rem',
+                marginTop: '1rem',
                 padding: '1.5rem',
-                backgroundColor: '#222',
-                borderRadius: '8px',
+                backgroundColor: '#1a1a1a',
+                borderRadius: '12px',
                 color: '#fff',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '2rem',
-                alignItems: 'center'
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem',
+                border: '1px solid #333'
             }}>
-                {/* Zoom Slider */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <label style={{ fontSize: '0.8rem', color: '#888' }}>Zoom</label>
-                    <input
-                        type="range"
-                        value={zoom}
-                        min={1}
-                        max={3}
-                        step={0.1}
-                        aria-labelledby="Zoom"
-                        onChange={(e) => setZoom(Number(e.target.value))}
-                        style={{ width: '100%', accentColor: 'var(--primary-color)' }}
-                    />
+
+                {/* Top Row: Aspect and Format */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
+
+                    {/* Aspect Ratio */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <label style={{ fontSize: '0.8rem', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Aspect Ratio</label>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            {[
+                                { label: '4:3', value: 4 / 3 },
+                                { label: '16:9', value: 16 / 9 },
+                                { label: '1:1', value: 1 },
+                                { label: 'Free', value: undefined }
+                            ].map((opt) => (
+                                <button
+                                    key={opt.label}
+                                    onClick={() => setAspect(opt.value)}
+                                    style={{
+                                        padding: '0.5rem 1rem',
+                                        backgroundColor: aspect === opt.value ? 'var(--primary-color)' : '#333',
+                                        color: aspect === opt.value ? '#000' : '#fff',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 'bold',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
+                                    {opt.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Download Format */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <label style={{ fontSize: '0.8rem', color: '#888', fontWeight: 'bold', textTransform: 'uppercase' }}>Save As</label>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            {[
+                                { label: 'JPG', value: 'image/jpeg' },
+                                { label: 'PNG', value: 'image/png' },
+                                { label: 'WEBP', value: 'image/webp' }
+                            ].map((opt) => (
+                                <button
+                                    key={opt.label}
+                                    onClick={() => setFormat(opt.value)}
+                                    style={{
+                                        padding: '0.5rem 1rem',
+                                        backgroundColor: format === opt.value ? '#fff' : '#333',
+                                        color: format === opt.value ? '#000' : '#fff',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 'bold',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
+                                    {opt.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
-                {/* Rotation Slider */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <label style={{ fontSize: '0.8rem', color: '#888' }}>Rotation</label>
-                    <input
-                        type="range"
-                        value={rotation}
-                        min={0}
-                        max={360}
-                        step={1}
-                        aria-labelledby="Rotation"
-                        onChange={(e) => setRotation(Number(e.target.value))}
-                        style={{ width: '100%', accentColor: 'var(--primary-color)' }}
-                    />
-                </div>
-
-                {/* Auto Enhance Toggle */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <label style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        cursor: 'pointer',
-                        padding: '0.5rem 1rem',
-                        backgroundColor: autoEnhance ? 'var(--primary-color)' : '#333',
-                        color: autoEnhance ? '#000' : '#fff',
-                        borderRadius: '20px',
-                        transition: 'all 0.2s',
-                        fontWeight: 'bold',
-                        fontSize: '0.9rem'
-                    }}>
+                {/* Middle Row: Sliders and Enhance */}
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '2rem',
+                    alignItems: 'center'
+                }}>
+                    {/* Zoom */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label style={{ fontSize: '0.8rem', color: '#888' }}>Zoom</label>
+                            <span style={{ fontSize: '0.8rem' }}>{zoom.toFixed(1)}x</span>
+                        </div>
                         <input
-                            type="checkbox"
-                            checked={autoEnhance}
-                            onChange={(e) => setAutoEnhance(e.target.checked)}
-                            style={{ display: 'none' }}
+                            type="range"
+                            value={zoom}
+                            min={1}
+                            max={3}
+                            step={0.1}
+                            onChange={(e) => setZoom(Number(e.target.value))}
+                            style={{ width: '100%', accentColor: 'var(--primary-color)' }}
                         />
-                        ✨ Auto Enhance
-                    </label>
+                    </div>
+
+                    {/* Rotation */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label style={{ fontSize: '0.8rem', color: '#888' }}>Rotation</label>
+                            <span style={{ fontSize: '0.8rem' }}>{rotation}°</span>
+                        </div>
+                        <input
+                            type="range"
+                            value={rotation}
+                            min={0}
+                            max={360}
+                            step={1}
+                            onChange={(e) => setRotation(Number(e.target.value))}
+                            style={{ width: '100%', accentColor: 'var(--primary-color)' }}
+                        />
+                    </div>
+
+                    {/* Auto Enhance Toggle */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <button
+                            onClick={() => setAutoEnhance(!autoEnhance)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                cursor: 'pointer',
+                                padding: '0.75rem 1.5rem',
+                                backgroundColor: autoEnhance ? 'var(--primary-color)' : '#333',
+                                color: autoEnhance ? '#000' : '#fff',
+                                border: 'none',
+                                borderRadius: '30px',
+                                transition: 'all 0.2s',
+                                fontWeight: 'bold',
+                                fontSize: '0.9rem',
+                                width: '100%',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            {autoEnhance ? '✨ Auto Enhance Active' : '🪄 Apply Auto Enhance'}
+                        </button>
+                    </div>
                 </div>
 
-                {/* Action Button */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <button
-                        onClick={handleProcessAndDownload}
-                        disabled={processing}
-                        className="btn btn-accent"
-                        style={{
-                            padding: '0.75rem 2rem',
-                            borderRadius: '30px',
-                            fontSize: '1rem',
-                            boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-                            backgroundColor: processing ? '#444' : 'var(--primary-color)',
-                            color: processing ? '#888' : '#000'
-                        }}
-                    >
-                        {processing ? 'Processing...' : 'Download Processed Image (JPG)'}
-                    </button>
-                </div>
+                {/* Bottom Row: Action */}
+                <button
+                    onClick={handleProcessAndDownload}
+                    disabled={processing}
+                    className="btn btn-primary"
+                    style={{
+                        padding: '1rem',
+                        borderRadius: '8px',
+                        fontSize: '1.1rem',
+                        fontWeight: 'bold',
+                        backgroundColor: processing ? '#444' : 'var(--primary-color)',
+                        color: processing ? '#888' : '#000',
+                        border: 'none',
+                        cursor: processing ? 'default' : 'pointer',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    {processing ? 'Processing Final Image...' : `Download ${format.split('/')[1].toUpperCase()}`}
+                </button>
             </div>
         </div>
     );
