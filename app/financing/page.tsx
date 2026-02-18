@@ -10,11 +10,11 @@ export default function FinancingPage() {
         <div style={{ padding: '0', color: '#fff', backgroundColor: '#050505', minHeight: '100vh' }}>
             {/* Hero Section */}
             <div style={{
-                padding: '8rem 0 6rem 0',
+                padding: 'var(--spacing-section) 0',
                 background: 'radial-gradient(circle at top right, rgba(15, 113, 177, 0.15), transparent 60%)',
                 textAlign: 'center'
             }}>
-                <div className="container" style={{ maxWidth: '1000px' }}>
+                <div className="container" style={{ maxWidth: '1000px', padding: '0 1.5rem' }}>
                     <span className="cta-glow" style={{
                         color: 'var(--primary-color)',
                         textTransform: 'uppercase',
@@ -26,10 +26,10 @@ export default function FinancingPage() {
                     }}>
                         Streamlined Approvals
                     </span>
-                    <h1 style={{ fontSize: '4.5rem', marginBottom: '1.5rem', textTransform: 'uppercase', fontWeight: 'bold', lineHeight: '1.1' }}>
+                    <h1 style={{ marginBottom: '1.5rem', textTransform: 'uppercase', fontWeight: 'bold', lineHeight: '1.1' }}>
                         Financing <span style={{ color: 'var(--primary-color)' }}>Simplified</span>
                     </h1>
-                    <p style={{ fontSize: '1.4rem', color: '#888', maxWidth: '750px', margin: '0 auto', lineHeight: '1.6' }}>
+                    <p style={{ fontSize: 'var(--font-size-p)', color: '#888', maxWidth: '750px', margin: '0 auto', lineHeight: '1.6' }}>
                         We partner with trusted lenders to provide flexible financing options tailored to your lifestyle. Get approved and drive home today.
                     </p>
                 </div>
@@ -157,8 +157,8 @@ export default function FinancingPage() {
                     </h2>
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                        gap: '3rem',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                        gap: '2.5rem',
                         justifyContent: 'center'
                     }}>
                         <div style={{ textAlign: 'center', padding: '1rem' }}>

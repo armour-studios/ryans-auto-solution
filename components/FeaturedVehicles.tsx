@@ -102,7 +102,7 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                             transition: 'transform 0.3s ease'
                         }}>
                             {/* Video or Image */}
-                            <div style={{ position: 'relative', height: '450px' }}>
+                            <div style={{ position: 'relative', height: 'clamp(300px, 50vh, 450px)' }}>
                                 {currentVehicle.video ? (
                                     <video
                                         src={currentVehicle.video}
@@ -163,21 +163,21 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                                     bottom: 0,
                                     left: 0,
                                     right: 0,
-                                    height: '50%',
-                                    background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)',
+                                    height: '70%',
+                                    background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 40%, transparent 100%)',
                                     pointerEvents: 'none'
                                 }} />
 
                                 {/* Featured Badge */}
                                 <div style={{
                                     position: 'absolute',
-                                    top: '20px',
-                                    left: '20px',
+                                    top: '15px',
+                                    left: '15px',
                                     background: 'linear-gradient(135deg, var(--primary-color), #0056b3)',
                                     color: '#fff',
-                                    padding: '0.5rem 1rem',
+                                    padding: '0.4rem 0.8rem',
                                     borderRadius: '6px',
-                                    fontSize: '0.8rem',
+                                    fontSize: '0.75rem',
                                     fontWeight: 'bold',
                                     textTransform: 'uppercase',
                                     letterSpacing: '1px',
@@ -190,13 +190,13 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                                 {(currentVehicle.video || currentVehicle.youtubeUrl) && (
                                     <div style={{
                                         position: 'absolute',
-                                        top: '20px',
-                                        right: '20px',
+                                        top: '15px',
+                                        right: '15px',
                                         background: 'rgba(0,0,0,0.7)',
                                         color: '#fff',
-                                        padding: '0.5rem 1rem',
+                                        padding: '0.4rem 0.8rem',
                                         borderRadius: '6px',
-                                        fontSize: '0.8rem',
+                                        fontSize: '0.75rem',
                                         fontWeight: 'bold',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -214,29 +214,33 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                padding: '2rem',
+                                padding: 'clamp(1rem, 4vw, 2rem)',
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'flex-end'
+                                alignItems: 'flex-end',
+                                gap: '1rem',
+                                flexWrap: 'wrap'
                             }}>
-                                <div>
+                                <div style={{ flex: '1 1 200px' }}>
                                     <h3 style={{
-                                        fontSize: '1.8rem',
+                                        fontSize: 'clamp(1.2rem, 4vw, 1.8rem)',
                                         color: '#fff',
                                         margin: 0,
-                                        marginBottom: '0.5rem',
-                                        textTransform: 'uppercase'
+                                        marginBottom: '0.25rem',
+                                        textTransform: 'uppercase',
+                                        lineHeight: '1.2'
                                     }}>
                                         {currentVehicle.year} {currentVehicle.make} {currentVehicle.model}
                                     </h3>
-                                    <p style={{ color: '#888', margin: 0, fontSize: '1rem' }}>
+                                    <p style={{ color: '#aaa', margin: 0, fontSize: '0.9rem' }}>
                                         {currentVehicle.mileage.toLocaleString()} miles
                                     </p>
                                 </div>
                                 <div style={{
-                                    fontSize: '2rem',
+                                    fontSize: 'clamp(1.5rem, 5vw, 2rem)',
                                     fontWeight: 'bold',
-                                    color: 'var(--primary-color)'
+                                    color: 'var(--primary-color)',
+                                    whiteSpace: 'nowrap'
                                 }}>
                                     ${currentVehicle.price.toLocaleString()}
                                 </div>
@@ -249,6 +253,7 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                         <>
                             <button
                                 onClick={(e) => { e.preventDefault(); prevSlide(); }}
+                                className="hide-on-mobile"
                                 style={{
                                     position: 'absolute',
                                     left: '-60px',
@@ -272,6 +277,7 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                             </button>
                             <button
                                 onClick={(e) => { e.preventDefault(); nextSlide(); }}
+                                className="hide-on-mobile"
                                 style={{
                                     position: 'absolute',
                                     right: '-60px',

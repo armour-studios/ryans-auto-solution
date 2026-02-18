@@ -33,7 +33,7 @@
     "video": "",
     "youtubeUrl": "https://youtu.be/7BQePCWipaM",
     "vin": "1C4RJFCG8DC640462",
-    "trending": true,
+    "trending": false,
     "description": "Make: Jeep \nModel: Grand Cherokee Overland\nYear: 2013 \nEngine: 3.6L V6 \nOdometer: 65,000 miles \nFuel: Gasoline \nTransmission: Automatic \nDrivetrain: AWD \nColor: White",
     "specs": {
       "Fuel": "Gasoline",
@@ -227,7 +227,7 @@
     "video": "",
     "youtubeUrl": "https://youtu.be/D5WkM8-gWBM",
     "vin": "2G1WA5E39E1169235",
-    "trending": false,
+    "trending": true,
     "description": "Make: Chevrolet \nModel: Impala Limited LS \nYear: 2014 \nEngine: 3.6L V6 \nOdometer: 106,000 miles \nFuel: Gasoline \nTransmission: Automatic \nDrivetrain: FWD \nColor: White",
     "specs": {
       "Fuel": "Gasoline",
@@ -281,7 +281,7 @@
     "video": "",
     "youtubeUrl": "https://youtu.be/9jTkAYT7348",
     "vin": "1GB3K0CL6BF145366",
-    "trending": false,
+    "trending": true,
     "description": "Make: Chevy\nModel: Silverado 3500 \nYear: 2011 \nEngine: 6.6L V8 \nOdometer: 217,000 miles \nFuel: Diesel \nTransmission: Automatic \nDrivetrain: 4x4 \nColor: Red",
     "specs": {
       "Fuel": "Diesel ",

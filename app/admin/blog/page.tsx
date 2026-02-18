@@ -12,9 +12,8 @@ export default async function BlogAdminPage() {
     const blogPosts = await getBlogPosts();
 
     return (
-        <div style={{ padding: '4rem 0' }}>
+        <div style={{ padding: '2rem 0' }}>
             <div className="container">
-                <Link href="/admin" style={{ display: 'inline-block', marginBottom: '2rem', color: '#888' }}>&larr; Back to Dashboard</Link>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <h1 style={{ fontSize: '2.5rem' }}>Blog Management</h1>

@@ -91,13 +91,8 @@ export default function UserManagementPage() {
     };
 
     return (
-        <div style={{ padding: '2rem 0', minHeight: '80vh' }}>
+        <div style={{ padding: '2rem 0' }}>
             <div className="container" style={{ maxWidth: '800px' }}>
-                <div style={{ marginBottom: '2rem' }}>
-                    <Link href="/admin" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                        ← Back to Dashboard
-                    </Link>
-                </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <h1 style={{ fontSize: '2rem', color: 'var(--primary-color)', textTransform: 'uppercase', margin: 0 }}>User Management</h1>

@@ -1,65 +1,123 @@
-import { getInventory } from '@/lib/inventory';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import DeleteButton from '@/components/DeleteButton';
+import FeaturedToggle from '@/components/admin/FeaturedToggle';
 
-export const metadata = {
-    title: 'Inventory Management',
-};
+export default function InventoryAdminPage() {
+    const [inventory, setInventory] = useState<any[]>([]);
+    const [activeFilter, setActiveFilter] = useState<'All' | 'Available' | 'Sold'>('Available');
+    const [loading, setLoading] = useState(true);
 
-export const dynamic = 'force-dynamic'; // Always fetch fresh data
+    useEffect(() => {
+        const fetchInventory = async () => {
+            try {
+                const res = await fetch('/api/inventory');
+                const data = await res.json();
+                setInventory(data);
+            } catch (err) {
+                console.error('Failed to load inventory:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchInventory();
+    }, []);
 
-export default async function InventoryAdminPage() {
-    const inventory = await getInventory();
+    const filteredInventory = inventory.filter(v => {
+        if (activeFilter === 'All') return true;
+        return v.status === activeFilter;
+    });
+
+    if (loading) {
+        return <div style={{ padding: '2rem', color: '#666' }}>Loading Inventory Management...</div>;
+    }
 
     return (
-        <div style={{ padding: '4rem 0' }}>
-            <div className="container">
-                <Link href="/admin" style={{ display: 'inline-block', marginBottom: '2rem', color: '#888' }}>&larr; Back to Dashboard</Link>
+        <div style={{ padding: '2rem 0' }}>
+            <div className="container" style={{ maxWidth: '1200px' }}>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                    <h1 style={{ fontSize: '2.5rem' }}>Inventory Management</h1>
+                    <h1 style={{ fontSize: '2.5rem', color: '#fff', textTransform: 'uppercase' }}>Inventory Management</h1>
                     <Link href="/admin/inventory/add" className="btn btn-accent">
                         + ADD NEW VEHICLE
                     </Link>
                 </div>
 
-                <div style={{ backgroundColor: '#222', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', border: '1px solid #333' }}>
+                {/* Filter Tabs */}
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', borderBottom: '1px solid #333', paddingBottom: '1rem' }}>
+                    {['Available', 'Sold', 'All'].map((filter) => (
+                        <button
+                            key={filter}
+                            onClick={() => setActiveFilter(filter as any)}
+                            style={{
+                                padding: '0.5rem 1.5rem',
+                                backgroundColor: activeFilter === filter ? 'var(--primary-color)' : 'transparent',
+                                border: '1px solid',
+                                borderColor: activeFilter === filter ? 'var(--primary-color)' : '#333',
+                                color: activeFilter === filter ? '#fff' : '#888',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                textTransform: 'uppercase',
+                                fontSize: '0.8rem',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            {filter}
+                        </button>
+                    ))}
+                </div>
+
+                <div style={{ backgroundColor: '#111', borderRadius: '12px', overflow: 'hidden', border: '1px solid #222' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
-                        <thead style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #333' }}>
-                            <tr>
-                                <th style={{ padding: '1rem', textAlign: 'left', color: '#888', textTransform: 'uppercase', fontSize: '0.8rem' }}>ID</th>
-                                <th style={{ padding: '1rem', textAlign: 'left', color: '#888', textTransform: 'uppercase', fontSize: '0.8rem' }}>Vehicle</th>
-                                <th style={{ padding: '1rem', textAlign: 'left', color: '#888', textTransform: 'uppercase', fontSize: '0.8rem' }}>Price</th>
-                                <th style={{ padding: '1rem', textAlign: 'left', color: '#888', textTransform: 'uppercase', fontSize: '0.8rem' }}>Status</th>
-                                <th style={{ padding: '1rem', textAlign: 'right', color: '#888', textTransform: 'uppercase', fontSize: '0.8rem' }}>Actions</th>
+                        <thead>
+                            <tr style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #222' }}>
+                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>ID</th>
+                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Vehicle</th>
+                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Price</th>
+                                <th style={{ padding: '1.25rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Featured</th>
+                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Status</th>
+                                <th style={{ padding: '1.25rem', textAlign: 'right', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {inventory.map(vehicle => (
-                                <tr key={vehicle.id} style={{ borderBottom: '1px solid #333' }}>
-                                    <td style={{ padding: '1rem', color: '#666' }}>{vehicle.id}</td>
-                                    <td style={{ padding: '1rem' }}>
-                                        <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{vehicle.year} {vehicle.make} {vehicle.model}</div>
-                                        <div style={{ fontSize: '0.85rem', color: '#888' }}>{vehicle.mileage.toLocaleString()} miles</div>
+                            {filteredInventory.map(vehicle => (
+                                <tr key={vehicle.id} style={{ borderBottom: '1px solid #222' }}>
+                                    <td style={{ padding: '1.25rem', color: '#444', fontSize: '0.85rem' }}>{vehicle.id}</td>
+                                    <td style={{ padding: '1.25rem' }}>
+                                        <div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#eee' }}>{vehicle.year} {vehicle.make} {vehicle.model}</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.25rem' }}>{vehicle.mileage.toLocaleString()} miles</div>
                                     </td>
-                                    <td style={{ padding: '1rem', fontWeight: 'bold' }}>${vehicle.price.toLocaleString()}</td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td style={{ padding: '1.25rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>${vehicle.price.toLocaleString()}</td>
+                                    <td style={{ padding: '1.25rem', textAlign: 'center' }}>
+                                        <FeaturedToggle id={vehicle.id} initialStatus={vehicle.trending || false} />
+                                    </td>
+                                    <td style={{ padding: '1.25rem' }}>
                                         <span style={{
-                                            padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold',
-                                            backgroundColor: vehicle.status === 'Sold' ? 'rgba(201, 42, 55, 0.2)' : 'rgba(40, 167, 69, 0.2)',
-                                            color: vehicle.status === 'Sold' ? '#ff6b6b' : '#4cd137'
+                                            padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase',
+                                            backgroundColor: vehicle.status === 'Sold' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                                            color: vehicle.status === 'Sold' ? '#ef4444' : '#10b981',
+                                            border: `1px solid ${vehicle.status === 'Sold' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`
                                         }}>
                                             {vehicle.status || 'Available'}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
-                                        <Link href={`/admin/inventory/edit/${vehicle.id}`} className="btn" style={{ marginRight: '0.5rem', padding: '0.25rem 0.75rem', fontSize: '0.8rem', backgroundColor: '#333' }}>Edit</Link>
+                                    <td style={{ padding: '1.25rem', textAlign: 'right' }}>
+                                        <Link href={`/admin/inventory/edit/${vehicle.id}`} className="btn" style={{ marginRight: '0.5rem', padding: '0.4rem 0.8rem', fontSize: '0.75rem', backgroundColor: '#222', border: '1px solid #333' }}>
+                                            EDIT
+                                        </Link>
                                         <DeleteButton id={vehicle.id} endpoint="/api/inventory" />
                                     </td>
                                 </tr>
                             ))}
-                            {inventory.length === 0 && (
-                                <tr><td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: '#666' }}>No inventory found.</td></tr>
+                            {filteredInventory.length === 0 && (
+                                <tr>
+                                    <td colSpan={6} style={{ padding: '4rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>
+                                        No vehicles found in this category.
+                                    </td>
+                                </tr>
                             )}
                         </tbody>
                     </table>

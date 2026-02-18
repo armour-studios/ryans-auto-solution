@@ -22,16 +22,16 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <div style={{
             backgroundColor: 'var(--card-bg)',
             color: 'var(--text-color)',
-            borderRadius: '4px',
+            borderRadius: '12px',
             overflow: 'hidden',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.3)', /* Darker shadow */
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
             border: '1px solid #333',
-            transition: 'transform 0.2s',
+            transition: 'all 0.3s ease',
             display: 'flex',
             flexDirection: 'column',
             opacity: isSold ? 0.8 : 1
         }}
-            className="vehicle-card"
+            className="vehicle-card card-glow"
         >
             <div style={{ position: 'relative', height: '220px' }}>
                 <Image

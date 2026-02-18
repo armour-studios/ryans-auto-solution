@@ -87,7 +87,12 @@ export default function InventoryPage() {
             <div className="container">
 
                 {/* Main Layout Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1fr) 3fr', gap: '2rem', alignItems: 'start' }} className="inventory-grid">
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                    gap: '2.5rem',
+                    alignItems: 'start'
+                }} className="inventory-layout-grid">
 
                     {/* Left Sidebar */}
                     <aside>

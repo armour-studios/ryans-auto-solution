@@ -18,10 +18,13 @@
 
   --border-color: #333333;
 
-  /* Typography */
-  --font-main: var(--font-tinos), serif;
-  --font-display: var(--font-tinos), serif;
-  /* Classic Times New Roman style */
+  /* Typography - Fluid scaling */
+  --font-size-h1: clamp(2.2rem, 8vw, 4.2rem);
+  --font-size-h2: clamp(1.8rem, 6vw, 2.8rem);
+  --font-size-h3: clamp(1.3rem, 4vw, 1.8rem);
+  --font-size-p: clamp(1rem, 2vw, 1.15rem);
+
+  --spacing-section: clamp(3rem, 10vw, 6rem);
 }
 
 * {
@@ -35,6 +38,8 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
+  font-size: var(--font-size-p);
+  overflow-x: hidden;
 }
 
 a {
@@ -43,15 +48,19 @@ a {
   transition: opacity 0.3s ease;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-display);
-  font-weight: 700;
+h1 {
+  font-size: var(--font-size-h1);
+  color: #fff;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
   color: var(--primary-color);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  color: #fff;
 }
 
 img {
@@ -181,140 +190,73 @@ img {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-/* Mobile Responsiveness - Tablet */
+/* Mobile Responsiveness - Tablet and Below */
 @media (max-width: 992px) {
   .container {
     padding: 0 1.5rem;
   }
 
-  h1 {
-    font-size: 2rem !important;
-  }
-
-  h2 {
-    font-size: 1.5rem !important;
-  }
-
-  /* Grid layouts become 2 columns */
-  .inventory-grid,
-  .blog-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
+  /* Force stack any intrinsic grids that don't use auto-fit */
+  .details-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
 /* Mobile Responsiveness - Phone */
 @media (max-width: 768px) {
-  .navbar .container {
-    flex-wrap: wrap;
-  }
-
-  .mobile-menu-btn {
-    display: block !important;
-    background: none;
-    border: none;
-    color: var(--white);
-    font-size: 1.5rem;
-    cursor: pointer;
+  .hero-text {
+    font-size: 2.5rem !important;
   }
 
   .nav-links {
     display: none !important;
+    position: fixed;
+    top: 100px;
+    left: 0;
     width: 100%;
+    background: #000;
     flex-direction: column;
-    gap: 1rem !important;
-    padding: 1rem 0;
-    text-align: center;
+    gap: 0 !important;
+    padding: 0;
+    border-bottom: 2px solid var(--primary-color);
+  }
+
+  .nav-links li {
+    width: 100%;
+    border-bottom: 1px solid #111;
+  }
+
+  .nav-links li a {
+    display: block;
+    padding: 1.5rem;
+    width: 100%;
   }
 
   .nav-links.open {
     display: flex !important;
   }
 
-  h1 {
-    font-size: 1.75rem !important;
+  .mobile-menu-btn {
+    display: block !important;
   }
 
-  h2 {
-    font-size: 1.25rem !important;
-  }
-
-  .vehicle-card {
-    margin-bottom: 20px;
-  }
-
-  .inventory-grid,
-  .details-grid,
-  .blog-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .hide-on-mobile {
-    display: none !important;
-  }
-
-  /* Hero section mobile */
-  section[style*="padding: 6rem"] {
-    padding: 3rem 0 !important;
-  }
-
-  /* Cards grid mobile */
-  div[style*="gridTemplateColumns: repeat(2, 1fr)"],
-  div[style*="gridTemplateColumns: repeat(3, 1fr)"],
-  div[style*="gridTemplateColumns: repeat(4, 1fr)"] {
-    grid-template-columns: 1fr !important;
-  }
-
-  /* Buttons full width on mobile */
   .btn {
     width: 100%;
-    text-align: center;
+    justify-content: center;
   }
 
-  /* Footer mobile */
-  footer .container>div[style*="display: flex"] {
-    flex-direction: column !important;
-    gap: 0.5rem !important;
-  }
-
-  /* Form inputs full width */
-  input,
-  select,
-  textarea {
-    width: 100% !important;
-  }
-
-  /* Quick actions wrap */
-  div[style*="display: flex"][style*="gap: 1rem"] {
-    flex-wrap: wrap;
+  section {
+    padding: var(--spacing-section) 0 !important;
   }
 }
 
-/* Small phones */
+/* Smallest phones */
 @media (max-width: 480px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 1.25rem;
   }
 
-  h1 {
-    font-size: 1.5rem !important;
-  }
-
-  h2 {
-    font-size: 1.1rem !important;
-  }
-
-  .btn {
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  /* Reduce padding on sections */
-  section {
-    padding: 2rem 0 !important;
-  }
-
-  /* Admin cards stack */
-  div[style*="gridTemplateColumns: repeat(auto-fit"] {
-    grid-template-columns: 1fr !important;
+  .glass-card {
+    padding: 2rem 1.5rem;
   }
 }

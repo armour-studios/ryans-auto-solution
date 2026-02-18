@@ -55,14 +55,20 @@ export default function LoginPage() {
                 boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
             }}>
                 <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔐</div>
+                    <div style={{ color: 'var(--primary-color)', marginBottom: '1.5rem' }}>
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
                     <h1 style={{
-                        fontSize: '1.8rem',
+                        textTransform: 'uppercase',
                         color: '#fff',
-                        marginBottom: '0.5rem',
-                        fontWeight: 'bold'
-                    }}>Admin Login</h1>
-                    <p style={{ color: '#666', fontSize: '0.9rem' }}>Enter your credentials to access the dashboard</p>
+                        marginBottom: '1.5rem',
+                        fontWeight: 'bold',
+                        letterSpacing: '2px'
+                    }}>Admin Access</h1>
+                    <p style={{ color: '#666', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Authorized Entry Only</p>
                 </div>
 
                 <form onSubmit={handleLogin}>

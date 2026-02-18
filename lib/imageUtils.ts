@@ -29,47 +29,54 @@ export function rotateSize(width: number, height: number, rotation: number) {
  * This function was adapted from the one in the react-easy-crop documentation
  */
 /**
- * Simple sharpen convolution filter
+ * Professional Unsharp Mask Sharpening
  */
-function sharpen(ctx: CanvasRenderingContext2D, w: number, h: number, mix: number) {
-    const weights = [0, -1, 0, -1, 5, -1, 0, -1, 0];
-    const katet = Math.round(Math.sqrt(weights.length));
-    const half = (katet * 0.5) | 0;
-    const dstData = ctx.createImageData(w, h);
-    const dstRaw = dstData.data;
-    const srcData = ctx.getImageData(0, 0, w, h);
-    const srcRaw = srcData.data;
+async function unsharpMask(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, amount: number, radius: number) {
+    const w = canvas.width;
+    const h = canvas.height;
 
-    for (let y = 0; y < h; y++) {
-        for (let x = 0; x < w; x++) {
-            const sy = y;
-            const sx = x;
-            const dstOff = (y * w + x) * 4;
-            let r = 0, g = 0, b = 0;
+    // 1. Get original image data
+    const originalData = ctx.getImageData(0, 0, w, h);
+    const original = originalData.data;
 
-            for (let cy = 0; cy < katet; cy++) {
-                for (let cx = 0; cx < katet; cx++) {
-                    const scy = sy + cy - half;
-                    const scx = sx + cx - half;
+    // 2. Create a blurred version on a temporary canvas
+    const blurCanvas = document.createElement('canvas');
+    blurCanvas.width = w;
+    blurCanvas.height = h;
+    const blurCtx = blurCanvas.getContext('2d');
+    if (!blurCtx) return;
 
-                    if (scy >= 0 && scy < h && scx >= 0 && scx < w) {
-                        const srcOff = (scy * w + scx) * 4;
-                        const wt = weights[cy * katet + cx];
-                        r += srcRaw[srcOff] * wt;
-                        g += srcRaw[srcOff + 1] * wt;
-                        b += srcRaw[srcOff + 2] * wt;
-                    }
-                }
-            }
+    blurCtx.filter = `blur(${radius}px)`;
+    blurCtx.drawImage(canvas, 0, 0);
+    const blurred = blurCtx.getImageData(0, 0, w, h).data;
 
-            // Alpha stays same
-            dstRaw[dstOff] = srcRaw[dstOff] + (r - srcRaw[dstOff]) * mix;
-            dstRaw[dstOff + 1] = srcRaw[dstOff + 1] + (g - srcRaw[dstOff + 1]) * mix;
-            dstRaw[dstOff + 2] = srcRaw[dstOff + 2] + (b - srcRaw[dstOff + 2]) * mix;
-            dstRaw[dstOff + 3] = srcRaw[dstOff + 3];
+    // 3. Blend: Pixel = Original + (Original - Blurred) * Amount
+    // We modify life data in originalData
+    for (let i = 0; i < original.length; i += 4) {
+        for (let j = 0; j < 3; j++) { // R, G, B
+            const idx = i + j;
+            const diff = original[idx] - blurred[idx];
+            // amount 0.6-0.8 is good for "clean" sharpen without grain
+            original[idx] = Math.min(255, Math.max(0, original[idx] + diff * amount));
         }
+        // Alpha (original[i+3]) remains unchanged
     }
-    ctx.putImageData(dstData, 0, 0);
+
+    ctx.putImageData(originalData, 0, 0);
+}
+
+/**
+ * Subtle Denoise (Median approximation) 
+ * Helps clean up image grain before sharpening
+ */
+function applyShowroomDenoise(ctx: CanvasRenderingContext2D, w: number, h: number) {
+    // We use a very light blur blend to smooth out noise while preserving edges
+    const originalData = ctx.getImageData(0, 0, w, h);
+    ctx.globalAlpha = 0.2; // 20% blend of smooth version
+    ctx.filter = 'blur(0.5px)';
+    ctx.drawImage(ctx.canvas, 0, 0);
+    ctx.globalAlpha = 1.0;
+    ctx.filter = 'none';
 }
 
 export async function getCroppedImg(
@@ -112,13 +119,15 @@ export async function getCroppedImg(
 
     // Apply auto-enhance filter to the context BEFORE drawing
     if (autoEnhance) {
-        // Professional Color Grade: Brightness, Contrast, Saturation + Cinematic Tint
-        // Tint: subtle warm shadows and cool highlights (standard cinematic look)
-        resultCtx.filter = 'brightness(1.08) contrast(1.15) saturate(1.2) sepia(0.1) hue-rotate(-5deg)';
+        // High-Quality "Showroom Clean" Filter:
+        // - contrast(1.15): Deepens blacks
+        // - brightness(1.05): Keeps it professional and airy
+        // - saturate(1.3): Makes car paint look fresh and vibrant
+        // - contrast(1.1): Secondary push for mid-tone definition
+        resultCtx.filter = 'brightness(1.03) contrast(1.18) saturate(1.3) contrast(1.05)';
     }
 
-    // Draw the cropped portion from workCanvas to resultCanvas
-    // drawImage SUPPORTS filters, putImageData DOES NOT
+    // Draw the cropped portion
     resultCtx.drawImage(
         workCanvas,
         pixelCrop.x,
@@ -131,14 +140,18 @@ export async function getCroppedImg(
         pixelCrop.height
     );
 
-    // 3. Post-processing (Sharpening)
+    // 3. Post-processing (Pro Sharpening & Denoise)
     if (autoEnhance) {
-        sharpen(resultCtx, resultCanvas.width, resultCanvas.height, 0.35); // Apply 35% sharpen
+        // First Pass: Denoise to clean up sensor grain
+        applyShowroomDenoise(resultCtx, resultCanvas.width, resultCanvas.height);
+
+        // Second Pass: Unsharp Mask for professional edge clarity
+        await unsharpMask(resultCtx, resultCanvas, 0.75, 1);
     }
 
     return new Promise((resolve) => {
         resultCanvas.toBlob((file) => {
             resolve(file);
-        }, mimeType, 0.95); // Higher quality for pro results
+        }, mimeType, 0.98); // Ultra high quality output
     });
 }

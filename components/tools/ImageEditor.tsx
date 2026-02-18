@@ -302,14 +302,15 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                         />
                     </div>
 
-                    {/* Auto Enhance Toggle */}
+                    {/* Auto Master Toggle */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <button
                             onClick={() => setAutoEnhance(!autoEnhance)}
                             style={{
                                 display: 'flex',
+                                flexDirection: 'column',
                                 alignItems: 'center',
-                                gap: '0.75rem',
+                                gap: '0.4rem',
                                 cursor: 'pointer',
                                 padding: '1rem',
                                 background: autoEnhance
@@ -326,8 +327,13 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                                 boxShadow: autoEnhance ? '0 4px 15px rgba(0,123,255,0.3)' : 'none'
                             }}
                         >
-                            <span style={{ fontSize: '1.2rem' }}>{autoEnhance ? '✨' : '🪄'}</span>
-                            {autoEnhance ? 'PRO ENHANCE & SHARPEN ON' : 'APPLY AUTO ENHANCE'}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <span style={{ fontSize: '1.2rem' }}>{autoEnhance ? '🏎️' : '🪄'}</span>
+                                {autoEnhance ? 'AUTO MASTER (ENABLED)' : 'AUTOMATED CAR MASTER'}
+                            </div>
+                            <span style={{ fontSize: '0.65rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Pro Multi-Pass Sharpen + Color Grade
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -358,7 +364,7 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                     {processing ? (
                         <>
                             <span className="animate-spin">⏳</span>
-                            <span>Finalizing Pro Master...</span>
+                            <span>Pro Sharpening & Color Grading...</span>
                         </>
                     ) : (
                         <>

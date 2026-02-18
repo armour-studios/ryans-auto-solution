@@ -81,24 +81,24 @@ export default function Testimonials({ initialTestimonials }: { initialTestimoni
                         {testimonials.map((t, idx) => (
                             <div key={`${t.id}-${idx}`} style={{ minWidth: '100%', padding: '0 1rem' }}>
                                 <div className="glass-card card-glow" style={{
-                                    padding: '3rem',
+                                    padding: 'clamp(1.5rem, 5vw, 3rem)',
                                     textAlign: 'center',
                                     position: 'relative',
                                     border: '1px solid rgba(15, 113, 177, 0.2)'
                                 }}>
                                     <div style={{ color: 'var(--primary-color)', fontSize: '1.8rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', gap: '0.2rem' }}>
                                         {[...Array(t.rating)].map((_, i) => (
-                                            <svg key={i} width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                            <svg key={i} width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
                                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                                             </svg>
                                         ))}
                                     </div>
-                                    <p style={{ fontSize: '1.3rem', fontStyle: 'italic', marginBottom: '2rem', lineHeight: '1.8', color: '#eee' }}>
-                                        "{t.content}"
+                                    <p style={{ fontSize: 'var(--font-size-p)', fontStyle: 'italic', marginBottom: '2rem', lineHeight: '1.8', color: '#eee' }}>
+                                        &quot;{t.content}&quot;
                                     </p>
                                     <div>
-                                        <strong style={{ display: 'block', fontSize: '1.2rem', color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.name}</strong>
-                                        <span style={{ fontSize: '0.9rem', color: '#888' }}>{t.role}</span>
+                                        <strong style={{ display: 'block', fontSize: '1.1rem', color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.name}</strong>
+                                        <span style={{ fontSize: '0.85rem', color: '#888' }}>{t.role}</span>
                                     </div>
                                 </div>
                             </div>
@@ -108,6 +108,7 @@ export default function Testimonials({ initialTestimonials }: { initialTestimoni
                     {/* Navigation Arrows */}
                     <button
                         onClick={prevSlide}
+                        className="hide-on-mobile"
                         style={{
                             position: 'absolute',
                             left: '-60px',
@@ -122,8 +123,6 @@ export default function Testimonials({ initialTestimonials }: { initialTestimoni
                             transition: 'opacity 0.3s',
                             zIndex: 10
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-                        onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.7')}
                     >
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
                             <polyline points="15 18 9 12 15 6"></polyline>
@@ -131,6 +130,7 @@ export default function Testimonials({ initialTestimonials }: { initialTestimoni
                     </button>
                     <button
                         onClick={nextSlide}
+                        className="hide-on-mobile"
                         style={{
                             position: 'absolute',
                             right: '-60px',
@@ -145,8 +145,6 @@ export default function Testimonials({ initialTestimonials }: { initialTestimoni
                             transition: 'opacity 0.3s',
                             zIndex: 10
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-                        onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.7')}
                     >
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
                             <polyline points="9 18 15 12 9 6"></polyline>

@@ -83,9 +83,9 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
                     >
                         {soldVehicles.map((vehicle, idx) => (
                             <div key={`${vehicle.id}-${idx}`} style={{ minWidth: '100%', padding: '0 1rem' }}>
-                                <div className="card-glow" style={{
+                                <div className="card-glow recently-sold-card" style={{
                                     display: 'grid',
-                                    gridTemplateColumns: '1fr 1fr',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                                     backgroundColor: '#111',
                                     borderRadius: '16px',
                                     overflow: 'hidden',
@@ -115,19 +115,19 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
                                             Sold
                                         </div>
                                     </div>
-                                    <div style={{ padding: '3rem' }}>
-                                        <h3 style={{ fontSize: '2rem', color: '#fff', marginBottom: '1rem' }}>
+                                    <div style={{ padding: 'clamp(1.5rem, 5vw, 3rem)' }}>
+                                        <h3 style={{ marginBottom: '1rem' }}>
                                             {vehicle.year} {vehicle.make} {vehicle.model}
                                         </h3>
-                                        <p style={{ color: '#999', fontSize: '1.1rem', marginBottom: '2rem', lineHeight: '1.6' }}>
+                                        <p style={{ color: '#999', fontSize: 'var(--font-size-p)', marginBottom: '2rem', lineHeight: '1.6' }}>
                                             {vehicle.description.length > 150 ? vehicle.description.substring(0, 150) + '...' : vehicle.description}
                                         </p>
-                                        <div style={{ display: 'flex', gap: '1rem' }}>
-                                            <div style={{ backgroundColor: '#222', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center' }}>
+                                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                            <div style={{ backgroundColor: '#222', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center', flex: '1 1 120px' }}>
                                                 <span style={{ display: 'block', fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>Mileage</span>
                                                 <span style={{ fontWeight: 'bold' }}>{vehicle.mileage.toLocaleString()} mi</span>
                                             </div>
-                                            <div style={{ backgroundColor: '#222', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center' }}>
+                                            <div style={{ backgroundColor: '#222', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center', flex: '1 1 120px' }}>
                                                 <span style={{ display: 'block', fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>Status</span>
                                                 <span style={{ fontWeight: 'bold', color: '#ef4444' }}>Gone!</span>
                                             </div>
@@ -210,13 +210,6 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
                 </div>
             </div>
 
-            <style jsx>{`
-                @media (max-width: 768px) {
-                    div[style*="gridTemplateColumns: 1fr 1fr"] {
-                        grid-template-columns: 1fr !important;
-                    }
-                }
-            `}</style>
         </section>
     );
 }

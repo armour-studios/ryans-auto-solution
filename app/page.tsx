@@ -57,27 +57,26 @@ export default async function Home() {
         </div>
 
 
-        <div className="container animate-fade-in" style={{ zIndex: 1, position: 'relative', width: '100%' }}>
+        <div className="container animate-fade-in" style={{ zIndex: 1, position: 'relative', width: '100%', padding: '0 1rem' }}>
           <div className="glass-card" style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <h1 className="animate-fade-in-up" style={{
-              fontSize: '4.2rem',
               fontWeight: 'bold',
               textTransform: 'uppercase',
               marginBottom: '1rem',
               letterSpacing: '2px',
-              color: '#ffffff',
-              whiteSpace: 'nowrap',
-              textShadow: '0 10px 20px rgba(0,0,0,0.3)'
+              textShadow: '0 10px 20px rgba(0,0,0,0.3)',
+              lineHeight: '1.1'
             }}>
-              Find Your Dream Ride
+              Find Your <br className="hide-on-mobile" /> Dream Ride
             </h1>
             <p className="animate-fade-in-up" style={{
-              fontSize: '1.4rem',
+              fontSize: 'var(--font-size-p)',
               marginBottom: '2.5rem',
               maxWidth: '650px',
               margin: '0 auto 2.5rem',
               color: 'rgba(255,255,255,0.9)',
-              animationDelay: '0.2s'
+              animationDelay: '0.2s',
+              lineHeight: '1.6'
             }}>
               Quality pre-owned vehicles at unbeatable prices.<br />
               Experience the Ryan&apos;s Auto Solution difference today.
@@ -86,13 +85,13 @@ export default async function Home() {
               display: 'flex',
               gap: '1.5rem',
               justifyContent: 'center',
+              flexWrap: 'wrap',
               animationDelay: '0.4s'
             }}>
-              <Link href="/inventory" className="btn btn-primary cta-glow" style={{ fontSize: '1.1rem', padding: '1.2rem 2.5rem', borderRadius: '50px' }}>
+              <Link href="/inventory" className="btn btn-primary cta-glow" style={{ padding: '1.2rem 2.5rem', borderRadius: '50px' }}>
                 View Inventory
               </Link>
               <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary cta-glow" style={{
-                fontSize: '1.1rem',
                 padding: '1.2rem 2.5rem',
                 borderRadius: '50px',
                 background: 'transparent',
@@ -223,9 +222,9 @@ export default async function Home() {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
             gap: '2rem',
-            maxWidth: '900px',
+            maxWidth: '1000px',
             margin: '0 auto'
           }}>
             {/* Card 1: Locally Owned */}
