@@ -50,10 +50,10 @@ export default function AdminPortalPage() {
                     borderBottom: '1px solid #333'
                 }}>
                     <div>
-                        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', color: '#fff' }}>
+                        <h1 style={{ fontSize: '3.5rem', marginBottom: '0.5rem', color: '#007bff', fontWeight: 'bold' }}>
                             Welcome{username ? `, ${username.charAt(0).toUpperCase() + username.slice(1)}` : ''}! 👋
                         </h1>
-                        <p style={{ color: '#888', fontSize: '1rem' }}>Manage your dealership content</p>
+                        <p style={{ color: '#aaa', fontSize: '1.2rem' }}>Manage your dealership content</p>
                     </div>
                     <button
                         onClick={handleLogout}

@@ -33,9 +33,20 @@ export default function Navbar() {
       <div style={{ backgroundColor: 'var(--primary-color)', color: '#fff', fontSize: '0.85rem', fontWeight: 'bold', padding: '0.5rem 0' }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            <span className="hide-on-mobile">📞 (218) 469-0183</span>
-            <span className="hide-on-mobile">📍 325 Oak Hills Rd SE, Bemidji, MN 56601</span>
-            <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" style={{ backgroundColor: 'rgba(0,0,0,0.2)', color: '#fff', padding: '0.25rem 0.75rem', borderRadius: '4px', textTransform: 'uppercase', textDecoration: 'none' }}>
+            <span className="hide-on-mobile" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              (218) 469-0183
+            </span>
+            <span className="hide-on-mobile" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              325 Oak Hills Rd SE, Bemidji, MN 56601
+            </span>
+            <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="cta-glow" style={{ backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff', padding: '0.35rem 1rem', borderRadius: '4px', textTransform: 'uppercase', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.2)' }}>
               Directions
             </a>
           </div>
@@ -66,7 +77,7 @@ export default function Navbar() {
 
           <ul className={`nav-links ${isOpen ? 'open' : ''}`} style={{ display: 'flex', gap: '2rem', listStyle: 'none', margin: 0 }}>
             {(() => {
-              const items = ['Home', 'Inventory', 'Trailers', 'Financing', 'Blog', 'About', 'Contact'];
+              const items = ['Home', 'Inventory', 'Trailers', 'Financing', 'Blog', 'Contact'];
               if (isAdmin) items.push('Admin');
               return items.map((item) => (
                 <li key={item}>

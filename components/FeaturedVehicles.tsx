@@ -327,6 +327,7 @@ export default function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) 
                 <div style={{ textAlign: 'center', marginTop: '2rem' }}>
                     <Link
                         href="/inventory"
+                        className="cta-glow"
                         style={{
                             color: 'var(--primary-color)',
                             textDecoration: 'none',

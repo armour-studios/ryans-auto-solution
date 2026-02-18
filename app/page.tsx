@@ -3,6 +3,11 @@ import Image from 'next/image';
 import { getTestimonials } from '@/lib/testimonials';
 import { getInventory } from '@/lib/inventory';
 import FeaturedVehicles from '@/components/FeaturedVehicles';
+import RecentlySoldCarousel from '@/components/RecentlySoldCarousel';
+import Testimonials from '@/components/Testimonials';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function Home() {
   const allTestimonials = await getTestimonials();
@@ -11,6 +16,7 @@ export default async function Home() {
   // Get featured/trending vehicles
   const inventory = await getInventory();
   const featuredVehicles = inventory.filter(v => v.trending && v.status === 'Available').slice(0, 6);
+  const soldVehicles = inventory.filter(v => v.status === 'Sold').slice(0, 5);
 
   return (
     <main>
@@ -50,16 +56,6 @@ export default async function Home() {
           />
         </div>
 
-        {/* Blue Tinted Overlay */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'linear-gradient(135deg, rgba(15, 113, 177, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
-          zIndex: -1
-        }} />
 
         <div className="container animate-fade-in" style={{ zIndex: 1, position: 'relative', width: '100%' }}>
           <div className="glass-card" style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -83,7 +79,8 @@ export default async function Home() {
               color: 'rgba(255,255,255,0.9)',
               animationDelay: '0.2s'
             }}>
-              Quality pre-owned vehicles at unbeatable prices. Experience the Ryan&apos;s Auto Solution difference today.
+              Quality pre-owned vehicles at unbeatable prices.<br />
+              Experience the Ryan&apos;s Auto Solution difference today.
             </p>
             <div className="animate-fade-in-up" style={{
               display: 'flex',
@@ -91,10 +88,10 @@ export default async function Home() {
               justifyContent: 'center',
               animationDelay: '0.4s'
             }}>
-              <Link href="/inventory" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1.2rem 2.5rem', borderRadius: '50px' }}>
+              <Link href="/inventory" className="btn btn-primary cta-glow" style={{ fontSize: '1.1rem', padding: '1.2rem 2.5rem', borderRadius: '50px' }}>
                 View Inventory
               </Link>
-              <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{
+              <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary cta-glow" style={{
                 fontSize: '1.1rem',
                 padding: '1.2rem 2.5rem',
                 borderRadius: '50px',
@@ -131,17 +128,32 @@ export default async function Home() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', color: '#fff', textAlign: 'center' }}>
             <div style={{ padding: '2rem', border: '1px solid #333', borderRadius: '8px', backgroundColor: '#111' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>✓</div>
+              <div style={{ marginBottom: '1rem', color: 'var(--primary-color)', display: 'flex', justifyContent: 'center' }}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
               <h3 style={{ marginBottom: '1rem' }}>Quality Assured</h3>
               <p style={{ color: '#aaa' }}>Every vehicle passes a rigorous multi-point inspection before it hits our lot.</p>
             </div>
             <div style={{ padding: '2rem', border: '1px solid #333', borderRadius: '8px', backgroundColor: '#111' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>💲</div>
+              <div style={{ marginBottom: '1rem', color: 'var(--primary-color)', display: 'flex', justifyContent: 'center' }}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+              </div>
               <h3 style={{ marginBottom: '1rem' }}>Fair Pricing</h3>
               <p style={{ color: '#aaa' }}>No hidden fees. Just honest pricing and great deals on all our inventory.</p>
             </div>
             <div style={{ padding: '2rem', border: '1px solid #333', borderRadius: '8px', backgroundColor: '#111' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>🤝</div>
+              <div style={{ marginBottom: '1rem', color: 'var(--primary-color)', display: 'flex', justifyContent: 'center' }}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <polyline points="17 11 19 13 23 9"></polyline>
+                </svg>
+              </div>
               <h3 style={{ marginBottom: '1rem' }}>Easy Financing</h3>
               <p style={{ color: '#aaa' }}>We work with multiple lenders to get you approved regardless of your credit history.</p>
             </div>
@@ -149,42 +161,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section style={{ padding: '6rem 0', backgroundColor: '#111', color: '#fff' }}>
-        <div className="container">
-          <h2 style={{ textAlign: 'center', fontSize: '2.5rem', textTransform: 'uppercase', marginBottom: '3rem', letterSpacing: '1px' }}>
-            What Our <span style={{ color: 'var(--primary-color)' }}>Customers Say</span>
-          </h2>
-
-          {testimonials.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-              {testimonials.map(t => (
-                <div key={t.id} style={{ backgroundColor: '#222', padding: '2rem', borderRadius: '8px', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ color: 'gold', marginBottom: '1rem', fontSize: '1.2rem' }}>
-                    {'⭐'.repeat(t.rating)}
-                  </div>
-                  <p style={{ fontStyle: 'italic', marginBottom: '1.5rem', lineHeight: '1.6', fontSize: '1.1rem', flex: 1 }}>
-                    "{t.content}"
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{ width: '40px', height: '40px', backgroundColor: '#444', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                      {t.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 'bold' }}>{t.name}</div>
-                      <div style={{ fontSize: '0.8rem', color: '#888' }}>{t.role}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#222', borderRadius: '8px', color: '#888' }}>
-              Customer reviews coming soon!
-            </div>
-          )}
-        </div>
-      </section>
+      <Testimonials initialTestimonials={testimonials} />
 
       {/* Why Buy From Us Section */}
       <section style={{
@@ -252,7 +229,7 @@ export default async function Home() {
             margin: '0 auto'
           }}>
             {/* Card 1: Locally Owned */}
-            <div style={{
+            <div className="card-glow" style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
               backdropFilter: 'blur(10px)',
               padding: '2.5rem',
@@ -280,7 +257,7 @@ export default async function Home() {
                 justifyContent: 'center',
                 marginBottom: '1.5rem'
               }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                   <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
@@ -297,7 +274,7 @@ export default async function Home() {
             </div>
 
             {/* Card 2: Winter Ready */}
-            <div style={{
+            <div className="card-glow" style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
               backdropFilter: 'blur(10px)',
               padding: '2.5rem',
@@ -325,7 +302,7 @@ export default async function Home() {
                 justifyContent: 'center',
                 marginBottom: '1.5rem'
               }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
                   <line x1="12" y1="2" x2="12" y2="22"></line>
                   <path d="M20 12H4"></path>
                   <path d="M18 6l-6 6l6 6"></path>
@@ -345,7 +322,7 @@ export default async function Home() {
             </div>
 
             {/* Card 3: Financing Options */}
-            <div style={{
+            <div className="card-glow" style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
               backdropFilter: 'blur(10px)',
               padding: '2.5rem',
@@ -373,7 +350,7 @@ export default async function Home() {
                 justifyContent: 'center',
                 marginBottom: '1.5rem'
               }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
                   <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                   <line x1="1" y1="10" x2="23" y2="10"></line>
                 </svg>
@@ -390,7 +367,7 @@ export default async function Home() {
             </div>
 
             {/* Card 4: Inspected & Ready */}
-            <div style={{
+            <div className="card-glow" style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
               backdropFilter: 'blur(10px)',
               padding: '2.5rem',
@@ -418,7 +395,7 @@ export default async function Home() {
                 justifyContent: 'center',
                 marginBottom: '1.5rem'
               }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
                   <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
                 </svg>
               </div>
@@ -435,7 +412,7 @@ export default async function Home() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <Link href="/about" style={{
+            <Link href="/about" className="cta-glow" style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.75rem',
@@ -461,61 +438,38 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Serving Northern Minnesota Section */}
-      <section style={{ padding: '6rem 0', backgroundColor: '#0a1628', color: '#fff' }}>
+
+
+      <RecentlySoldCarousel initialVehicles={soldVehicles} />
+
+      {/* Final Conversion CTA */}
+      <section style={{
+        padding: '5rem 0',
+        background: 'linear-gradient(135deg, #000 0%, #0a1628 100%)',
+        borderTop: '1px solid #333',
+        textAlign: 'center'
+      }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
-            <div>
-              <h2 style={{ fontSize: '2.5rem', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '1px' }}>
-                Proudly Serving <span style={{ color: 'var(--primary-color)' }}>Northern Minnesota</span>
-              </h2>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#ccc' }}>
-                Located in Bemidji, we serve customers throughout Beltrami County and all of Northern Minnesota. Whether you&apos;re from Walker, Cass Lake, Park Rapids, or Bagley—we&apos;re here to help you find your next vehicle.
-              </p>
-              <p style={{ fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2rem', color: '#aaa' }}>
-                Our vehicles can be viewed at <strong>King of The Road Trailers</strong> in Bemidji. Stop by for a test drive—no appointment needed!
-              </p>
-
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
-                {['Bemidji', 'Walker', 'Cass Lake', 'Park Rapids', 'Bagley', 'Blackduck', 'Laporte', 'Solway'].map(city => (
-                  <span key={city} style={{
-                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                    color: 'var(--primary-color)',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '20px',
-                    fontSize: '0.9rem',
-                    border: '1px solid rgba(0, 123, 255, 0.3)'
-                  }}>
-                    {city}
-                  </span>
-                ))}
-              </div>
-
-              <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: '1.1rem', padding: '1rem 2rem', textDecoration: 'none' }}>
-                Get Directions
-              </a>
-            </div>
-
-            <div style={{ backgroundColor: '#111', padding: '2.5rem', borderRadius: '12px', border: '1px solid #333' }}>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--primary-color)' }}>📍 Visit Us Today</h3>
-              <address style={{ fontStyle: 'normal', lineHeight: '2', fontSize: '1.1rem', marginBottom: '1.5rem' }}>
-                <strong>Ryan&apos;s Auto Solution</strong><br />
-                325 Oak Hills Rd SE<br />
-                Bemidji, MN 56601
-              </address>
-              <div style={{ borderTop: '1px solid #333', paddingTop: '1.5rem' }}>
-                <div style={{ marginBottom: '1rem' }}>
-                  <strong style={{ color: '#888' }}>Phone:</strong><br />
-                  <a href="tel:2184690183" style={{ color: 'var(--primary-color)', fontSize: '1.3rem', fontWeight: 'bold' }}>
-                    (218) 469-0183
-                  </a>
-                </div>
-                <div>
-                  <strong style={{ color: '#888' }}>Hours:</strong><br />
-                  <span>Mon-Fri: 8AM - 5PM</span><br />
-                  <span style={{ color: '#888' }}>Weekends by appointment</span>
-                </div>
-              </div>
+          <div className="glass-card" style={{ padding: '4rem', maxWidth: '1000px', margin: '0 auto' }}>
+            <h2 style={{ fontSize: '3rem', color: '#fff', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+              Ready to find your <span style={{ color: 'var(--primary-color)' }}>next vehicle?</span>
+            </h2>
+            <p style={{ fontSize: '1.2rem', color: '#ccc', marginBottom: '2.5rem', maxWidth: '700px', margin: '0 auto 2.5rem auto' }}>
+              Browse our current inventory or visit us today for a test drive. We&apos;re here to help you get on the road.
+            </p>
+            <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href="/inventory" className="btn btn-primary cta-glow" style={{ padding: '1.2rem 2.5rem', fontSize: '1.1rem' }}>
+                View Inventory
+              </Link>
+              <Link href="/contact" className="btn btn-outline cta-glow" style={{
+                padding: '1.2rem 2.5rem',
+                fontSize: '1.1rem',
+                border: '2px solid var(--primary-color)',
+                backgroundColor: 'transparent',
+                color: 'var(--primary-color)'
+              }}>
+                Contact Us
+              </Link>
             </div>
           </div>
         </div>

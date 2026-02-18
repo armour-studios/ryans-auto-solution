@@ -81,7 +81,7 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
                 <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid #333' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <span style={{ fontWeight: 'bold', fontSize: '1.4rem', color: 'var(--primary-color)' }}>
-                            ${vehicle.price.toLocaleString()}
+                            {isSold ? 'SOLD' : `$${vehicle.price.toLocaleString()}`}
                         </span>
                     </div>
 

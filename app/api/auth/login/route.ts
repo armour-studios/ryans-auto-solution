@@ -15,7 +15,7 @@ export async function POST(request: Request) {
             response.cookies.set('admin_session', JSON.stringify({ username: user.username, role: user.role }), {
                 httpOnly: true,
                 path: '/',
-                maxAge: 60 * 60 * 24, // 1 day
+                maxAge: 60 * 60 * 24 * 30, // 30 days
                 sameSite: 'strict'
             });
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
             response.cookies.set('admin_user', JSON.stringify({ username: user.username, role: user.role }), {
                 httpOnly: false, // Allows JavaScript to read
                 path: '/',
-                maxAge: 60 * 60 * 24, // 1 day
+                maxAge: 60 * 60 * 24 * 30, // 30 days
                 sameSite: 'strict'
             });
 
