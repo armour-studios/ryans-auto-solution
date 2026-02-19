@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getBlogPosts, saveBlogPosts, deleteBlogPost } from '@/lib/blog';
+import { revalidatePath } from 'next/cache';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -15,6 +16,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         posts[index] = { ...posts[index], ...body };
         await saveBlogPosts(posts);
 
+        revalidatePath('/blog');
+        revalidatePath('/admin/blog');
+        revalidatePath(`/blog/${posts[index].slug}`);
+
         return NextResponse.json(posts[index]);
     } catch (error) {
         console.error('Error updating blog post:', error);
@@ -26,6 +31,9 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     try {
         const { id } = await params;
         await deleteBlogPost(parseInt(id));
+
+        revalidatePath('/blog');
+        revalidatePath('/admin/blog');
 
         return NextResponse.json({ message: 'Deleted' });
     } catch (error) {
