@@ -120,3 +120,27 @@ export async function getBlogPostById(id: number): Promise<BlogPost | undefined>
     return data as BlogPost;
 }
 
+export async function deleteBlogPost(id: number): Promise<void> {
+    try {
+        // Delete from Supabase
+        const { error } = await supabase
+            .from('blog_posts')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error deleting from Supabase:', error);
+        }
+
+        // Delete from local file in development
+        if (process.env.NODE_ENV === 'development') {
+            const posts = getBlogPostsLocal();
+            const newPosts = posts.filter(p => p.id !== id);
+            saveBlogPostsLocal(newPosts);
+        }
+    } catch (error) {
+        console.error('Error in deleteBlogPost:', error);
+        throw error;
+    }
+}
+

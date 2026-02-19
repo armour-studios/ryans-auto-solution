@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getBlogPosts, saveBlogPosts } from '@/lib/blog';
+import { getBlogPosts, saveBlogPosts, deleteBlogPost } from '@/lib/blog';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -25,10 +25,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
-        const posts = await getBlogPosts();
-        const newPosts = posts.filter(p => p.id !== parseInt(id));
+        await deleteBlogPost(parseInt(id));
 
-        await saveBlogPosts(newPosts);
         return NextResponse.json({ message: 'Deleted' });
     } catch (error) {
         console.error('Error deleting blog post:', error);
