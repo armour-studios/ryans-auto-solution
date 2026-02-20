@@ -78,55 +78,70 @@ export default function InventoryAdminPage() {
                 </div>
 
                 {/* Search Bar */}
-                <div style={{ marginBottom: '1.5rem' }}>
+                <div style={{ marginBottom: '1.5rem', position: 'relative' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}>
+                        <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
                     <input
                         type="text"
                         placeholder="Search by name, make, model, or ID..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
-                            width: '100%', padding: '0.85rem 1.25rem', backgroundColor: '#1a1a1a',
+                            width: '100%', padding: '0.85rem 1.25rem 0.85rem 2.75rem', backgroundColor: '#1a1a1a',
                             border: '1px solid #333', borderRadius: '8px', color: '#fff',
-                            fontSize: '0.9rem', outline: 'none'
+                            fontSize: '0.9rem', outline: 'none', transition: 'border-color 0.2s'
                         }}
+                        onFocus={(e) => e.currentTarget.style.borderColor = 'var(--primary-color)'}
+                        onBlur={(e) => e.currentTarget.style.borderColor = '#333'}
                     />
+                    {searchQuery && (
+                        <button onClick={() => setSearchQuery('')} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1 }}>✕</button>
+                    )}
                 </div>
 
                 <div style={{ backgroundColor: '#111', borderRadius: '12px', overflow: 'hidden', border: '1px solid #222' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
                         <thead>
-                            <tr style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #222' }}>
-                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px', width: '80px' }}></th>
-                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Vehicle</th>
-                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Price</th>
-                                <th style={{ padding: '1.25rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Featured</th>
-                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Status</th>
-                                <th style={{ padding: '1.25rem', textAlign: 'right', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Actions</th>
+                            <tr style={{ backgroundColor: '#1a1a1a', borderBottom: '2px solid #222' }}>
+                                <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700', width: '90px' }}></th>
+                                <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Vehicle</th>
+                                <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Price</th>
+                                <th style={{ padding: '1rem 1.25rem', textAlign: 'center', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Featured</th>
+                                <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Status</th>
+                                <th style={{ padding: '1rem 1.25rem', textAlign: 'right', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredInventory.map(vehicle => (
-                                <tr key={vehicle.id} style={{ borderBottom: '1px solid #222' }}>
+                                <tr key={vehicle.id} style={{ borderBottom: '1px solid #1a1a1a', transition: 'background 0.15s' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1a1a1a'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                >
                                     <td style={{ padding: '0.75rem 1.25rem' }}>
-                                        <div style={{ position: 'relative', width: '70px', height: '50px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #333', backgroundColor: '#222' }}>
-                                            {vehicle.image ? (
-                                                <Image
-                                                    src={vehicle.image}
-                                                    alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-                                                    fill
-                                                    style={{ objectFit: 'cover' }}
-                                                    sizes="70px"
-                                                />
-                                            ) : (
-                                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', fontSize: '0.65rem' }}>No img</div>
-                                            )}
-                                        </div>
+                                        <Link href={`/inventory/${vehicle.id}`} style={{ display: 'block' }}>
+                                            <div style={{ position: 'relative', width: '75px', height: '52px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #333', backgroundColor: '#222', cursor: 'pointer', transition: 'border-color 0.2s' }}>
+                                                {vehicle.image ? (
+                                                    <Image
+                                                        src={vehicle.image}
+                                                        alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                                                        fill
+                                                        style={{ objectFit: 'cover' }}
+                                                        sizes="75px"
+                                                    />
+                                                ) : (
+                                                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', fontSize: '0.65rem' }}>No img</div>
+                                                )}
+                                            </div>
+                                        </Link>
                                     </td>
-                                    <td style={{ padding: '1.25rem' }}>
-                                        <div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#eee' }}>{vehicle.year} {vehicle.make} {vehicle.model}</div>
-                                        <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.25rem' }}>{vehicle.mileage.toLocaleString()} miles · ID: {vehicle.id}</div>
+                                    <td style={{ padding: '1rem 1.25rem' }}>
+                                        <Link href={`/inventory/${vehicle.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            <div style={{ fontWeight: 'bold', fontSize: '0.95rem', color: '#eee' }}>{vehicle.year} {vehicle.make} {vehicle.model}</div>
+                                        </Link>
+                                        <div style={{ fontSize: '0.75rem', color: '#555', marginTop: '0.3rem', fontFamily: 'monospace' }}>{vehicle.mileage.toLocaleString()} mi · #{vehicle.id}</div>
                                     </td>
-                                    <td style={{ padding: '1.25rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>${vehicle.price.toLocaleString()}</td>
+                                    <td style={{ padding: '1rem 1.25rem', fontWeight: 'bold', color: 'var(--primary-color)', fontSize: '1rem' }}>${vehicle.price.toLocaleString()}</td>
                                     <td style={{ padding: '1.25rem', textAlign: 'center' }}>
                                         <FeaturedToggle id={vehicle.id} initialStatus={vehicle.trending || false} />
                                     </td>
