@@ -31,7 +31,7 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
         <div style={{ padding: '2rem 0', color: '#fff' }}>
             <div className="container">
                 {/* Breadcrumbs */}
-                <div style={{ marginBottom: '2rem', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: '#888' }}>
+                <div style={{ marginBottom: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.9rem', color: '#888' }}>
                     <Link href="/" className='hover:text-primary'>Home</Link>
                     <span>/</span>
                     <Link href="/inventory" className='hover:text-primary'>Inventory</Link>
@@ -41,9 +41,22 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                     <span style={{ color: '#fff' }}>{vehicle.year} {vehicle.make}</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: '4rem', alignItems: 'start' }} className="details-grid">
-                    {/* Main Content (Left) */}
-                    <div>
+                {/* Mobile Only Header: Simple Name & Price (Matches Sidebar Styling) */}
+                <div className="lg:hidden" style={{ marginBottom: '2rem', borderBottom: '1px solid #333', paddingBottom: '1.5rem' }}>
+                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
+                        {vehicle.year} {vehicle.make} {vehicle.model}
+                    </h1>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
+                            ${vehicle.price.toLocaleString()}
+                        </span>
+                        <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start max-w-full overflow-hidden">
+                    {/* Main Content (Left - 8/12 = 2/3) */}
+                    <div className="lg:col-span-8 w-full max-w-full overflow-hidden">
                         <ImageGallery
                             images={vehicle.images}
                             mainImage={vehicle.image}
@@ -81,9 +94,9 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                                 <p style={{ lineHeight: '1.8', color: '#ccc', fontSize: '1.05rem' }}>{vehicle.description}</p>
                             </section>
 
-                            <section>
+                            <section className="w-full">
                                 <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block', paddingBottom: '0.25rem' }}>Key Features</h3>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '1rem' }}>
                                     {vehicle.features && vehicle.features.map(feature => (
                                         <div key={feature} style={{
                                             backgroundColor: '#222', padding: '0.75rem', borderRadius: '4px',
@@ -98,54 +111,56 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                         </div>
                     </div>
 
-                    {/* Sidebar (Right) - Sticky */}
-                    <div style={{
-                        backgroundColor: 'var(--card-bg)', padding: '2rem', borderRadius: '4px',
-                        position: 'sticky', top: '100px', border: '1px solid #333', color: 'var(--text-color)'
-                    }}>
-                        <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #444', paddingBottom: '1.5rem' }}>
-                            <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
-                                {vehicle.year} {vehicle.make} {vehicle.model}
-                            </h1>
-                            <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
-                        </div>
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
-                                ${vehicle.price.toLocaleString()}
-                            </span>
-                        </div>
-
-                        <div style={{ marginBottom: '2rem', backgroundColor: '#1a1a1a', padding: '1rem', borderRadius: '4px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                <span style={{ color: '#888' }}>Mileage</span>
-                                <strong>{vehicle.mileage.toLocaleString()} mi</strong>
+                    {/* Sidebar (Right - 4/12 = 1/3) - Sticky */}
+                    <aside className="lg:col-span-4" style={{ position: 'sticky', top: '100px' }}>
+                        <div style={{
+                            backgroundColor: 'var(--card-bg)', padding: '2rem', borderRadius: '4px',
+                            border: '1px solid #333', color: 'var(--text-color)'
+                        }}>
+                            <div className="hidden lg:block" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #444', paddingBottom: '1.5rem' }}>
+                                <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
+                                    {vehicle.year} {vehicle.make} {vehicle.model}
+                                </h1>
+                                <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                <span style={{ color: '#888' }}>Status</span>
-                                <strong style={{ color: vehicle.status === 'Available' ? 'var(--primary-color)' : '#c92a37' }}>{vehicle.status}</strong>
+
+                            <div className="hidden lg:flex" style={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                                <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
+                                    ${vehicle.price.toLocaleString()}
+                                </span>
                             </div>
-                            {vehicle.vin && (
+
+                            <div style={{ marginBottom: '2rem', backgroundColor: '#1a1a1a', padding: '1rem', borderRadius: '4px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                    <span style={{ color: '#888' }}>VIN</span>
-                                    <strong style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>{vehicle.vin}</strong>
+                                    <span style={{ color: '#888' }}>Mileage</span>
+                                    <strong>{vehicle.mileage.toLocaleString()} mi</strong>
                                 </div>
-                            )}
-                            {Object.entries(vehicle.specs || {}).map(([key, value]) => (
-                                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                    <span style={{ color: '#888' }}>{key}</span>
-                                    <strong>{value}</strong>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
+                                    <span style={{ color: '#888' }}>Status</span>
+                                    <strong style={{ color: vehicle.status === 'Available' ? 'var(--primary-color)' : '#c92a37' }}>{vehicle.status}</strong>
                                 </div>
-                            ))}
-                        </div>
+                                {vehicle.vin && (
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
+                                        <span style={{ color: '#888' }}>VIN</span>
+                                        <strong style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>{vehicle.vin}</strong>
+                                    </div>
+                                )}
+                                {Object.entries(vehicle.specs || {}).map(([key, value]) => (
+                                    <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
+                                        <span style={{ color: '#888' }}>{key}</span>
+                                        <strong>{value}</strong>
+                                    </div>
+                                ))}
+                            </div>
 
-                        <Link href="/contact" className="btn" style={{ width: '100%', display: 'block', textAlign: 'center', fontSize: '1.1rem', padding: '1rem' }}>
-                            CONTACT DEALER
-                        </Link>
-                        <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', textAlign: 'center' }}>
-                            * Price excludes tax, title, and license.
-                        </p>
-                    </div>
+                            <Link href="/contact" className="btn" style={{ width: '100%', display: 'block', textAlign: 'center', fontSize: '1.1rem', padding: '1rem' }}>
+                                CONTACT DEALER
+                            </Link>
+                            <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', textAlign: 'center' }}>
+                                * Price excludes tax, title, and license.
+                            </p>
+                        </div>
+                    </aside>
                 </div>
 
                 {/* Related Inventory Section */}
