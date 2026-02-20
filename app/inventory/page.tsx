@@ -48,6 +48,7 @@ export default function InventoryPage() {
     const [priceRange, setPriceRange] = useState({ min: '', max: '' });
     const [yearRange, setYearRange] = useState({ min: '', max: '' });
     const [showSold, setShowSold] = useState(false);
+    const [filtersOpen, setFiltersOpen] = useState(false);
     const [sortBy, setSortBy] = useState('newest');
 
     // Finance State
@@ -196,189 +197,201 @@ export default function InventoryPage() {
                 <div className="inventory-grid">
 
                     {/* Left Sidebar Filters */}
-                    <aside>
+                    <aside className="inventory-filters-aside">
+                        {/* Mobile Filter Toggle */}
+                        <button
+                            className="mobile-filter-toggle mobile-only"
+                            onClick={() => setFiltersOpen(!filtersOpen)}
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="16" y2="12" /><line x1="4" y1="18" x2="12" y2="18" />
+                            </svg>
+                            {filtersOpen ? 'HIDE FILTERS' : 'SHOW FILTERS'}
+                        </button>
+                        <div className={`filter-panel-content ${filtersOpen ? 'filter-panel-open' : ''}`}>
 
-                        <AccordionItem title="Price" isOpen={openSections.price} onToggle={() => toggleSection('price')}>
-                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                                <input
-                                    type="number" placeholder="MIN"
-                                    className="custom-select"
-                                    value={priceRange.min} onChange={(e) => setPriceRange(p => ({ ...p, min: e.target.value }))}
-                                />
-                                <span style={{ color: '#555', fontWeight: 'bold' }}>-</span>
-                                <input
-                                    type="number" placeholder="MAX"
-                                    className="custom-select"
-                                    value={priceRange.max} onChange={(e) => setPriceRange(p => ({ ...p, max: e.target.value }))}
-                                />
-                            </div>
-                        </AccordionItem>
-
-                        <AccordionItem title="Year" isOpen={openSections.year} onToggle={() => toggleSection('year')}>
-                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                                <input
-                                    type="number" placeholder="FROM"
-                                    className="custom-select"
-                                    value={yearRange.min} onChange={(e) => setYearRange(y => ({ ...y, min: e.target.value }))}
-                                />
-                                <span style={{ color: '#555', fontWeight: 'bold' }}>-</span>
-                                <input
-                                    type="number" placeholder="TO"
-                                    className="custom-select"
-                                    value={yearRange.max} onChange={(e) => setYearRange(y => ({ ...y, max: e.target.value }))}
-                                />
-                            </div>
-                        </AccordionItem>
-
-                        <AccordionItem title="Make" isOpen={openSections.make} onToggle={() => toggleSection('make')}>
-                            <select
-                                className="custom-select"
-                                onChange={(e) => setSearchQuery(e.target.value === 'All' ? '' : e.target.value)}
-                                value={searchQuery && activeMakes.includes(searchQuery) ? searchQuery : 'All'}
-                            >
-                                <option value="All">ALL MAKES</option>
-                                {activeMakes.map(make => <option key={make} value={make}>{make.toUpperCase()}</option>)}
-                            </select>
-                        </AccordionItem>
-
-                        <AccordionItem title="Category" isOpen={openSections.type} onToggle={() => toggleSection('type')}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                {['All', ...activeTypes].map(type => (
-                                    <label key={type} style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '1rem',
-                                        cursor: 'pointer',
-                                        fontSize: '0.9rem',
-                                        color: filterType === type ? 'var(--primary-color)' : '#888',
-                                        fontWeight: filterType === type ? 'bold' : 'normal',
-                                        textTransform: 'uppercase'
-                                    }}>
-                                        <input
-                                            type="radio"
-                                            name="type"
-                                            checked={filterType === type}
-                                            onChange={() => setFilterType(type)}
-                                            style={{ accentColor: 'var(--primary-color)', width: '18px', height: '18px' }}
-                                        />
-                                        {type}
-                                    </label>
-                                ))}
-                            </div>
-                        </AccordionItem>
-
-                        <div style={{ marginTop: '2.5rem' }}>
-                            {/* My Wallet Section */}
-                            <div className="wallet-card">
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary-color)' }}>
-                                        <WalletIcon />
-                                        <span style={{ fontWeight: '900', fontSize: '0.9rem', letterSpacing: '1px' }}>MY WALLET</span>
-                                    </div>
-                                    <label className="switch">
-                                        <input
-                                            type="checkbox"
-                                            checked={financeSettings.budgetMode}
-                                            onChange={(e) => setFinanceSettings(f => ({ ...f, budgetMode: e.target.checked }))}
-                                        />
-                                        <span className="slider-toggle"></span>
-                                    </label>
+                            <AccordionItem title="Price" isOpen={openSections.price} onToggle={() => toggleSection('price')}>
+                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                                    <input
+                                        type="number" placeholder="MIN"
+                                        className="custom-select"
+                                        value={priceRange.min} onChange={(e) => setPriceRange(p => ({ ...p, min: e.target.value }))}
+                                    />
+                                    <span style={{ color: '#555', fontWeight: 'bold' }}>-</span>
+                                    <input
+                                        type="number" placeholder="MAX"
+                                        className="custom-select"
+                                        value={priceRange.max} onChange={(e) => setPriceRange(p => ({ ...p, max: e.target.value }))}
+                                    />
                                 </div>
+                            </AccordionItem>
 
-                                <span className="wallet-label">Budget Per Month</span>
-                                <div className="wallet-payment">${financeSettings.monthlyBudget}<span> / mo</span></div>
+                            <AccordionItem title="Year" isOpen={openSections.year} onToggle={() => toggleSection('year')}>
+                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                                    <input
+                                        type="number" placeholder="FROM"
+                                        className="custom-select"
+                                        value={yearRange.min} onChange={(e) => setYearRange(y => ({ ...y, min: e.target.value }))}
+                                    />
+                                    <span style={{ color: '#555', fontWeight: 'bold' }}>-</span>
+                                    <input
+                                        type="number" placeholder="TO"
+                                        className="custom-select"
+                                        value={yearRange.max} onChange={(e) => setYearRange(y => ({ ...y, max: e.target.value }))}
+                                    />
+                                </div>
+                            </AccordionItem>
 
-                                <input
-                                    type="range"
-                                    min="200"
-                                    max="2000"
-                                    step="50"
-                                    className="finance-slider"
-                                    value={financeSettings.monthlyBudget}
-                                    onChange={(e) => handleBudgetChange(Number(e.target.value))}
-                                />
-
-                                <button
-                                    onClick={() => toggleSection('finance')}
-                                    style={{ background: 'none', border: 'none', color: 'var(--primary-color)', fontSize: '0.7rem', fontWeight: 'bold', cursor: 'pointer', display: 'block', margin: '1rem auto 0 auto' }}
+                            <AccordionItem title="Make" isOpen={openSections.make} onToggle={() => toggleSection('make')}>
+                                <select
+                                    className="custom-select"
+                                    onChange={(e) => setSearchQuery(e.target.value === 'All' ? '' : e.target.value)}
+                                    value={searchQuery && activeMakes.includes(searchQuery) ? searchQuery : 'All'}
                                 >
-                                    {openSections.finance ? 'HIDE SETTINGS' : 'UPDATE PAYMENT SETTINGS'}
-                                </button>
+                                    <option value="All">ALL MAKES</option>
+                                    {activeMakes.map(make => <option key={make} value={make}>{make.toUpperCase()}</option>)}
+                                </select>
+                            </AccordionItem>
+
+                            <AccordionItem title="Category" isOpen={openSections.type} onToggle={() => toggleSection('type')}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    {['All', ...activeTypes].map(type => (
+                                        <label key={type} style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '1rem',
+                                            cursor: 'pointer',
+                                            fontSize: '0.9rem',
+                                            color: filterType === type ? 'var(--primary-color)' : '#888',
+                                            fontWeight: filterType === type ? 'bold' : 'normal',
+                                            textTransform: 'uppercase'
+                                        }}>
+                                            <input
+                                                type="radio"
+                                                name="type"
+                                                checked={filterType === type}
+                                                onChange={() => setFilterType(type)}
+                                                style={{ accentColor: 'var(--primary-color)', width: '18px', height: '18px' }}
+                                            />
+                                            {type}
+                                        </label>
+                                    ))}
+                                </div>
+                            </AccordionItem>
+
+                            <div style={{ marginTop: '2.5rem' }}>
+                                {/* My Wallet Section */}
+                                <div className="wallet-card">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary-color)' }}>
+                                            <WalletIcon />
+                                            <span style={{ fontWeight: '900', fontSize: '0.9rem', letterSpacing: '1px' }}>MY WALLET</span>
+                                        </div>
+                                        <label className="switch">
+                                            <input
+                                                type="checkbox"
+                                                checked={financeSettings.budgetMode}
+                                                onChange={(e) => setFinanceSettings(f => ({ ...f, budgetMode: e.target.checked }))}
+                                            />
+                                            <span className="slider-toggle"></span>
+                                        </label>
+                                    </div>
+
+                                    <span className="wallet-label">Budget Per Month</span>
+                                    <div className="wallet-payment">${financeSettings.monthlyBudget}<span> / mo</span></div>
+
+                                    <input
+                                        type="range"
+                                        min="200"
+                                        max="2000"
+                                        step="50"
+                                        className="finance-slider"
+                                        value={financeSettings.monthlyBudget}
+                                        onChange={(e) => handleBudgetChange(Number(e.target.value))}
+                                    />
+
+                                    <button
+                                        onClick={() => toggleSection('finance')}
+                                        style={{ background: 'none', border: 'none', color: 'var(--primary-color)', fontSize: '0.7rem', fontWeight: 'bold', cursor: 'pointer', display: 'block', margin: '1rem auto 0 auto' }}
+                                    >
+                                        {openSections.finance ? 'HIDE SETTINGS' : 'UPDATE PAYMENT SETTINGS'}
+                                    </button>
+                                </div>
+
+                                {openSections.finance && (
+                                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem', border: '1px dashed #333' }}>
+                                        <div style={{ marginBottom: '1.5rem' }}>
+                                            <span className="wallet-label">Target Vehicle Price</span>
+                                            <div className="input-group">
+                                                <span className="input-prefix">$</span>
+                                                <input
+                                                    type="number" className="custom-select input-with-prefix"
+                                                    value={financeSettings.targetPrice}
+                                                    onChange={(e) => setFinanceSettings(f => ({ ...f, targetPrice: Number(e.target.value) }))}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="finance-grid">
+                                            <div style={{ marginBottom: '1rem' }}>
+                                                <span className="wallet-label">Down Payment</span>
+                                                <div className="input-group">
+                                                    <span className="input-prefix">$</span>
+                                                    <input
+                                                        type="number" className="custom-select input-with-prefix"
+                                                        value={financeSettings.downPayment}
+                                                        onChange={(e) => setFinanceSettings(f => ({ ...f, downPayment: Number(e.target.value) }))}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div style={{ marginBottom: '1rem' }}>
+                                                <span className="wallet-label">Trade-In Value</span>
+                                                <div className="input-group">
+                                                    <span className="input-prefix">$</span>
+                                                    <input
+                                                        type="number" className="custom-select input-with-prefix"
+                                                        value={financeSettings.tradeIn}
+                                                        onChange={(e) => setFinanceSettings(f => ({ ...f, tradeIn: Number(e.target.value) }))}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div style={{ marginBottom: '1rem' }}>
+                                                <span className="wallet-label">APR%</span>
+                                                <div className="input-group">
+                                                    <input
+                                                        type="number" step="0.1" className="custom-select input-with-suffix"
+                                                        value={financeSettings.apr}
+                                                        onChange={(e) => setFinanceSettings(f => ({ ...f, apr: Number(e.target.value) }))}
+                                                    />
+                                                    <span className="input-suffix">%</span>
+                                                </div>
+                                            </div>
+                                            <div style={{ marginBottom: '1rem' }}>
+                                                <span className="wallet-label">Term</span>
+                                                <select
+                                                    className="custom-select"
+                                                    value={financeSettings.term}
+                                                    onChange={(e) => setFinanceSettings(f => ({ ...f, term: Number(e.target.value) }))}
+                                                >
+                                                    <option value="36">36 Mo</option>
+                                                    <option value="48">48 Mo</option>
+                                                    <option value="60">60 Mo</option>
+                                                    <option value="72">72 Mo</option>
+                                                    <option value="84">84 Mo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
-                            {openSections.finance && (
-                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem', border: '1px dashed #333' }}>
-                                    <div style={{ marginBottom: '1.5rem' }}>
-                                        <span className="wallet-label">Target Vehicle Price</span>
-                                        <div className="input-group">
-                                            <span className="input-prefix">$</span>
-                                            <input
-                                                type="number" className="custom-select input-with-prefix"
-                                                value={financeSettings.targetPrice}
-                                                onChange={(e) => setFinanceSettings(f => ({ ...f, targetPrice: Number(e.target.value) }))}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="finance-grid">
-                                        <div style={{ marginBottom: '1rem' }}>
-                                            <span className="wallet-label">Down Payment</span>
-                                            <div className="input-group">
-                                                <span className="input-prefix">$</span>
-                                                <input
-                                                    type="number" className="custom-select input-with-prefix"
-                                                    value={financeSettings.downPayment}
-                                                    onChange={(e) => setFinanceSettings(f => ({ ...f, downPayment: Number(e.target.value) }))}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div style={{ marginBottom: '1rem' }}>
-                                            <span className="wallet-label">Trade-In Value</span>
-                                            <div className="input-group">
-                                                <span className="input-prefix">$</span>
-                                                <input
-                                                    type="number" className="custom-select input-with-prefix"
-                                                    value={financeSettings.tradeIn}
-                                                    onChange={(e) => setFinanceSettings(f => ({ ...f, tradeIn: Number(e.target.value) }))}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div style={{ marginBottom: '1rem' }}>
-                                            <span className="wallet-label">APR%</span>
-                                            <div className="input-group">
-                                                <input
-                                                    type="number" step="0.1" className="custom-select input-with-suffix"
-                                                    value={financeSettings.apr}
-                                                    onChange={(e) => setFinanceSettings(f => ({ ...f, apr: Number(e.target.value) }))}
-                                                />
-                                                <span className="input-suffix">%</span>
-                                            </div>
-                                        </div>
-                                        <div style={{ marginBottom: '1rem' }}>
-                                            <span className="wallet-label">Term</span>
-                                            <select
-                                                className="custom-select"
-                                                value={financeSettings.term}
-                                                onChange={(e) => setFinanceSettings(f => ({ ...f, term: Number(e.target.value) }))}
-                                            >
-                                                <option value="36">36 Mo</option>
-                                                <option value="48">48 Mo</option>
-                                                <option value="60">60 Mo</option>
-                                                <option value="72">72 Mo</option>
-                                                <option value="84">84 Mo</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #222' }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', color: '#888', fontSize: '0.9rem', fontVariant: 'small-caps', fontWeight: 'bold' }}>
-                                <input type="checkbox" checked={showSold} onChange={(e) => setShowSold(e.target.checked)} style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color)' }} />
-                                INCLUDE SOLD UNITS
-                            </label>
-                        </div>
+                            <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #222' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', color: '#888', fontSize: '0.9rem', fontVariant: 'small-caps', fontWeight: 'bold' }}>
+                                    <input type="checkbox" checked={showSold} onChange={(e) => setShowSold(e.target.checked)} style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color)' }} />
+                                    INCLUDE SOLD UNITS
+                                </label>
+                            </div>
+                        </div>{/* end filter-panel-content */}
                     </aside>
 
                     {/* Right Content */}

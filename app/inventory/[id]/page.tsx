@@ -226,14 +226,22 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
 
                 {/* Related Inventory Section */}
                 {relatedVehicles.length > 0 && (
-                    <div style={{ marginTop: '6rem', borderTop: '1px solid #333', paddingTop: '4rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '2rem', color: '#fff' }}>Similar {vehicle.type}s</h2>
-                            <Link href="/inventory" className="btn btn-accent" style={{ fontSize: '0.9rem' }}>
-                                VIEW ALL
+                    <div style={{ marginTop: '6rem', borderTop: '2px solid #222', paddingTop: '4rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                            <div>
+                                <p style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--primary-color)', marginBottom: '0.5rem', fontWeight: '600' }}>More From Our Lot</p>
+                                <h2 style={{ fontSize: '2rem', color: '#fff', lineHeight: '1.2' }}>You May Also Like</h2>
+                            </div>
+                            <Link href="/inventory" style={{
+                                fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em',
+                                color: '#fff', padding: '0.75rem 1.75rem', border: '1px solid #444',
+                                borderRadius: '4px', textDecoration: 'none', transition: 'all 0.2s ease',
+                                fontWeight: '500'
+                            }}>
+                                Browse All Inventory →
                             </Link>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+                        <div className="related-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
                             {relatedVehicles.map(v => (
                                 <VehicleCard key={v.id} vehicle={v as any} />
                             ))}
