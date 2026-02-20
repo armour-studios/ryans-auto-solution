@@ -42,9 +42,9 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                 </div>
 
                 {/* DESKTOP LAYOUT (Preserves original aesthetics exactly) */}
-                <div className="hidden lg:grid grid-cols-12 gap-16 items-start">
-                    {/* Main Content (Left - 8/12) */}
-                    <div className="lg:col-span-8">
+                <div className="desktop-only" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: '4rem', alignItems: 'start' }}>
+                    {/* Main Content (Left) */}
+                    <div>
                         <ImageGallery
                             images={vehicle.images}
                             mainImage={vehicle.image}
@@ -99,60 +99,58 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                         </div>
                     </div>
 
-                    {/* Sidebar (Right - 4/12) */}
-                    <aside className="lg:col-span-4" style={{ position: 'sticky', top: '100px' }}>
-                        <div style={{
-                            backgroundColor: 'var(--card-bg)', padding: '2rem', borderRadius: '4px',
-                            border: '1px solid #333', color: 'var(--text-color)'
-                        }}>
-                            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #444', paddingBottom: '1.5rem' }}>
-                                <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
-                                    {vehicle.year} {vehicle.make} {vehicle.model}
-                                </h1>
-                                <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
-                            </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                                <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
-                                    ${vehicle.price.toLocaleString()}
-                                </span>
-                            </div>
-
-                            <div style={{ marginBottom: '2rem', backgroundColor: '#1a1a1a', padding: '1rem', borderRadius: '4px' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                    <span style={{ color: '#888' }}>Mileage</span>
-                                    <strong>{vehicle.mileage.toLocaleString()} mi</strong>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                    <span style={{ color: '#888' }}>Status</span>
-                                    <strong style={{ color: vehicle.status === 'Available' ? 'var(--primary-color)' : '#c92a37' }}>{vehicle.status}</strong>
-                                </div>
-                                {vehicle.vin && (
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                        <span style={{ color: '#888' }}>VIN</span>
-                                        <strong style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>{vehicle.vin}</strong>
-                                    </div>
-                                )}
-                                {Object.entries(vehicle.specs || {}).map(([key, value]) => (
-                                    <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                        <span style={{ color: '#888' }}>{key}</span>
-                                        <strong>{value}</strong>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <Link href="/contact" className="btn" style={{ width: '100%', display: 'block', textAlign: 'center', fontSize: '1.1rem', padding: '1rem' }}>
-                                CONTACT DEALER
-                            </Link>
-                            <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', textAlign: 'center' }}>
-                                * Price excludes tax, title, and license.
-                            </p>
+                    {/* Sidebar (Right) - Sticky */}
+                    <div style={{
+                        backgroundColor: 'var(--card-bg)', padding: '2rem', borderRadius: '4px',
+                        position: 'sticky', top: '100px', border: '1px solid #333', color: 'var(--text-color)'
+                    }}>
+                        <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #444', paddingBottom: '1.5rem' }}>
+                            <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
+                                {vehicle.year} {vehicle.make} {vehicle.model}
+                            </h1>
+                            <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
                         </div>
-                    </aside>
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
+                                ${vehicle.price.toLocaleString()}
+                            </span>
+                        </div>
+
+                        <div style={{ marginBottom: '2rem', backgroundColor: '#1a1a1a', padding: '1rem', borderRadius: '4px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
+                                <span style={{ color: '#888' }}>Mileage</span>
+                                <strong>{vehicle.mileage.toLocaleString()} mi</strong>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
+                                <span style={{ color: '#888' }}>Status</span>
+                                <strong style={{ color: vehicle.status === 'Available' ? 'var(--primary-color)' : '#c92a37' }}>{vehicle.status}</strong>
+                            </div>
+                            {vehicle.vin && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
+                                    <span style={{ color: '#888' }}>VIN</span>
+                                    <strong style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>{vehicle.vin}</strong>
+                                </div>
+                            )}
+                            {Object.entries(vehicle.specs || {}).map(([key, value]) => (
+                                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
+                                    <span style={{ color: '#888' }}>{key}</span>
+                                    <strong>{value}</strong>
+                                </div>
+                            ))}
+                        </div>
+
+                        <Link href="/contact" className="btn" style={{ width: '100%', display: 'block', textAlign: 'center', fontSize: '1.1rem', padding: '1rem' }}>
+                            CONTACT DEALER
+                        </Link>
+                        <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', textAlign: 'center' }}>
+                            * Price excludes tax, title, and license.
+                        </p>
+                    </div>
                 </div>
 
                 {/* MOBILE LAYOUT (Optimized for small screens) */}
-                <div className="lg:hidden">
+                <div className="mobile-only">
                     <div style={{ marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid #333' }}>
                         <h1 style={{ fontSize: '1.75rem', fontWeight: 'bold', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
                             {vehicle.year} {vehicle.make} {vehicle.model}

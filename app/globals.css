@@ -27,6 +27,35 @@
   --spacing-section: clamp(3rem, 10vw, 6rem);
 }
 
+/* Dual-Layout Visibility Classes */
+/* Mobile: show mobile-only, hide desktop-only */
+/* Desktop (992px+): show desktop-only, hide mobile-only */
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none !important;
+}
+
+@media (min-width: 992px) {
+  .mobile-only {
+    display: none !important;
+  }
+
+  .desktop-only {
+    display: grid !important;
+  }
+}
+
+/* Mobile gallery height: use aspect-ratio instead of fixed 500px */
+@media (max-width: 991px) {
+  .image-gallery .hover-card {
+    height: auto !important;
+    aspect-ratio: 16 / 10;
+  }
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
