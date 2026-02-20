@@ -9,6 +9,7 @@ import FeaturedToggle from '@/components/admin/FeaturedToggle';
 export default function InventoryAdminPage() {
     const [inventory, setInventory] = useState<any[]>([]);
     const [activeFilter, setActiveFilter] = useState<'All' | 'Available' | 'Sold'>('Available');
+    const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -27,8 +28,13 @@ export default function InventoryAdminPage() {
     }, []);
 
     const filteredInventory = inventory.filter(v => {
-        if (activeFilter === 'All') return true;
-        return v.status === activeFilter;
+        if (activeFilter !== 'All' && v.status !== activeFilter) return false;
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            const name = `${v.year} ${v.make} ${v.model}`.toLowerCase();
+            if (!name.includes(q) && !v.id.toString().includes(q)) return false;
+        }
+        return true;
     });
 
     if (loading) {
@@ -71,12 +77,26 @@ export default function InventoryAdminPage() {
                     ))}
                 </div>
 
+                {/* Search Bar */}
+                <div style={{ marginBottom: '1.5rem' }}>
+                    <input
+                        type="text"
+                        placeholder="Search by name, make, model, or ID..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        style={{
+                            width: '100%', padding: '0.85rem 1.25rem', backgroundColor: '#1a1a1a',
+                            border: '1px solid #333', borderRadius: '8px', color: '#fff',
+                            fontSize: '0.9rem', outline: 'none'
+                        }}
+                    />
+                </div>
+
                 <div style={{ backgroundColor: '#111', borderRadius: '12px', overflow: 'hidden', border: '1px solid #222' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', color: '#fff' }}>
                         <thead>
                             <tr style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #222' }}>
-                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>ID</th>
-                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Image</th>
+                                <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px', width: '80px' }}></th>
                                 <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Vehicle</th>
                                 <th style={{ padding: '1.25rem', textAlign: 'left', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Price</th>
                                 <th style={{ padding: '1.25rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '1px' }}>Featured</th>
@@ -87,8 +107,7 @@ export default function InventoryAdminPage() {
                         <tbody>
                             {filteredInventory.map(vehicle => (
                                 <tr key={vehicle.id} style={{ borderBottom: '1px solid #222' }}>
-                                    <td style={{ padding: '1.25rem', color: '#444', fontSize: '0.85rem' }}>{vehicle.id}</td>
-                                    <td style={{ padding: '0.75rem' }}>
+                                    <td style={{ padding: '0.75rem 1.25rem' }}>
                                         <div style={{ position: 'relative', width: '70px', height: '50px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #333', backgroundColor: '#222' }}>
                                             {vehicle.image ? (
                                                 <Image
@@ -105,7 +124,7 @@ export default function InventoryAdminPage() {
                                     </td>
                                     <td style={{ padding: '1.25rem' }}>
                                         <div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#eee' }}>{vehicle.year} {vehicle.make} {vehicle.model}</div>
-                                        <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.25rem' }}>{vehicle.mileage.toLocaleString()} miles</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.25rem' }}>{vehicle.mileage.toLocaleString()} miles · ID: {vehicle.id}</div>
                                     </td>
                                     <td style={{ padding: '1.25rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>${vehicle.price.toLocaleString()}</td>
                                     <td style={{ padding: '1.25rem', textAlign: 'center' }}>
@@ -131,7 +150,7 @@ export default function InventoryAdminPage() {
                             ))}
                             {filteredInventory.length === 0 && (
                                 <tr>
-                                    <td colSpan={7} style={{ padding: '4rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>
+                                    <td colSpan={6} style={{ padding: '4rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>
                                         No vehicles found in this category.
                                     </td>
                                 </tr>
