@@ -200,18 +200,6 @@ img {
   .details-grid {
     grid-template-columns: 1fr !important;
   }
-
-  .gallery-main-stage {
-    aspect-ratio: 16/10 !important;
-    height: auto !important;
-  }
-}
-
-/* Desktop Gallery Height */
-@media (min-width: 993px) {
-  .gallery-main-stage {
-    height: 500px !important;
-  }
 }
 
 /* Mobile Responsiveness - Phone */

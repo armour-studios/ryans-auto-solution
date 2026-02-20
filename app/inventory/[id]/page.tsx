@@ -31,7 +31,7 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
         <div style={{ padding: '2rem 0', color: '#fff' }}>
             <div className="container">
                 {/* Breadcrumbs */}
-                <div style={{ marginBottom: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.9rem', color: '#888' }}>
+                <div style={{ marginBottom: '2rem', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: '#888' }}>
                     <Link href="/" className='hover:text-primary'>Home</Link>
                     <span>/</span>
                     <Link href="/inventory" className='hover:text-primary'>Inventory</Link>
@@ -41,22 +41,10 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                     <span style={{ color: '#fff' }}>{vehicle.year} {vehicle.make}</span>
                 </div>
 
-                {/* Mobile Only Header: Simple Name & Price (Matches Sidebar Styling) */}
-                <div className="lg:hidden" style={{ marginBottom: '2rem', borderBottom: '1px solid #333', paddingBottom: '1.5rem' }}>
-                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
-                        {vehicle.year} {vehicle.make} {vehicle.model}
-                    </h1>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
-                            ${vehicle.price.toLocaleString()}
-                        </span>
-                        <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start max-w-full overflow-hidden">
-                    {/* Main Content (Left - 8/12 = 2/3) */}
-                    <div className="lg:col-span-8 w-full max-w-full overflow-hidden">
+                {/* DESKTOP LAYOUT (Preserves original aesthetics exactly) */}
+                <div className="hidden lg:grid grid-cols-12 gap-16 items-start">
+                    {/* Main Content (Left - 8/12) */}
+                    <div className="lg:col-span-8">
                         <ImageGallery
                             images={vehicle.images}
                             mainImage={vehicle.image}
@@ -94,9 +82,9 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                                 <p style={{ lineHeight: '1.8', color: '#ccc', fontSize: '1.05rem' }}>{vehicle.description}</p>
                             </section>
 
-                            <section className="w-full">
+                            <section>
                                 <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block', paddingBottom: '0.25rem' }}>Key Features</h3>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
                                     {vehicle.features && vehicle.features.map(feature => (
                                         <div key={feature} style={{
                                             backgroundColor: '#222', padding: '0.75rem', borderRadius: '4px',
@@ -111,20 +99,20 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                         </div>
                     </div>
 
-                    {/* Sidebar (Right - 4/12 = 1/3) - Sticky */}
+                    {/* Sidebar (Right - 4/12) */}
                     <aside className="lg:col-span-4" style={{ position: 'sticky', top: '100px' }}>
                         <div style={{
                             backgroundColor: 'var(--card-bg)', padding: '2rem', borderRadius: '4px',
                             border: '1px solid #333', color: 'var(--text-color)'
                         }}>
-                            <div className="hidden lg:block" style={{ marginBottom: '1.5rem', borderBottom: '1px solid #444', paddingBottom: '1.5rem' }}>
+                            <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #444', paddingBottom: '1.5rem' }}>
                                 <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
                                     {vehicle.year} {vehicle.make} {vehicle.model}
                                 </h1>
                                 <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
                             </div>
 
-                            <div className="hidden lg:flex" style={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                                 <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
                                     ${vehicle.price.toLocaleString()}
                                 </span>
@@ -161,6 +149,81 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                             </p>
                         </div>
                     </aside>
+                </div>
+
+                {/* MOBILE LAYOUT (Optimized for small screens) */}
+                <div className="lg:hidden">
+                    <div style={{ marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid #333' }}>
+                        <h1 style={{ fontSize: '1.75rem', fontWeight: 'bold', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
+                            {vehicle.year} {vehicle.make} {vehicle.model}
+                        </h1>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
+                                ${vehicle.price.toLocaleString()}
+                            </span>
+                            <span style={{ fontSize: '0.8rem', color: '#888' }}>Stock: {vehicle.id}</span>
+                        </div>
+                    </div>
+
+                    <ImageGallery
+                        images={vehicle.images}
+                        mainImage={vehicle.image}
+                        vehicleName={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                    />
+
+                    <div style={{ marginTop: '2rem', display: 'grid', gap: '2rem' }}>
+                        {/* Quick Specs for Mobile */}
+                        <div style={{ backgroundColor: '#1a1a1a', padding: '1.25rem', borderRadius: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #333' }}>
+                                <span style={{ color: '#888' }}>Mileage</span>
+                                <strong>{vehicle.mileage.toLocaleString()} mi</strong>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #333' }}>
+                                <span style={{ color: '#888' }}>Status</span>
+                                <strong style={{ color: vehicle.status === 'Available' ? 'var(--primary-color)' : '#c92a37' }}>{vehicle.status}</strong>
+                            </div>
+                        </div>
+
+                        <Link href="/contact" className="btn" style={{ width: '100%', padding: '1.25rem' }}>
+                            CONTACT DEALER
+                        </Link>
+
+                        {/* Video for Mobile */}
+                        {(vehicle.video || vehicle.youtubeUrl) && (
+                            <section>
+                                <h3 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Video Walkthrough</h3>
+                                <div style={{ position: 'relative', paddingTop: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
+                                    {vehicle.youtubeUrl ? (
+                                        <iframe
+                                            src={getYouTubeEmbedUrl(vehicle.youtubeUrl) || ''}
+                                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                            frameBorder="0"
+                                            allowFullScreen
+                                        />
+                                    ) : (
+                                        <video src={vehicle.video} controls style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+                                    )}
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Full Specs, Description, etc. */}
+                        <section>
+                            <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block' }}>Description</h3>
+                            <p style={{ lineHeight: '1.6', color: '#ccc' }}>{vehicle.description}</p>
+                        </section>
+
+                        <section>
+                            <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block' }}>Key Features</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                {vehicle.features?.map(feature => (
+                                    <div key={feature} style={{ backgroundColor: '#222', padding: '0.5rem', borderRadius: '4px', fontSize: '0.85rem' }}>
+                                        ✓ {feature}
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </div>
                 </div>
 
                 {/* Related Inventory Section */}

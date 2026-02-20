@@ -51,36 +51,14 @@ export default function ImageGallery({ images, mainImage, vehicleName }: ImageGa
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isLightboxOpen, nextImage, prevImage]);
 
-    // Simple swipe logic
-    const [touchStart, setTouchStart] = useState<number | null>(null);
-    const [touchEnd, setTouchEnd] = useState<number | null>(null);
-
-    const onTouchStart = (e: React.TouchEvent) => {
-        setTouchEnd(null);
-        setTouchStart(e.targetTouches[0].clientX);
-    };
-
-    const onTouchMove = (e: React.TouchEvent) => {
-        setTouchEnd(e.targetTouches[0].clientX);
-    };
-
-    const onTouchEnd = () => {
-        if (!touchStart || !touchEnd) return;
-        const distance = touchStart - touchEnd;
-        if (distance > 50) nextImage();
-        if (distance < -50) prevImage();
-    };
-
     return (
         <div className="image-gallery">
             {/* Main Stage */}
             <div
                 onClick={() => openLightbox(activeIndex)}
-                onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
-                onTouchEnd={onTouchEnd}
                 style={{
                     position: 'relative',
+                    height: '500px',
                     borderRadius: '8px',
                     overflow: 'hidden',
                     marginBottom: '1rem',
@@ -89,7 +67,7 @@ export default function ImageGallery({ images, mainImage, vehicleName }: ImageGa
                     backgroundColor: '#111',
                     transition: 'transform 0.3s ease'
                 }}
-                className="hover-card gallery-main-stage w-full"
+                className="hover-card"
             >
                 <Image
                     src={allImages[activeIndex]}
