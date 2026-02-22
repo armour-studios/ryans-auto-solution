@@ -68,17 +68,17 @@ function createVehiclePostMessage(vehicle: VehiclePostData): string {
 
     const mileageFormatted = new Intl.NumberFormat('en-US').format(vehicle.mileage);
 
-    let message = `🚗 NEW ARRIVAL! 🚗\n\n`;
+    let message = `--- NEW ARRIVAL ---\n\n`;
     message += `${vehicle.year} ${vehicle.make} ${vehicle.model}\n\n`;
-    message += `💰 Price: ${priceFormatted}\n`;
-    message += `📍 Mileage: ${mileageFormatted} miles\n\n`;
+    message += `Price: ${priceFormatted}\n`;
+    message += `Mileage: ${mileageFormatted} miles\n\n`;
 
     if (vehicle.description) {
         message += `${vehicle.description}\n\n`;
     }
 
-    message += `📞 Call (218) 469-0183 to schedule a test drive!\n`;
-    message += `📍 325 Oak Hills Rd SE, Bemidji, MN 56601\n\n`;
+    message += `Call (218) 469-0183 to schedule a test drive!\n`;
+    message += `325 Oak Hills Rd SE, Bemidji, MN 56601\n\n`;
     message += `#BemidjiCars #UsedCars #RyansAutoSolution #NorthernMinnesota`;
 
     return message;

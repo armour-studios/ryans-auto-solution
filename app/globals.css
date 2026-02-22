@@ -219,6 +219,34 @@ img {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+/* Admin Panel - Mobile Responsive */
+.admin-table-view {
+  display: block;
+}
+
+.admin-card-view {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .admin-table-view {
+    display: none !important;
+  }
+
+  .admin-card-view {
+    display: block !important;
+  }
+
+  .admin-page-header {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  .admin-page-header .btn {
+    text-align: center;
+  }
+}
+
 /* Mobile Responsiveness - Tablet and Below */
 @media (max-width: 992px) {
   .container {

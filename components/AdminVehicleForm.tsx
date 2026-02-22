@@ -250,21 +250,21 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
 
             {(formData.youtubeUrl || formData.video) && (
                 <div style={{ marginTop: '1rem', padding: '0.5rem', backgroundColor: '#333', borderRadius: '4px', textAlign: 'center', fontSize: '0.8rem' }}>
-                    ▶ Video Included
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{display:'inline',verticalAlign:'middle',marginRight:'4px'}}><polygon points="5 3 19 12 5 21 5 3"/></svg> Video Included
                 </div>
             )}
         </div>
     );
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', alignItems: 'start' }}>
-            <div style={{ backgroundColor: '#222', padding: '2rem', borderRadius: '8px', color: '#fff' }}>
+        <div className="admin-form-layout" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', alignItems: 'start' }}>
+            <div style={{ backgroundColor: '#222', padding: 'clamp(1rem, 3vw, 2rem)', borderRadius: '8px', color: '#fff' }}>
                 <h2 style={{ marginBottom: '2rem' }}>{initialData ? 'Edit Vehicle' : 'Add New Vehicle'}</h2>
                 <FormSteps currentStep={currentStep} steps={STEPS} />
 
                 {/* STEP 1: BASIC INFO */}
                 {currentStep === 0 && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="admin-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div><label>VIN</label><input name="vin" value={formData.vin} onChange={handleChange} className="form-input" placeholder="17-Digit VIN" /></div>
                         <div><label>Stock # / ID</label><div style={{ padding: '0.75rem', backgroundColor: '#333', color: '#888', border: '1px solid #444', borderRadius: '4px' }}>Auto-Generated</div></div>
                         {/* ... (rest of inputs will be styled via global css update below) ... */}
@@ -290,7 +290,7 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
 
                 {/* STEP 2: SPECS & DETAILS */}
                 {currentStep === 1 && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="admin-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div><label>Mileage</label><input type="number" name="mileage" required value={formData.mileage} onChange={handleChange} className="form-input" /></div>
                         <div><label>Type</label>
                             <select name="type" value={formData.type} onChange={handleChange} className="form-input">
@@ -316,11 +316,58 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                     <div>
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label>Photos</label>
-                            <input type="file" multiple onChange={handleImageUpload} accept="image/*" className="form-input" />
-                            {uploading && <span style={{ color: 'var(--primary-color)', marginLeft: '0.5rem' }}>Uploading...</span>}
+
+                            {/* Mobile-friendly upload zone */}
+                            <div
+                                onClick={() => document.getElementById('vehicle-photo-input')?.click()}
+                                style={{
+                                    border: '2px dashed #444',
+                                    borderRadius: '12px',
+                                    padding: '1.5rem',
+                                    textAlign: 'center',
+                                    cursor: 'pointer',
+                                    marginTop: '0.5rem',
+                                    backgroundColor: '#1a1a1a',
+                                    transition: 'border-color 0.2s'
+                                }}
+                            >
+                                <div style={{ marginBottom: '0.5rem' }}><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+                                <div style={{ color: '#aaa', fontSize: '0.9rem', fontWeight: 'bold' }}>Tap to add photos</div>
+                                <div style={{ color: '#666', fontSize: '0.8rem', marginTop: '0.25rem' }}>Camera or photo library</div>
+                            </div>
+                            <input
+                                id="vehicle-photo-input"
+                                type="file"
+                                multiple
+                                onChange={handleImageUpload}
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
+                            {uploading && (
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    marginTop: '0.75rem',
+                                    padding: '0.75rem',
+                                    backgroundColor: 'rgba(15, 113, 177, 0.1)',
+                                    borderRadius: '8px',
+                                    border: '1px solid rgba(15, 113, 177, 0.2)'
+                                }}>
+                                    <div className="upload-spinner" style={{
+                                        width: '18px',
+                                        height: '18px',
+                                        border: '2px solid #333',
+                                        borderTopColor: 'var(--primary-color)',
+                                        borderRadius: '50%',
+                                        animation: 'spin 0.8s linear infinite'
+                                    }} />
+                                    <span style={{ color: 'var(--primary-color)', fontSize: '0.85rem' }}>Uploading photos...</span>
+                                </div>
+                            )}
 
                             <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '0.5rem' }}>
-                                Drag images to reorder • First image = Main photo • Click ⭐ to set as main
+                                First image = Main photo • Use star icon to set main • Use arrows to reorder
                             </p>
 
                             {/* Draggable Image Grid */}
@@ -387,6 +434,29 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                                             padding: '4px',
                                             background: 'linear-gradient(transparent, rgba(0,0,0,0.8))'
                                         }}>
+                                            {idx > 0 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newImages = [...formData.images];
+                                                        [newImages[idx - 1], newImages[idx]] = [newImages[idx], newImages[idx - 1]];
+                                                        setFormData(prev => ({ ...prev, images: newImages, image: newImages[0] }));
+                                                    }}
+                                                    title="Move left"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '4px',
+                                                        backgroundColor: 'rgba(255,255,255,0.15)',
+                                                        border: 'none',
+                                                        borderRadius: '4px',
+                                                        color: '#fff',
+                                                        cursor: 'pointer',
+                                                        fontSize: '0.75rem'
+                                                    }}
+                                                >
+                                                    ◀
+                                                </button>
+                                            )}
                                             {idx !== 0 && (
                                                 <button
                                                     type="button"
@@ -400,10 +470,36 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                                                         borderRadius: '4px',
                                                         color: '#fff',
                                                         cursor: 'pointer',
+                                                        fontSize: '0.75rem',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
+                                                    }}
+                                                >
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                                </button>
+                                            )}
+                                            {idx < formData.images.length - 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newImages = [...formData.images];
+                                                        [newImages[idx], newImages[idx + 1]] = [newImages[idx + 1], newImages[idx]];
+                                                        setFormData(prev => ({ ...prev, images: newImages, image: newImages[0] }));
+                                                    }}
+                                                    title="Move right"
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '4px',
+                                                        backgroundColor: 'rgba(255,255,255,0.15)',
+                                                        border: 'none',
+                                                        borderRadius: '4px',
+                                                        color: '#fff',
+                                                        cursor: 'pointer',
                                                         fontSize: '0.75rem'
                                                     }}
                                                 >
-                                                    ⭐
+                                                    ▶
                                                 </button>
                                             )}
                                             <button
@@ -498,6 +594,17 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                     font-weight: bold;
                     font-size: 0.9rem;
                     color: #ccc;
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+                @media (max-width: 992px) {
+                    .admin-form-layout {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .admin-form-grid {
+                        grid-template-columns: 1fr !important;
+                    }
                 }
             `}</style>
         </div>

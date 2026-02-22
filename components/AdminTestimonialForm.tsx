@@ -61,11 +61,11 @@ export default function AdminTestimonialForm({ initialData }: { initialData?: an
             <div style={{ marginBottom: '1.5rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Rating</label>
                 <select name="rating" value={formData.rating} onChange={handleChange} style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #444', backgroundColor: '#333', color: '#fff' }}>
-                    <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
-                    <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
-                    <option value="3">⭐⭐⭐ (3 Stars)</option>
-                    <option value="2">⭐⭐ (2 Stars)</option>
-                    <option value="1">⭐ (1 Star)</option>
+                    <option value="5">★★★★★ (5 Stars)</option>
+                    <option value="4">★★★★ (4 Stars)</option>
+                    <option value="3">★★★ (3 Stars)</option>
+                    <option value="2">★★ (2 Stars)</option>
+                    <option value="1">★ (1 Star)</option>
                 </select>
             </div>
 

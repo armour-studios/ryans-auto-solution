@@ -53,7 +53,7 @@ export default function ValueYourTradePage() {
         return (
             <div style={{ padding: '6rem 0', color: '#fff', minHeight: '80vh', textAlign: 'center' }}>
                 <div className="container" style={{ maxWidth: '600px' }}>
-                    <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>💰</div>
+                    <div style={{ marginBottom: '1.5rem' }}><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                     <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>We&apos;ll Be In Touch!</h1>
                     <p style={{ fontSize: '1.2rem', color: '#ccc', marginBottom: '2rem' }}>
                         Thank you for submitting your trade-in information. We&apos;ll evaluate your vehicle and send you an offer within 24-48 hours.

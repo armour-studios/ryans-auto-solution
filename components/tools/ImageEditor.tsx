@@ -266,7 +266,7 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <span style={{ fontSize: '1.2rem' }}>🔍</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
                                 <label style={{ fontSize: '0.75rem', color: '#888', fontWeight: '600' }}>ZOOM</label>
                             </div>
                             <span style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontFamily: 'monospace', fontWeight: 'bold' }}>{zoom.toFixed(1)}x</span>
@@ -286,7 +286,7 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <span style={{ fontSize: '1.2rem' }}>🔄</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
                                 <label style={{ fontSize: '0.75rem', color: '#888', fontWeight: '600' }}>ROTATION</label>
                             </div>
                             <span style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontFamily: 'monospace', fontWeight: 'bold' }}>{rotation}°</span>
@@ -328,7 +328,7 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                             }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <span style={{ fontSize: '1.2rem' }}>{autoEnhance ? '🏎️' : '🪄'}</span>
+                                {autoEnhance ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8L19 13"/><path d="M15 9h0"/><path d="M17.8 6.2L19 5"/><path d="M3 21l9-9"/><path d="M12.2 6.2L11 5"/></svg>}
                                 {autoEnhance ? 'AUTO MASTER (ENABLED)' : 'AUTOMATED CAR MASTER'}
                             </div>
                             <span style={{ fontSize: '0.65rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -363,12 +363,12 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                 >
                     {processing ? (
                         <>
-                            <span className="animate-spin">⏳</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-spin"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
                             <span>Pro Sharpening & Color Grading...</span>
                         </>
                     ) : (
                         <>
-                            <span>💾</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             <span>Download {format.split('/')[1].toUpperCase()} Master</span>
                         </>
                     )}

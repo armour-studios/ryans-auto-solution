@@ -102,7 +102,7 @@ export default async function BlogPage() {
                         <div style={{ backgroundColor: '#151515', padding: '2rem', borderRadius: '12px', border: '1px solid #333' }}>
                             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
                                 <div style={{ width: '30px', height: '30px', backgroundColor: 'var(--primary-color)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '0.75rem' }}>
-                                    <span style={{ color: '#fff', fontSize: '1.2rem' }}>⚡</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                                 </div>
                                 <h3 style={{ margin: 0, textTransform: 'uppercase', letterSpacing: '1px' }}>Trending</h3>
                             </div>
