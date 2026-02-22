@@ -145,6 +145,25 @@ img {
   filter: brightness(1.2);
 }
 
+/* Top bar responsive toggle */
+.topbar-desktop {
+  display: flex;
+}
+
+.topbar-mobile {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .topbar-desktop {
+    display: none !important;
+  }
+
+  .topbar-mobile {
+    display: flex !important;
+  }
+}
+
 .card-glow {
   transition: all 0.3s ease;
 }
