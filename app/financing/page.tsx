@@ -1,13 +1,75 @@
-import Link from 'next/link';
+'use client';
 
-export const metadata = {
-    title: 'Financing | Ryan\'s Auto Solution',
-    description: 'Apply for financing at Ryan\'s Auto Solution in Bemidji, MN. All credit welcome.',
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+
+// External link data
+const externalLinks: Record<string, { url: string; name: string }> = {
+    apply: { url: 'https://lotuspf.com/', name: 'Lotus Partner Finance' },
+    trade: { url: 'https://www.kbb.com/whats-my-car-worth/', name: 'Kelley Blue Book' },
 };
 
 export default function FinancingPage() {
+    const [popup, setPopup] = useState<{ url: string; name: string } | null>(null);
+
+    const handleExternal = (key: string, e: React.MouseEvent) => {
+        e.preventDefault();
+        setPopup(externalLinks[key]);
+    };
+
     return (
         <div style={{ padding: '0', color: '#fff', backgroundColor: '#050505', minHeight: '100vh' }}>
+
+            {/* External Site Popup */}
+            {popup && (
+                <div className="ext-popup-overlay" onClick={() => setPopup(null)}>
+                    <div className="ext-popup" onClick={(e) => e.stopPropagation()}>
+                        <button className="ext-popup-close" onClick={() => setPopup(null)} aria-label="Close">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                        <div className="ext-popup-logo">
+                            <Image
+                                src="/uploads/ras1+copy+2 (1).webp"
+                                alt="Ryan's Auto Solution"
+                                width={180}
+                                height={50}
+                                style={{ objectFit: 'contain' }}
+                            />
+                        </div>
+                        <div className="ext-popup-divider" />
+                        <div className="ext-popup-icon">
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                <polyline points="15 3 21 3 21 9" />
+                                <line x1="10" y1="14" x2="21" y2="3" />
+                            </svg>
+                        </div>
+                        <h3 className="ext-popup-title">You&apos;re Leaving Our Site</h3>
+                        <p className="ext-popup-text">
+                            You will be redirected to <strong>{popup.name}</strong>, a trusted third-party partner. Ryan&apos;s Auto Solution is not responsible for the content on external sites.
+                        </p>
+                        <a
+                            href={popup.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn cta-glow ext-popup-btn"
+                            onClick={() => setPopup(null)}
+                        >
+                            Continue to {popup.name}
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+                        <button className="ext-popup-cancel" onClick={() => setPopup(null)}>
+                            Go Back
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Hero Section */}
             <div style={{
                 padding: 'var(--spacing-section) 0',
@@ -44,7 +106,7 @@ export default function FinancingPage() {
                     marginBottom: '8rem'
                 }}>
                     {/* Apply For Financing */}
-                    <a href="https://lotuspf.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <button onClick={(e) => handleExternal('apply', e)} style={{ textDecoration: 'none', color: 'inherit', background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}>
                         <div className="glass-card card-glow" style={{
                             padding: '3.5rem 2.5rem',
                             height: '100%',
@@ -74,10 +136,10 @@ export default function FinancingPage() {
                                 Begin Application
                             </span>
                         </div>
-                    </a>
+                    </button>
 
                     {/* Value Your Trade */}
-                    <a href="https://www.kbb.com/whats-my-car-worth/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <button onClick={(e) => handleExternal('trade', e)} style={{ textDecoration: 'none', color: 'inherit', background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}>
                         <div className="glass-card card-glow" style={{
                             padding: '3.5rem 2.5rem',
                             height: '100%',
@@ -104,7 +166,7 @@ export default function FinancingPage() {
                                 Get Value
                             </span>
                         </div>
-                    </a>
+                    </button>
 
                     {/* Payment Calculator */}
                     <Link href="/financing/calculator" style={{ textDecoration: 'none', color: 'inherit' }}>

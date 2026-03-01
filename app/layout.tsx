@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FacebookMessenger from '@/components/FacebookMessenger';
+import ThemeProvider from '@/components/ThemeProvider';
 
 const tinos = Tinos({
   subsets: ['latin'],
@@ -42,10 +43,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={tinos.variable} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Navbar />
-        <main style={{ flex: 1 }}>{children}</main>
-        <Footer />
-        <FacebookMessenger />
+        <ThemeProvider>
+          <Navbar />
+          <main style={{ flex: 1 }}>{children}</main>
+          <Footer />
+          <FacebookMessenger />
+        </ThemeProvider>
       </body>
     </html>
   );

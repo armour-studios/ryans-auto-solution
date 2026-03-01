@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showExtPopup, setShowExtPopup] = useState(false);
 
   useEffect(() => {
     // Check for admin_user cookie
@@ -110,7 +111,7 @@ export default function Navbar() {
       </div>
 
       {/* Main Nav */}
-      <nav style={{ backgroundColor: '#000', color: '#fff', padding: '1rem 0', borderBottom: '4px solid #333' }}>
+      <nav style={{ backgroundColor: 'var(--nav-bg)', color: 'var(--nav-text)', padding: '1rem 0', borderBottom: `4px solid var(--nav-border)` }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center' }}>
             <Image
@@ -130,7 +131,7 @@ export default function Navbar() {
             style={{
               background: 'none',
               border: 'none',
-              color: '#fff',
+              color: 'var(--nav-text)',
               fontSize: '2rem',
               cursor: 'pointer',
               display: 'none' // Controlled by CSS media query
@@ -151,26 +152,87 @@ export default function Navbar() {
               if (isAdmin) items.push('Admin');
               return items.map((item) => (
                 <li key={item} onClick={() => setIsOpen(false)}>
-                  <Link
-                    href={item === 'Home' ? '/' : item === 'Trailers' ? 'https://www.kingoftheroadtrailer.com' : item === 'Admin' ? '/admin' : `/${item.toLowerCase()}`}
-                    target={item === 'Trailers' ? '_blank' : undefined}
-                    rel={item === 'Trailers' ? 'noopener noreferrer' : undefined}
-                    style={{
-                      textTransform: 'uppercase',
-                      fontWeight: 'bold',
-                      fontSize: '0.9rem',
-                      letterSpacing: '1px',
-                      color: item === 'Admin' ? 'var(--primary-color)' : '#fff'
-                    }}
-                  >
-                    {item}
-                  </Link>
+                  {item === 'Trailers' ? (
+                    <a
+                      href="#"
+                      onClick={(e) => { e.preventDefault(); setShowExtPopup(true); }}
+                      style={{
+                        textTransform: 'uppercase',
+                        fontWeight: 'bold',
+                        fontSize: '0.9rem',
+                        letterSpacing: '1px',
+                        color: 'var(--nav-text)',
+                        cursor: 'pointer',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      {item}
+                    </a>
+                  ) : (
+                    <Link
+                      href={item === 'Home' ? '/' : item === 'Admin' ? '/admin' : `/${item.toLowerCase()}`}
+                      style={{
+                        textTransform: 'uppercase',
+                        fontWeight: 'bold',
+                        fontSize: '0.9rem',
+                        letterSpacing: '1px',
+                        color: item === 'Admin' ? 'var(--primary-color)' : 'var(--nav-text)'
+                      }}
+                    >
+                      {item}
+                    </Link>
+                  )}
                 </li>
               ));
             })()}
           </ul>
         </div>
       </nav>
+
+      {/* External Site Popup for Trailers */}
+      {showExtPopup && (
+        <div className="ext-popup-overlay" onClick={() => setShowExtPopup(false)}>
+          <div className="ext-popup" onClick={(e) => e.stopPropagation()}>
+            <button className="ext-popup-close" onClick={() => setShowExtPopup(false)} aria-label="Close">✕</button>
+            <div className="ext-popup-logo">
+              <Image
+                src="/uploads/ras1+copy+2 (1).webp"
+                alt="Ryan's Auto Solution"
+                width={180}
+                height={50}
+                style={{ objectFit: 'contain' }}
+              />
+            </div>
+            <div className="ext-popup-divider" />
+            <div className="ext-popup-icon">
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </div>
+            <h3 className="ext-popup-title">You&apos;re Leaving Our Site</h3>
+            <p className="ext-popup-text">
+              You&apos;re about to visit <strong>King of the Road Trailer</strong>, our trusted trailer partner. Their site has its own privacy policy and terms.
+            </p>
+            <a
+              href="https://www.kingoftheroadtrailer.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ext-popup-btn"
+              onClick={() => setShowExtPopup(false)}
+            >
+              Continue to King of the Road Trailer
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+            <button className="ext-popup-cancel" onClick={() => setShowExtPopup(false)}>Go Back</button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

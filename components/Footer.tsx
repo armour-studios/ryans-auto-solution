@@ -35,7 +35,7 @@ export default function Footer() {
     };
 
     return (
-        <footer style={{ backgroundColor: '#000', color: '#fff', padding: '3rem 0', marginTop: 'auto', borderTop: '4px solid var(--primary-color)' }}>
+        <footer style={{ backgroundColor: 'var(--nav-bg)', color: 'var(--text-color)', padding: '3rem 0', marginTop: 'auto', borderTop: '4px solid var(--primary-color)' }}>
             <div className="container" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Image
                     src="/uploads/ras1+copy+2 (1).webp"

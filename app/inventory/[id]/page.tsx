@@ -28,17 +28,17 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
         .slice(0, 3);
 
     return (
-        <div style={{ padding: '2rem 0', color: '#fff' }}>
+        <div style={{ padding: '2rem 0', color: 'var(--text-color)' }}>
             <div className="container">
                 {/* Breadcrumbs */}
-                <div style={{ marginBottom: '2rem', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: '#888' }}>
+                <div style={{ marginBottom: '2rem', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                     <Link href="/" className='hover:text-primary'>Home</Link>
                     <span>/</span>
                     <Link href="/inventory" className='hover:text-primary'>Inventory</Link>
                     <span>/</span>
                     <span style={{ color: 'var(--primary-color)' }}>{vehicle.type}</span>
                     <span>/</span>
-                    <span style={{ color: '#fff' }}>{vehicle.year} {vehicle.make}</span>
+                    <span style={{ color: 'var(--text-color)' }}>{vehicle.year} {vehicle.make}</span>
                 </div>
 
                 {/* DESKTOP LAYOUT (Preserves original aesthetics exactly) */}
@@ -53,9 +53,9 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
 
                         {/* Video Section */}
                         {(vehicle.video || vehicle.youtubeUrl) && (
-                            <div style={{ marginTop: '3rem', borderTop: '1px solid #333', paddingTop: '2rem' }}>
-                                <h3 style={{ marginBottom: '1.5rem', color: '#fff' }}>Video Walkthrough</h3>
-                                <div style={{ position: 'relative', paddingTop: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden', border: '1px solid #333' }}>
+                            <div style={{ marginTop: '3rem', borderTop: '1px solid var(--border-color)', paddingTop: '2rem' }}>
+                                <h3 style={{ marginBottom: '1.5rem' }}>Video Walkthrough</h3>
+                                <div style={{ position: 'relative', paddingTop: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
                                     {vehicle.youtubeUrl ? (
                                         <iframe
                                             src={getYouTubeEmbedUrl(vehicle.youtubeUrl) || ''}
@@ -79,16 +79,16 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                         <div style={{ marginTop: '3rem', display: 'grid', gap: '3rem' }}>
                             <section>
                                 <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block', paddingBottom: '0.25rem' }}>Vehicle Description</h3>
-                                <p style={{ lineHeight: '1.8', color: '#ccc', fontSize: '1.05rem' }}>{vehicle.description}</p>
+                                <p style={{ lineHeight: '1.8', color: 'var(--text-muted)', fontSize: '1.05rem' }}>{vehicle.description}</p>
                             </section>
 
                             <section>
                                 <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block', paddingBottom: '0.25rem' }}>Key Features</h3>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
                                     {vehicle.features && vehicle.features.map(feature => (
-                                        <div key={feature} style={{
-                                            backgroundColor: '#222', padding: '0.75rem', borderRadius: '4px',
-                                            display: 'flex', alignItems: 'center', gap: '0.5rem', border: '1px solid #333'
+                                        <div key={feature} className="detail-feature-chip" style={{
+                                            backgroundColor: 'var(--card-bg)', padding: '0.75rem', borderRadius: '4px',
+                                            display: 'flex', alignItems: 'center', gap: '0.5rem', border: '1px solid var(--border-color)'
                                         }}>
                                             <span style={{ color: 'var(--primary-color)' }}>✓</span>
                                             <span style={{ fontSize: '0.9rem' }}>{feature}</span>
@@ -102,13 +102,13 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                     {/* Sidebar (Right) - Sticky */}
                     <div style={{
                         backgroundColor: 'var(--card-bg)', padding: '2rem', borderRadius: '4px',
-                        position: 'sticky', top: '100px', border: '1px solid #333', color: 'var(--text-color)'
+                        position: 'sticky', top: '100px', border: '1px solid var(--card-border)', color: 'var(--text-color)'
                     }}>
-                        <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid #444', paddingBottom: '1.5rem' }}>
+                        <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '1.5rem' }}>
                             <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
                                 {vehicle.year} {vehicle.make} {vehicle.model}
                             </h1>
-                            <p style={{ fontSize: '0.9rem', color: '#888' }}>Stock #: {vehicle.id}</p>
+                            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Stock #: {vehicle.id}</p>
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -117,24 +117,24 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                             </span>
                         </div>
 
-                        <div style={{ marginBottom: '2rem', backgroundColor: '#1a1a1a', padding: '1rem', borderRadius: '4px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                <span style={{ color: '#888' }}>Mileage</span>
+                        <div className="detail-specs-table" style={{ marginBottom: '2rem', backgroundColor: 'var(--subtle-bg)', padding: '1rem', borderRadius: '4px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid var(--border-color)' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Mileage</span>
                                 <strong>{vehicle.mileage.toLocaleString()} mi</strong>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                <span style={{ color: '#888' }}>Status</span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid var(--border-color)' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Status</span>
                                 <strong style={{ color: vehicle.status === 'Available' ? 'var(--primary-color)' : '#c92a37' }}>{vehicle.status}</strong>
                             </div>
                             {vehicle.vin && (
-                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                    <span style={{ color: '#888' }}>VIN</span>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid var(--border-color)' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>VIN</span>
                                     <strong style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>{vehicle.vin}</strong>
                                 </div>
                             )}
                             {Object.entries(vehicle.specs || {}).map(([key, value]) => (
-                                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #333' }}>
-                                    <span style={{ color: '#888' }}>{key}</span>
+                                <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid var(--border-color)' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>{key}</span>
                                     <strong>{value}</strong>
                                 </div>
                             ))}
@@ -143,7 +143,7 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                         <Link href="/contact" className="btn" style={{ width: '100%', display: 'block', textAlign: 'center', fontSize: '1.1rem', padding: '1rem' }}>
                             CONTACT DEALER
                         </Link>
-                        <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', textAlign: 'center' }}>
+                        <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--text-muted)', textAlign: 'center' }}>
                             * Price excludes tax, title, and license.
                         </p>
                     </div>
@@ -151,7 +151,7 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
 
                 {/* MOBILE LAYOUT (Optimized for small screens) */}
                 <div className="mobile-only">
-                    <div style={{ marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid #333' }}>
+                    <div style={{ marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid var(--border-color)' }}>
                         <h1 style={{ fontSize: '1.75rem', fontWeight: 'bold', marginBottom: '0.5rem', textTransform: 'uppercase', lineHeight: '1.2' }}>
                             {vehicle.year} {vehicle.make} {vehicle.model}
                         </h1>
@@ -159,7 +159,7 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                             <span style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
                                 ${vehicle.price.toLocaleString()}
                             </span>
-                            <span style={{ fontSize: '0.8rem', color: '#888' }}>Stock: {vehicle.id}</span>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Stock: {vehicle.id}</span>
                         </div>
                     </div>
 
@@ -171,13 +171,13 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
 
                     <div style={{ marginTop: '2rem', display: 'grid', gap: '2rem' }}>
                         {/* Quick Specs for Mobile */}
-                        <div style={{ backgroundColor: '#1a1a1a', padding: '1.25rem', borderRadius: '8px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #333' }}>
-                                <span style={{ color: '#888' }}>Mileage</span>
+                        <div className="detail-specs-table" style={{ backgroundColor: 'var(--subtle-bg)', padding: '1.25rem', borderRadius: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border-color)' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Mileage</span>
                                 <strong>{vehicle.mileage.toLocaleString()} mi</strong>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #333' }}>
-                                <span style={{ color: '#888' }}>Status</span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border-color)' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Status</span>
                                 <strong style={{ color: vehicle.status === 'Available' ? 'var(--primary-color)' : '#c92a37' }}>{vehicle.status}</strong>
                             </div>
                         </div>
@@ -208,14 +208,14 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                         {/* Full Specs, Description, etc. */}
                         <section>
                             <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block' }}>Description</h3>
-                            <p style={{ lineHeight: '1.6', color: '#ccc' }}>{vehicle.description}</p>
+                            <p style={{ lineHeight: '1.6', color: 'var(--text-muted)' }}>{vehicle.description}</p>
                         </section>
 
                         <section>
                             <h3 style={{ marginBottom: '1rem', borderBottom: '2px solid var(--primary-color)', display: 'inline-block' }}>Key Features</h3>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                                 {vehicle.features?.map(feature => (
-                                    <div key={feature} style={{ backgroundColor: '#222', padding: '0.5rem', borderRadius: '4px', fontSize: '0.85rem' }}>
+                                    <div key={feature} className="detail-feature-chip" style={{ backgroundColor: 'var(--card-bg)', padding: '0.5rem', borderRadius: '4px', fontSize: '0.85rem', border: '1px solid var(--border-color)' }}>
                                         ✓ {feature}
                                     </div>
                                 ))}
@@ -226,15 +226,15 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
 
                 {/* Related Inventory Section */}
                 {relatedVehicles.length > 0 && (
-                    <div style={{ marginTop: '6rem', borderTop: '2px solid #222', paddingTop: '4rem' }}>
+                    <div style={{ marginTop: '6rem', borderTop: '2px solid var(--section-divider)', paddingTop: '4rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                             <div>
                                 <p style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--primary-color)', marginBottom: '0.5rem', fontWeight: '600' }}>More From Our Lot</p>
-                                <h2 style={{ fontSize: '2rem', color: '#fff', lineHeight: '1.2' }}>You May Also Like</h2>
+                                <h2 style={{ fontSize: '2rem', lineHeight: '1.2' }}>You May Also Like</h2>
                             </div>
                             <Link href="/inventory" style={{
                                 fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em',
-                                color: '#fff', padding: '0.75rem 1.75rem', border: '1px solid #444',
+                                color: 'var(--text-color)', padding: '0.75rem 1.75rem', border: '1px solid var(--border-color)',
                                 borderRadius: '4px', textDecoration: 'none', transition: 'all 0.2s ease',
                                 fontWeight: '500'
                             }}>
