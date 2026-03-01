@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
 const NAV_ICONS: Record<string, React.ReactNode> = {
@@ -87,14 +88,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 overflowY: 'auto',
             }}>
                 {/* Brand */}
-                <div style={{ marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #1e1e1e' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <div style={{ width: '4px', height: '28px', backgroundColor: '#0f71b1', borderRadius: '2px', flexShrink: 0 }} />
-                        <div>
-                            <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '2px', lineHeight: 1.1 }}>Ryan&apos;s Auto</div>
-                            <div style={{ fontSize: '0.6rem', color: '#444', textTransform: 'uppercase', letterSpacing: '1.5px', marginTop: '0.2rem' }}>Admin Console</div>
-                        </div>
-                    </div>
+                <div style={{ marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #1e1e1e', textAlign: 'center' }}>
+                    <Link href="/admin" style={{ display: 'block', textDecoration: 'none' }}>
+                        <Image
+                            src="/uploads/ryansautowhite.png"
+                            alt="Ryan's Auto Solution"
+                            width={180}
+                            height={60}
+                            style={{ objectFit: 'contain', objectPosition: 'center', maxWidth: '100%', height: 'auto', margin: '0 auto' }}
+                            priority
+                        />
+                    </Link>
+                    <div style={{ fontSize: '0.65rem', color: '#888', textTransform: 'uppercase', letterSpacing: '2px', marginTop: '0.5rem' }}>Admin Console</div>
                 </div>
 
                 {/* Nav */}
@@ -158,13 +163,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 zIndex: 200,
             }}>
                 {/* Brand */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
-                    <div style={{ width: '3px', height: '22px', backgroundColor: '#0f71b1', borderRadius: '2px' }} />
-                    <div>
-                        <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '1.5px', lineHeight: 1 }}>Ryan&apos;s Auto</div>
-                        <div style={{ fontSize: '0.52rem', color: '#444', textTransform: 'uppercase', letterSpacing: '1px' }}>Admin Console</div>
-                    </div>
-                </div>
+                <Link href="/admin" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                    <Image
+                        src="/uploads/ryansautowhite.png"
+                        alt="Ryan's Auto Solution"
+                        width={130}
+                        height={44}
+                        style={{ objectFit: 'contain', objectPosition: 'left', height: 'auto' }}
+                        priority
+                    />
+                </Link>
                 {/* Right: username chip + hamburger */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     {username && (
