@@ -71,7 +71,7 @@
 }
 
 [data-theme="light"] .vehicle-card {
-  background: #e5e7eb !important;
+  background: #d1d5db !important;
   border-color: #e2e8f0 !important;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }

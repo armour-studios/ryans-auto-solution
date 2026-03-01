@@ -190,7 +190,7 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Stock #: {vehicle.id}</p>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '2rem' }}>
                             {vehicle.status === 'Sold' ? (
                                 <span style={{ fontSize: '1.75rem', fontWeight: 'bold', color: '#e53e3e', letterSpacing: '2px', textTransform: 'uppercase' }}>
                                     Sold
@@ -225,7 +225,14 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                             ))}
                         </div>
 
-                        <Link href="/contact" className="btn" style={{ width: '100%', display: 'block', textAlign: 'center', fontSize: '1.1rem', padding: '1rem' }}>
+                        <Link href="/contact" style={{
+                            width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                            textAlign: 'center', fontSize: '1.1rem', padding: '1rem',
+                            backgroundColor: '#0f71b1', color: '#fff', borderRadius: '8px',
+                            textDecoration: 'none', fontWeight: '700', letterSpacing: '1px',
+                            boxShadow: '0 4px 18px rgba(15,113,177,0.45)', transition: 'opacity 0.2s',
+                        }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6.1 6.1l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
                             CONTACT DEALER
                         </Link>
                         <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--text-muted)', textAlign: 'center' }}>
@@ -273,7 +280,13 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                             </div>
                         </div>
 
-                        <Link href="/contact" className="btn" style={{ width: '100%', padding: '1.25rem' }}>
+                        <Link href="/contact" style={{
+                            width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                            padding: '1.25rem', backgroundColor: '#0f71b1', color: '#fff', borderRadius: '8px',
+                            textDecoration: 'none', fontWeight: '700', fontSize: '1rem', letterSpacing: '1px',
+                            boxShadow: '0 4px 18px rgba(15,113,177,0.45)',
+                        }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6.1 6.1l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
                             CONTACT DEALER
                         </Link>
 
