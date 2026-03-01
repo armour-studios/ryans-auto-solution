@@ -90,14 +90,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {/* Brand */}
                 <div style={{ marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #1e1e1e', textAlign: 'center' }}>
                     <Link href="/admin" style={{ display: 'block', textDecoration: 'none' }}>
-                        <Image
-                            src="/uploads/ryansautowhite.png"
-                            alt="Ryan's Auto Solution"
-                            width={180}
-                            height={60}
-                            style={{ objectFit: 'contain', objectPosition: 'center', maxWidth: '100%', height: 'auto', margin: '0 auto' }}
-                            priority
-                        />
+                        <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', lineHeight: 1.1 }}>
+                            <div style={{ fontSize: '1.35rem', fontWeight: '900', color: '#fff', letterSpacing: '1px', textTransform: 'uppercase' }}>Ryan&apos;s</div>
+                            <div style={{ fontSize: '0.95rem', fontWeight: '900', color: '#0f71b1', letterSpacing: '1px', textTransform: 'uppercase' }}>Auto Solution</div>
+                        </div>
                     </Link>
                     <div style={{ fontSize: '0.65rem', color: '#888', textTransform: 'uppercase', letterSpacing: '2px', marginTop: '0.5rem' }}>Admin Console</div>
                 </div>
