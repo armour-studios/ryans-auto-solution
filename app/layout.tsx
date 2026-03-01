@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import { Tinos } from 'next/font/google';
+import { Barlow } from 'next/font/google';
 import './globals.css';
 import ConditionalShell from '@/components/ConditionalShell';
 import { Analytics } from '@vercel/analytics/next';
 
-const tinos = Tinos({
+const barlow = Barlow({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-tinos'
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-barlow'
 });
 
 export const viewport: Viewport = {
@@ -45,7 +45,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={tinos.variable} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <body className={barlow.variable} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <ConditionalShell>
           {children}
         </ConditionalShell>

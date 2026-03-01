@@ -17,7 +17,7 @@
 :root {
   /* Custom Fonts */
   --font-display: 'Eurostile', 'Serpentine', Impact, sans-serif;
-  --font-body: var(--font-tinos, Georgia, serif);
+  --font-body: var(--font-barlow, 'Barlow', sans-serif);
   --font-main: var(--font-body);
 
   /* Dark Mode Color Palette */
