@@ -16,7 +16,7 @@
 
 :root {
   /* Custom Fonts */
-  --font-display: 'Eurostile', 'Serpentine', Impact, sans-serif;
+  --font-display: var(--font-barlow, 'Barlow', sans-serif);
   --font-body: var(--font-barlow, 'Barlow', sans-serif);
   --font-main: var(--font-body);
 
@@ -374,21 +374,21 @@ h1 {
   font-family: var(--font-display);
   font-size: var(--font-size-h1);
   color: var(--heading-color);
-  font-style: italic;
+  font-style: normal;
 }
 
 h2 {
   font-family: var(--font-display);
   font-size: var(--font-size-h2);
   color: var(--primary-color);
-  font-style: italic;
+  font-style: normal;
 }
 
 h3 {
   font-family: var(--font-display);
   font-size: var(--font-size-h3);
   color: var(--heading-color);
-  font-style: italic;
+  font-style: normal;
 }
 
 img {

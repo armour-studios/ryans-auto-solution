@@ -504,7 +504,7 @@ export default function Navbar() {
           background: linear-gradient(135deg, #0d65a0 0%, #0f71b1 50%, #1483cc 100%);
           color: #fff !important;
           text-decoration: none;
-          font-family: var(--font-display, 'Eurostile', sans-serif);
+          font-family: var(--font-barlow, 'Barlow', sans-serif);
           font-size: 0.75rem;
           font-weight: 800;
           font-style: normal;
