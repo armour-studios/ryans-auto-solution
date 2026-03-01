@@ -80,6 +80,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
     return (
         <article style={{ padding: '4rem 0', minHeight: '80vh', color: '#fff' }}>
+            <style>{`
+                .blog-post-title { font-size: 3rem; }
+                .blog-post-hero { height: 400px; }
+                .blog-post-body { padding: 3rem; }
+                @media (max-width: 768px) {
+                    article { padding: 2rem 0 !important; }
+                    .blog-post-title { font-size: 1.8rem; }
+                    .blog-post-hero { height: 220px; }
+                    .blog-post-body { padding: 1.25rem; font-size: 1rem !important; }
+                }
+            `}</style>
             <div className="container" style={{ maxWidth: '800px' }}>
                 <Link href="/blog" style={{ display: 'inline-block', marginBottom: '2rem', color: '#888' }}>
                     &larr; Back to Blog
@@ -87,7 +98,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
                 <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
                     {post.tags && post.tags.length > 0 && (
-                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
                             {post.tags.map((tag, i) => (
                                 <span key={i} style={{
                                     fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px',
@@ -99,7 +110,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         </div>
                     )}
 
-                    <h1 style={{ fontSize: '3rem', marginBottom: '1.5rem', lineHeight: '1.2' }}>{post.title}</h1>
+                    <h1 className="blog-post-title" style={{ marginBottom: '1.5rem', lineHeight: '1.2' }}>{post.title}</h1>
 
                     <div style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>
                         {new Date(post.date).toLocaleDateString()} • {post.author}
@@ -107,14 +118,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </header>
 
                 {post.image && (
-                    <div style={{ position: 'relative', width: '100%', height: '400px', marginBottom: '3rem', borderRadius: '8px', overflow: 'hidden' }}>
+                    <div className="blog-post-hero" style={{ position: 'relative', width: '100%', marginBottom: '3rem', borderRadius: '8px', overflow: 'hidden' }}>
                         <Image src={post.image} alt={post.title} fill style={{ objectFit: 'cover' }} priority />
                     </div>
                 )}
 
-                <div style={{
+                <div className="blog-post-body" style={{
                     backgroundColor: 'var(--card-bg)',
-                    padding: '3rem',
                     borderRadius: '8px',
                     border: '1px solid #333',
                     fontSize: '1.15rem',

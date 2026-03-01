@@ -21,23 +21,39 @@ export default async function BlogPage() {
 
     return (
         <div style={{ background: 'linear-gradient(180deg, #111111 0%, #0d1520 60%, #111111 100%)', color: '#fff', minHeight: '100vh', padding: '2rem 0' }}>
+            <style>{`
+                .blog-page-header h1 { font-size: 3rem; }
+                .blog-outer-grid { display: grid; grid-template-columns: minmax(0, 2fr) 1fr; gap: 3rem; align-items: start; }
+                .blog-recent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+                .blog-featured-img { height: 450px; }
+                .blog-featured-title { font-size: 2.5rem; }
+                @media (max-width: 768px) {
+                    .blog-page-header h1 { font-size: 2rem; letter-spacing: 1px; }
+                    .blog-page-header p { font-size: 0.95rem; }
+                    .blog-outer-grid { grid-template-columns: 1fr; gap: 2rem; }
+                    .blog-recent-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+                    .blog-featured-img { height: 260px; }
+                    .blog-featured-title { font-size: 1.5rem; line-height: 1.2; }
+                    .blog-featured-excerpt { display: none; }
+                }
+            `}</style>
             <div className="container">
-                <header style={{ marginBottom: '4rem', textAlign: 'center' }}>
-                    <h1 style={{ fontSize: '3rem', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '2px' }}>
+                <header className="blog-page-header" style={{ marginBottom: '4rem', textAlign: 'center' }}>
+                    <h1 style={{ textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '2px' }}>
                         Latest News <span style={{ color: 'var(--primary-color)' }}>&amp; Tips</span>
                     </h1>
                     <p style={{ color: '#888', fontSize: '1.1rem' }}>Insights from the auto experts at Ryan's Auto Solution</p>
                     <div style={{ width: '60px', height: '4px', backgroundColor: 'var(--primary-color)', margin: '1.5rem auto 0' }}></div>
                 </header>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) 1fr', gap: '3rem', alignItems: 'start' }}>
+                <div className="blog-outer-grid">
 
                     {/* LEFT COLUMN (Featured + Grid) */}
                     <div>
                         {featuredPost ? (
                             <section style={{ marginBottom: '4rem' }}>
                                 <Link href={`/blog/${featuredPost.slug}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
-                                    <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', height: '450px', border: '1px solid #333' }}>
+                                    <div className="blog-featured-img" style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', border: '1px solid #333' }}>
                                         {featuredPost.image ? (
                                             <Image src={featuredPost.image} alt={featuredPost.title} fill style={{ objectFit: 'cover' }} />
                                         ) : (
@@ -53,8 +69,8 @@ export default async function BlogPage() {
                                             <span style={{ backgroundColor: 'var(--primary-color)', color: '#fff', padding: '0.25rem 0.75rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '0.5rem', display: 'inline-block' }}>
                                                 Featured
                                             </span>
-                                            <h2 style={{ fontSize: '2.5rem', lineHeight: '1.1', marginBottom: '0.5rem' }}>{featuredPost.title}</h2>
-                                            <p style={{ color: '#ccc', fontSize: '1rem', maxWidth: '600px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                            <h2 className="blog-featured-title" style={{ lineHeight: '1.1', marginBottom: '0.5rem' }}>{featuredPost.title}</h2>
+                                            <p className="blog-featured-excerpt" style={{ color: '#ccc', fontSize: '1rem', maxWidth: '600px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                                                 {featuredPost.excerpt}
                                             </p>
                                         </div>
@@ -66,7 +82,7 @@ export default async function BlogPage() {
                         )}
 
                         {/* Recent Grid */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                        <div className="blog-recent-grid">
                             {otherPosts.map(post => (
                                 <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                     <div style={{ backgroundColor: '#1a1a1a', borderRadius: '8px', overflow: 'hidden', border: '1px solid #333', height: '100%', transition: 'transform 0.2s', display: 'flex', flexDirection: 'column' }}>
