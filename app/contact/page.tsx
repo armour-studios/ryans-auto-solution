@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import DirectionsCTA from '@/components/DirectionsCTA';
 
 export const metadata = {
     title: 'Contact & About Us | Ryan\'s Auto Solution',
@@ -135,19 +136,7 @@ export default function ContactPage() {
 
                 {/* Directions CTA */}
                 <div style={{ marginTop: '5rem', textAlign: 'center' }}>
-                    <a href="https://maps.app.goo.gl/6DmndURC1jqZ5xvx6" target="_blank" rel="noopener noreferrer" className="btn btn-primary cta-glow" style={{
-                        padding: '1.5rem 4rem',
-                        fontSize: '1.2rem',
-                        borderRadius: '50px',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '1rem'
-                    }}>
-                        Get Directions Online
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </a>
+                    <DirectionsCTA />
                 </div>
             </div>
         </div>
