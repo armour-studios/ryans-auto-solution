@@ -8,8 +8,9 @@ export type Vehicle = {
     model: string;
     year: number;
     price: number;
+    buyCost?: number;
     mileage: number;
-    status: 'Available' | 'Sold' | 'Pending';
+    status: 'Available' | 'Sold' | 'Pending' | 'Coming Soon' | 'Draft';
     type: string;
     image: string;
     images: string[];

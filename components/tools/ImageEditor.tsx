@@ -195,6 +195,7 @@ export default function ImageEditor({ imageSrc, onClose }: ImageEditorProps) {
                         <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: '#000', padding: '0.4rem', borderRadius: '10px', border: '1px solid #222' }}>
                             {[
                                 { label: '4:3', value: 4 / 3 },
+                                { label: '3:2', value: 3 / 2 },
                                 { label: '16:9', value: 16 / 9 },
                                 { label: '1:1', value: 1 },
                                 { label: 'Free', value: undefined }

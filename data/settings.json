@@ -1,0 +1,53 @@
+{
+  "site": {
+    "businessName": "Ryan's Auto Solution",
+    "phone": "",
+    "address": "",
+    "email": "",
+    "siteUrl": "https://ryansautosolution.com",
+    "heroTagline": "",
+    "brandColor": "#0f71b1"
+  },
+  "facebook": {
+    "connected": "false",
+    "pageName": "",
+    "pageId": "",
+    "accessToken": ""
+  },
+  "instagram": {
+    "connected": "false",
+    "username": "",
+    "accountId": "",
+    "accessToken": ""
+  },
+  "discord": {
+    "bugWebhookUrl": "",
+    "leadWebhookUrl": ""
+  },
+  "notifications": {
+    "contactFormEmail": "",
+    "financeAppEmail": "",
+    "generalAlertsEmail": ""
+  },
+  "google": {
+    "connected": "false",
+    "email": "",
+    "analyticsId": "",
+    "mapsApiKey": "",
+    "accessToken": "",
+    "refreshToken": ""
+  },
+  "smtp": {
+    "host": "",
+    "port": "587",
+    "user": "",
+    "password": "",
+    "fromName": "Ryan's Auto Solution"
+  },
+  "youtube": {
+    "connected": "false",
+    "channelId": "",
+    "channelName": "",
+    "apiKey": ""
+  }
+}

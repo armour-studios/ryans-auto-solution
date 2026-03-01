@@ -1,10 +1,28 @@
+import fs from 'fs';
+import path from 'path';
+
 export const metadata = {
     title: 'Contact & About Us | Ryan\'s Auto Solution',
 };
 
+function getSiteInfo() {
+    try {
+        const raw = fs.readFileSync(path.join(process.cwd(), 'data', 'settings.json'), 'utf-8');
+        const site = JSON.parse(raw).site || {};
+        return {
+            phone:   site.phone   || '(218) 469-0183',
+            address: site.address || '325 Oak Hills Rd SE, Bemidji, MN 56601',
+            email:   site.email   || 'ryan@ryansautosolution.com',
+        };
+    } catch {
+        return { phone: '(218) 469-0183', address: '325 Oak Hills Rd SE, Bemidji, MN 56601', email: 'ryan@ryansautosolution.com' };
+    }
+}
+
 export default function ContactPage() {
+    const { phone, address } = getSiteInfo();
     return (
-        <div style={{ padding: '4rem 0', color: '#fff', backgroundColor: '#050505', minHeight: '100vh' }}>
+        <div style={{ padding: '4rem 0', color: '#fff', background: 'linear-gradient(180deg, #111111 0%, #0d1520 50%, #111111 100%)', minHeight: '100vh' }}>
             {/* Hero Section */}
             <div className="container" style={{ maxWidth: '1100px', marginBottom: '6rem', textAlign: 'center' }}>
                 <span className="cta-glow" style={{
@@ -74,8 +92,8 @@ export default function ContactPage() {
                             </svg>
                         </div>
                         <h3 style={{ textTransform: 'uppercase', marginBottom: '0.5rem' }}>Call Us</h3>
-                        <a href="tel:2184690183" style={{ fontSize: '1.8rem', color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
-                            (218) 469-0183
+                        <a href={`tel:${phone.replace(/\D/g, '')}`} style={{ fontSize: '1.8rem', color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
+                            {phone}
                         </a>
                     </div>
 
@@ -89,8 +107,7 @@ export default function ContactPage() {
                         </div>
                         <h3 style={{ textTransform: 'uppercase', marginBottom: '0.5rem' }}>Location</h3>
                         <p style={{ fontSize: '1.2rem', color: '#ccc', lineHeight: '1.6' }}>
-                            325 Oak Hills Rd SE<br />
-                            Bemidji, MN 56601
+                            {address}
                         </p>
                     </div>
 

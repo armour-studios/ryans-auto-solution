@@ -119,11 +119,13 @@ function ConfirmModal({
 export default function DeleteButton({
     id,
     endpoint = '/api/inventory',
-    itemName = 'this item'
+    itemName = 'this item',
+    onDelete
 }: {
     id: number;
     endpoint?: string;
     itemName?: string;
+    onDelete?: (id: number) => void;
 }) {
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
@@ -140,7 +142,11 @@ export default function DeleteButton({
 
             if (res.ok) {
                 setShowModal(false);
-                router.refresh();
+                if (onDelete) {
+                    onDelete(id);
+                } else {
+                    router.refresh();
+                }
             } else {
                 alert(json.error || 'Failed to delete');
             }

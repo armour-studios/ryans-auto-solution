@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getUsers, addUser, deleteUser, type User } from '@/lib/users';
+import { getUsers, addUser, deleteUser, updateUser, type User } from '@/lib/users';
 
 // GET - List all users
 export async function GET() {
@@ -71,5 +71,49 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 });
+    }
+}
+
+// PATCH - Update user role or password
+export async function PATCH(request: Request) {
+    try {
+        const { username, role, password } = await request.json();
+
+        if (!username) {
+            return NextResponse.json({ error: 'Username is required' }, { status: 400 });
+        }
+
+        const validRoles = ['admin', 'editor', 'staff'];
+        if (role && !validRoles.includes(role)) {
+            return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
+        }
+
+        // Prevent removing the last admin
+        if (role && role !== 'admin') {
+            const users = await getUsers();
+            const admins = users.filter(u => u.role === 'admin');
+            const userToUpdate = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+            if (userToUpdate?.role === 'admin' && admins.length <= 1) {
+                return NextResponse.json({ error: 'Cannot demote the last admin user' }, { status: 400 });
+            }
+        }
+
+        const updates: any = {};
+        if (role) updates.role = role;
+        if (password) {
+            if (password.length < 6) {
+                return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 });
+            }
+            updates.password = password;
+        }
+
+        const success = await updateUser(username, updates);
+        if (!success) {
+            return NextResponse.json({ error: 'User not found or update failed' }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
     }
 }

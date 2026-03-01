@@ -38,7 +38,7 @@ export default async function Home() {
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundColor: '#000',
+          backgroundColor: '#111111',
           zIndex: -2
         }}>
           <video
@@ -123,7 +123,7 @@ export default async function Home() {
       )}
 
       {/* Features Section */}
-      <section style={{ padding: '4rem 0', backgroundColor: '#000' }}>
+      <section style={{ padding: '4rem 0', background: 'linear-gradient(180deg, #0d0d0d 0%, #111111 100%)' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', color: '#fff', textAlign: 'center' }}>
             <div style={{ padding: '2rem', border: '1px solid #333', borderRadius: '8px', backgroundColor: '#111' }}>
@@ -165,7 +165,7 @@ export default async function Home() {
       {/* Why Buy From Us Section */}
       <section style={{
         padding: '6rem 0',
-        background: 'linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%)',
+        background: 'linear-gradient(180deg, #111111 0%, #0d1520 50%, #111111 100%)',
         color: '#fff',
         position: 'relative',
         overflow: 'hidden'
@@ -178,7 +178,7 @@ export default async function Home() {
           transform: 'translate(-50%, -50%)',
           width: '800px',
           height: '400px',
-          background: 'radial-gradient(ellipse, rgba(0, 123, 255, 0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(15, 113, 177, 0.1) 0%, transparent 70%)',
           pointerEvents: 'none'
         }} />
 
@@ -444,7 +444,7 @@ export default async function Home() {
       {/* Final Conversion CTA */}
       <section style={{
         padding: '5rem 0',
-        background: 'linear-gradient(135deg, #000 0%, #0a1628 100%)',
+        background: 'linear-gradient(135deg, #111111 0%, #0d1a2e 100%)',
         borderTop: '1px solid #333',
         textAlign: 'center'
       }}>

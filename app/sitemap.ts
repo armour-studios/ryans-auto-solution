@@ -58,9 +58,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const inventory = await getInventory();
     const inventoryPages: MetadataRoute.Sitemap = inventory.map((vehicle) => ({
         url: `${baseUrl}/inventory/${vehicle.id}`,
-        lastModified: new Date(),
+        lastModified: vehicle.created_at ? new Date(vehicle.created_at) : new Date(),
         changeFrequency: 'weekly' as const,
-        priority: 0.7,
+        priority: vehicle.status === 'Available' ? 0.85 : 0.5,
     }));
 
     return [...staticPages, ...blogPages, ...inventoryPages];

@@ -50,8 +50,8 @@ export default function ImageToolsPage() {
                 <Link href="/admin" style={{ color: 'var(--primary-color)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                     &larr; Back to Dashboard
                 </Link>
-                <h1 style={{ marginTop: '1rem', color: '#fff' }}>Image Editing Tool</h1>
-                <p style={{ color: '#888' }}>Upload, crop, and enhance photos for your inventory or blog.</p>
+                <h1 style={{ marginTop: '1rem', fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', margin: '0.75rem 0 0.4rem' }}>Image Editor</h1>
+                <p style={{ color: '#666', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.8px', margin: 0 }}>Upload, crop, and enhance photos for inventory or blog</p>
             </div>
 
             <div style={{

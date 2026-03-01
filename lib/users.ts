@@ -3,7 +3,7 @@ import { supabase, supabaseAdmin } from './supabase';
 export type User = {
     username: string;
     password?: string; // Optional because we don't always fetch it
-    role: 'admin' | 'editor';
+    role: 'admin' | 'editor' | 'marketing';
     createdAt: string;
 };
 

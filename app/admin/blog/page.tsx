@@ -16,7 +16,7 @@ export default async function BlogAdminPage() {
             <div className="container">
 
                 <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-                    <h1 style={{ fontSize: 'clamp(1.4rem, 5vw, 2.5rem)' }}>Blog Management</h1>
+                    <h1 style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Blog Management</h1>
                     <Link href="/admin/blog/add" className="btn" style={{ backgroundColor: '#222', color: '#fff', border: '1px solid #333', whiteSpace: 'nowrap' }}>
                         + ADD NEW POST
                     </Link>

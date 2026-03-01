@@ -8,9 +8,38 @@ import FeaturedToggle from '@/components/admin/FeaturedToggle';
 
 export default function InventoryAdminPage() {
     const [inventory, setInventory] = useState<any[]>([]);
-    const [activeFilter, setActiveFilter] = useState<'All' | 'Available' | 'Sold'>('Available');
+    const [activeFilter, setActiveFilter] = useState<'All' | 'Available' | 'Sold' | 'Pending' | 'Coming Soon' | 'Draft'>('Available');
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
+
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'Sold': return { bg: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: 'rgba(239, 68, 68, 0.2)' };
+            case 'Pending': return { bg: 'rgba(251, 191, 36, 0.1)', color: '#fbbf24', border: 'rgba(251, 191, 36, 0.2)' };
+            case 'Coming Soon': return { bg: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', border: 'rgba(139, 92, 246, 0.2)' };
+            case 'Draft': return { bg: 'rgba(107, 114, 128, 0.1)', color: '#6b7280', border: 'rgba(107, 114, 128, 0.2)' };
+            default: return { bg: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: 'rgba(16, 185, 129, 0.2)' };
+        }
+    };
+
+    const updateVehicleStatus = async (id: string | number, newStatus: string) => {
+        try {
+            const res = await fetch(`/api/inventory/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+            if (res.ok) {
+                setInventory(prev => prev.map(v => v.id === id ? { ...v, status: newStatus } : v));
+            } else {
+                const json = await res.json().catch(() => ({}));
+                alert(`Failed to update status: ${json.error || res.statusText}`);
+            }
+        } catch (err) {
+            console.error('Failed to update status:', err);
+            alert('Failed to update status. Check console for details.');
+        }
+    };
 
     useEffect(() => {
         const fetchInventory = async () => {
@@ -27,8 +56,13 @@ export default function InventoryAdminPage() {
         fetchInventory();
     }, []);
 
+    const handleDeleteVehicle = (deletedId: number) => {
+        setInventory(prev => prev.filter(v => v.id !== deletedId));
+    };
+
     const filteredInventory = inventory.filter(v => {
-        if (activeFilter !== 'All' && v.status !== activeFilter) return false;
+        const status = v.status || 'Available';
+        if (activeFilter !== 'All' && status !== activeFilter) return false;
         if (searchQuery) {
             const q = searchQuery.toLowerCase();
             const name = `${v.year} ${v.make} ${v.model}`.toLowerCase();
@@ -46,15 +80,15 @@ export default function InventoryAdminPage() {
             <div className="container" style={{ maxWidth: '1200px' }}>
 
                 <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-                    <h1 style={{ fontSize: 'clamp(1.4rem, 5vw, 2.5rem)', color: '#fff', textTransform: 'uppercase' }}>Inventory Management</h1>
+                    <h1 style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Inventory Management</h1>
                     <Link href="/admin/inventory/add" className="btn btn-accent" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>
                         + ADD NEW VEHICLE
                     </Link>
                 </div>
 
                 {/* Filter Tabs */}
-                <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', borderBottom: '1px solid #333', paddingBottom: '1rem' }}>
-                    {['Available', 'Sold', 'All'].map((filter) => (
+                <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', borderBottom: '1px solid #333', paddingBottom: '1rem', flexWrap: 'wrap' }}>
+                    {['Available', 'Pending', 'Coming Soon', 'Draft', 'Sold', 'All'].map((filter) => (
                         <button
                             key={filter}
                             onClick={() => setActiveFilter(filter as any)}
@@ -108,6 +142,7 @@ export default function InventoryAdminPage() {
                                 <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700', width: '90px' }}></th>
                                 <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Vehicle</th>
                                 <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Price</th>
+                                <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Cost / Profit</th>
                                 <th style={{ padding: '1rem 1.25rem', textAlign: 'center', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Featured</th>
                                 <th style={{ padding: '1rem 1.25rem', textAlign: 'left', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Status</th>
                                 <th style={{ padding: '1rem 1.25rem', textAlign: 'right', color: '#555', textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: '700' }}>Actions</th>
@@ -143,30 +178,77 @@ export default function InventoryAdminPage() {
                                         <div style={{ fontSize: '0.75rem', color: '#555', marginTop: '0.3rem', fontFamily: 'monospace' }}>{vehicle.mileage.toLocaleString()} mi · #{vehicle.id}</div>
                                     </td>
                                     <td style={{ padding: '1rem 1.25rem', fontWeight: 'bold', color: 'var(--primary-color)', fontSize: '1rem' }}>${vehicle.price.toLocaleString()}</td>
+                                    <td style={{ padding: '1rem 1.25rem' }}>
+                                        {vehicle.buyCost ? (
+                                            <>
+                                                <div style={{ fontSize: '0.8rem', color: '#888' }}>${vehicle.buyCost.toLocaleString()}</div>
+                                                <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: (vehicle.price - vehicle.buyCost) >= 0 ? '#10b981' : '#ef4444', marginTop: '0.2rem' }}>
+                                                    {(vehicle.price - vehicle.buyCost) >= 0 ? '+' : ''}
+                                                    ${(vehicle.price - vehicle.buyCost).toLocaleString()}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <span style={{ fontSize: '0.75rem', color: '#444' }}>—</span>
+                                        )}
+                                    </td>
                                     <td style={{ padding: '1.25rem', textAlign: 'center' }}>
                                         <FeaturedToggle id={vehicle.id} initialStatus={vehicle.trending || false} />
                                     </td>
                                     <td style={{ padding: '1.25rem' }}>
-                                        <span style={{
-                                            padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase',
-                                            backgroundColor: vehicle.status === 'Sold' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-                                            color: vehicle.status === 'Sold' ? '#ef4444' : '#10b981',
-                                            border: `1px solid ${vehicle.status === 'Sold' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`
-                                        }}>
-                                            {vehicle.status || 'Available'}
-                                        </span>
+                                        {(() => {
+                                            const sc = getStatusColor(vehicle.status || 'Available');
+                                            return (
+                                                <select
+                                                    className="admin-status-select"
+                                                    value={vehicle.status || 'Available'}
+                                                    onChange={(e) => updateVehicleStatus(vehicle.id, e.target.value)}
+                                                    style={{
+                                                        backgroundColor: sc.bg,
+                                                        color: sc.color,
+                                                        border: `1px solid ${sc.border}`,
+                                                    }}
+                                                >
+                                                    <option value="Available">Available</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Sold">Sold</option>
+                                                    <option value="Coming Soon">Coming Soon</option>
+                                                    <option value="Draft">Draft</option>
+                                                </select>
+                                            );
+                                        })()}
                                     </td>
-                                    <td style={{ padding: '1.25rem', textAlign: 'right' }}>
+                                    <td style={{ padding: '1.25rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                        {(vehicle.status === 'Coming Soon' || vehicle.status === 'Pending' || vehicle.status === 'Draft') && (
+                                            <button
+                                                onClick={() => updateVehicleStatus(vehicle.id, 'Available')}
+                                                style={{
+                                                    marginRight: '0.5rem',
+                                                    padding: '0.4rem 0.7rem',
+                                                    fontSize: '0.7rem',
+                                                    fontWeight: 'bold',
+                                                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                                                    color: '#10b981',
+                                                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                                                    borderRadius: '4px',
+                                                    cursor: 'pointer',
+                                                    textTransform: 'uppercase',
+                                                    letterSpacing: '0.5px',
+                                                    transition: 'all 0.2s'
+                                                }}
+                                            >
+                                                PUBLISH
+                                            </button>
+                                        )}
                                         <Link href={`/admin/inventory/edit/${vehicle.id}`} className="btn" style={{ marginRight: '0.5rem', padding: '0.4rem 0.8rem', fontSize: '0.75rem', backgroundColor: '#222', border: '1px solid #333' }}>
                                             EDIT
                                         </Link>
-                                        <DeleteButton id={vehicle.id} endpoint="/api/inventory" />
+                                        <DeleteButton id={vehicle.id} endpoint="/api/inventory" onDelete={handleDeleteVehicle} />
                                     </td>
                                 </tr>
                             ))}
                             {filteredInventory.length === 0 && (
                                 <tr>
-                                    <td colSpan={6} style={{ padding: '4rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>
+                                    <td colSpan={7} style={{ padding: '4rem', textAlign: 'center', color: '#666', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>
                                         No vehicles found in this category.
                                     </td>
                                 </tr>
@@ -211,14 +293,29 @@ export default function InventoryAdminPage() {
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
                                         <span style={{ fontSize: '0.75rem', color: '#555', fontFamily: 'monospace' }}>{vehicle.mileage.toLocaleString()} mi</span>
-                                        <span style={{
-                                            padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase',
-                                            backgroundColor: vehicle.status === 'Sold' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-                                            color: vehicle.status === 'Sold' ? '#ef4444' : '#10b981',
-                                            border: `1px solid ${vehicle.status === 'Sold' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`
-                                        }}>
-                                            {vehicle.status || 'Available'}
-                                        </span>
+                                        {(() => {
+                                            const sc = getStatusColor(vehicle.status || 'Available');
+                                            return (
+                                                <select
+                                                    className="admin-status-select"
+                                                    value={vehicle.status || 'Available'}
+                                                    onChange={(e) => updateVehicleStatus(vehicle.id, e.target.value)}
+                                                    style={{
+                                                        backgroundColor: sc.bg,
+                                                        color: sc.color,
+                                                        border: `1px solid ${sc.border}`,
+                                                        fontSize: '0.7rem',
+                                                        padding: '0.2rem 0.5rem',
+                                                    }}
+                                                >
+                                                    <option value="Available">Available</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Sold">Sold</option>
+                                                    <option value="Coming Soon">Coming Soon</option>
+                                                    <option value="Draft">Draft</option>
+                                                </select>
+                                            );
+                                        })()}
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                                             <FeaturedToggle id={vehicle.id} initialStatus={vehicle.trending || false} />
                                             <span style={{ fontSize: '0.7rem', color: '#555', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Featured</span>
@@ -259,7 +356,7 @@ export default function InventoryAdminPage() {
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}>
-                                    <DeleteButton id={vehicle.id} endpoint="/api/inventory" />
+                                    <DeleteButton id={vehicle.id} endpoint="/api/inventory" onDelete={handleDeleteVehicle} />
                                 </div>
                             </div>
                         </div>

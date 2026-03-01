@@ -61,7 +61,7 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
             : activeIndex - 1;
 
     return (
-        <section style={{ padding: '6rem 0', background: '#000', borderTop: '1px solid #222' }}>
+        <section style={{ padding: '6rem 0', background: 'linear-gradient(180deg, #111111 0%, #0d1520 55%, #111111 100%)', borderTop: '1px solid #333', borderBottom: '1px solid #333' }}>
             <div className="container">
                 <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                     <h2 style={{ fontSize: '2.5rem', textTransform: 'uppercase', marginBottom: '1rem', color: '#fff', letterSpacing: '1px' }}>
@@ -86,13 +86,14 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
                                 <div className="card-glow recently-sold-card" style={{
                                     display: 'grid',
                                     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                                    backgroundColor: '#111',
+                                    backgroundColor: '#161b22',
                                     borderRadius: '16px',
                                     overflow: 'hidden',
-                                    border: '1px solid #222',
-                                    alignItems: 'center'
+                                    border: '1px solid #2a3344',
+                                    alignItems: 'center',
+                                    boxShadow: '0 4px 30px rgba(15, 113, 177, 0.08)'
                                 }}>
-                                    <div style={{ position: 'relative', height: '350px', backgroundColor: '#000' }}>
+                                    <div style={{ position: 'relative', height: '350px', backgroundColor: '#0d0d0d' }}>
                                         <Image
                                             src={vehicle.image}
                                             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
@@ -123,12 +124,12 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
                                             {vehicle.description.length > 150 ? vehicle.description.substring(0, 150) + '...' : vehicle.description}
                                         </p>
                                         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                            <div style={{ backgroundColor: '#222', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center', flex: '1 1 120px' }}>
-                                                <span style={{ display: 'block', fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>Mileage</span>
+                                            <div style={{ backgroundColor: '#1a2030', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center', flex: '1 1 120px', border: '1px solid #2a3344' }}>
+                                                <span style={{ display: 'block', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Mileage</span>
                                                 <span style={{ fontWeight: 'bold' }}>{vehicle.mileage.toLocaleString()} mi</span>
                                             </div>
-                                            <div style={{ backgroundColor: '#222', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center', flex: '1 1 120px' }}>
-                                                <span style={{ display: 'block', fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>Status</span>
+                                            <div style={{ backgroundColor: '#1a2030', padding: '0.75rem 1.25rem', borderRadius: '8px', textAlign: 'center', flex: '1 1 120px', border: '1px solid #2a3344' }}>
+                                                <span style={{ display: 'block', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</span>
                                                 <span style={{ fontWeight: 'bold', color: '#ef4444' }}>Gone!</span>
                                             </div>
                                         </div>
@@ -148,8 +149,9 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
                                     left: '0',
                                     top: '50%',
                                     transform: 'translateY(-50%)',
-                                    background: 'rgba(0,0,0,0.5)',
-                                    border: 'none',
+                                    background: 'rgba(15, 113, 177, 0.18)',
+                                    border: '1px solid rgba(15, 113, 177, 0.35)',
+                                    borderLeft: 'none',
                                     color: '#fff',
                                     padding: '1rem',
                                     cursor: 'pointer',
@@ -168,8 +170,9 @@ export default function RecentlySoldCarousel({ initialVehicles }: { initialVehic
                                     right: '0',
                                     top: '50%',
                                     transform: 'translateY(-50%)',
-                                    background: 'rgba(0,0,0,0.5)',
-                                    border: 'none',
+                                    background: 'rgba(15, 113, 177, 0.18)',
+                                    border: '1px solid rgba(15, 113, 177, 0.35)',
+                                    borderRight: 'none',
                                     color: '#fff',
                                     padding: '1rem',
                                     cursor: 'pointer',

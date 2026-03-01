@@ -65,7 +65,8 @@
       "Heated Mirrors",
       "and Air Suspension."
     ],
-    "created_at": "2026-02-15T07:22:19.783+00:00"
+    "created_at": "2026-02-15T07:22:19.783+00:00",
+    "buyCost": 0
   },
   {
     "id": 1771142676216,
@@ -125,7 +126,8 @@
       "Sunroof",
       "Fog Lights and Third Row Seating"
     ],
-    "created_at": "2026-02-15T08:04:36.216+00:00"
+    "created_at": "2026-02-15T08:04:36.216+00:00",
+    "buyCost": 0
   },
   {
     "id": 1771174012620,
@@ -134,7 +136,7 @@
     "year": 2009,
     "price": 10450,
     "mileage": 177000,
-    "status": "Available",
+    "status": "Sold",
     "type": "SUV",
     "image": "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1771173891121-20260209201527643iOS.jpg",
     "images": [
@@ -164,7 +166,7 @@
     "video": "",
     "youtubeUrl": "https://youtu.be/oFXCZZXUBnU",
     "vin": "1GNFK33219R219102",
-    "trending": true,
+    "trending": false,
     "description": "Make: Chevy\nModel: Tahoe LTZ\nYear: 2009\nEngine: 6.2 V8\nOdometer: 177,000 miles \nFuel: Gasoline \nTransmission: Automatic \nDrivetrain: 4x4\nColor: Black",
     "specs": {
       "Fuel": "Gasoline",
@@ -191,7 +193,8 @@
       "Fog Lamps",
       "Keyless Start"
     ],
-    "created_at": "2026-02-15T16:46:52.62+00:00"
+    "created_at": "2026-02-15T16:46:52.62+00:00",
+    "buyCost": 0
   },
   {
     "id": 1771175030732,
@@ -250,7 +253,8 @@
       "Tow Package",
       "Weather Techs"
     ],
-    "created_at": "2026-02-15T17:03:50.732+00:00"
+    "created_at": "2026-02-15T17:03:50.732+00:00",
+    "buyCost": 3800
   },
   {
     "id": 1771175216534,
@@ -305,7 +309,8 @@
       "hydraulic controls",
       "tool box."
     ],
-    "created_at": "2026-02-15T17:06:56.534+00:00"
+    "created_at": "2026-02-15T17:06:56.534+00:00",
+    "buyCost": 6100
   },
   {
     "id": 1771193463896,
@@ -371,7 +376,8 @@
       "Rear Heated Seats",
       "third row seating"
     ],
-    "created_at": "2026-02-15T22:11:03.896+00:00"
+    "created_at": "2026-02-15T22:11:03.896+00:00",
+    "buyCost": 0
   },
   {
     "id": 1771193579737,
@@ -429,7 +435,8 @@
       "Fog Lights",
       "Android Radio."
     ],
-    "created_at": "2026-02-15T22:12:59.737+00:00"
+    "created_at": "2026-02-15T22:12:59.737+00:00",
+    "buyCost": 0
   },
   {
     "id": 1771193747724,
@@ -494,7 +501,8 @@
       "Brake Controller",
       "AFM Delete Tune"
     ],
-    "created_at": "2026-02-15T22:15:47.724+00:00"
+    "created_at": "2026-02-15T22:15:47.724+00:00",
+    "buyCost": 0
   },
   {
     "id": 1771194005637,
@@ -557,7 +565,8 @@
       "Stabilitrack",
       "ABS"
     ],
-    "created_at": "2026-02-15T22:20:05.637+00:00"
+    "created_at": "2026-02-15T22:20:05.637+00:00",
+    "buyCost": 0
   },
   {
     "id": 1771200118137,
@@ -618,6 +627,108 @@
       "Tonell Cover",
       "Two keys"
     ],
-    "created_at": "2026-02-16T00:01:58.137+00:00"
+    "created_at": "2026-02-16T00:01:58.137+00:00",
+    "buyCost": 0
+  },
+  {
+    "id": 1771817497290,
+    "make": "Ram",
+    "model": "Express Cew",
+    "year": 2015,
+    "price": 10895,
+    "mileage": 172000,
+    "status": "Sold",
+    "type": "Truck",
+    "image": "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772147929142-20260220195136591iOS.jpg",
+    "images": [
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772147929142-20260220195136591iOS.jpg"
+    ],
+    "video": "",
+    "youtubeUrl": "",
+    "vin": "1C6RR7KT7FS617025",
+    "trending": false,
+    "description": "",
+    "specs": {
+      "Fuel": "Gasoline",
+      "Color": "Grey",
+      "Engine": "5.7 V8",
+      "Drivetrain": "4WD",
+      "Transmission": "Automatic"
+    },
+    "features": [],
+    "created_at": "2026-02-23T03:31:37.29+00:00",
+    "buyCost": 0
+  },
+  {
+    "id": 1772246809502,
+    "make": "Jeep",
+    "model": "Grand Cherokee ",
+    "year": 2011,
+    "price": 6250,
+    "mileage": 179000,
+    "status": "Pending",
+    "type": "",
+    "image": "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246770258-20260223183958926iOS.jpg",
+    "images": [
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246770258-20260223183958926iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246778301-20260223184016793iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246778238-20260223184033118iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246778477-20260223184042518iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246778878-20260223184048184iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246787315-20260223184102068iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246787199-20260223184108258iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246787243-20260223184114847iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246787399-20260223184123853iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246787139-20260223184129456iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246787206-20260223184134402iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246805232-20260223184203935iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246805233-20260223184213396iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246805229-20260223184220642iOS.jpg",
+      "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1772246805276-20260223184229207iOS.jpg"
+    ],
+    "video": "",
+    "youtubeUrl": "",
+    "vin": "1J4RR4GG4BC555763",
+    "trending": false,
+    "description": "",
+    "specs": {
+      "Fuel": "Gasoline",
+      "Color": "Blue",
+      "Engine": "3.6",
+      "Drivetrain": "4WD",
+      "Transmission": "Automatic"
+    },
+    "features": [],
+    "created_at": "2026-02-28T02:46:49.502+00:00",
+    "buyCost": 4000
+  },
+  {
+    "id": 1772395090153,
+    "make": "",
+    "model": "",
+    "year": 2026,
+    "price": 0,
+    "mileage": 0,
+    "status": "Available",
+    "type": "",
+    "image": "",
+    "images": [
+      ""
+    ],
+    "video": "",
+    "youtubeUrl": "",
+    "vin": "test",
+    "trending": false,
+    "description": "",
+    "specs": {
+      "Fuel": "Gasoline",
+      "Color": "",
+      "Engine": "",
+      "Drivetrain": "4WD",
+      "Transmission": "Automatic"
+    },
+    "features": [],
+    "created_at": "2026-03-01T19:58:10.153+00:00",
+    "buyCost": 0
   }
 ]

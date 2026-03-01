@@ -20,7 +20,7 @@ export default async function BlogPage() {
     const trendingPosts = sortedPosts.slice(0, 3); // Just select top 3 for demo
 
     return (
-        <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: '2rem 0' }}>
+        <div style={{ background: 'linear-gradient(180deg, #111111 0%, #0d1520 60%, #111111 100%)', color: '#fff', minHeight: '100vh', padding: '2rem 0' }}>
             <div className="container">
                 <header style={{ marginBottom: '4rem', textAlign: 'center' }}>
                     <h1 style={{ fontSize: '3rem', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '2px' }}>

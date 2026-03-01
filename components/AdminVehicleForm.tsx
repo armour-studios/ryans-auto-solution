@@ -10,6 +10,7 @@ type VehicleFormData = {
     model: string;
     year: number;
     price: number;
+    buyCost: number;
     mileage: number;
     vin: string;
     description: string;
@@ -19,7 +20,7 @@ type VehicleFormData = {
     video?: string;
     youtubeUrl?: string;
     trending: boolean;
-    status: 'Available' | 'Pending' | 'Sold';
+    status: 'Available' | 'Pending' | 'Sold' | 'Coming Soon' | 'Draft';
     type: string;
     specs: {
         Engine: string;
@@ -37,11 +38,13 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
     const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
     const [uploading, setUploading] = useState(false);
+    const [publishing, setPublishing] = useState(false);
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
     const [formData, setFormData] = useState<VehicleFormData>(initialData ? {
         ...initialData,
+        buyCost: initialData.buyCost || 0,
         images: initialData.images || [initialData.image],
         features: Array.isArray(initialData.features) ? initialData.features.join(', ') : initialData.features || '',
         vin: initialData.vin || '',
@@ -51,6 +54,7 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
         model: '',
         year: new Date().getFullYear(),
         price: 0,
+        buyCost: 0,
         mileage: 0,
         vin: '',
         description: '',
@@ -180,9 +184,10 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
         }));
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (overrideStatus?: string) => {
         const payload = {
             ...formData,
+            ...(overrideStatus ? { status: overrideStatus } : {}),
             features: formData.features.split(',').map(f => f.trim()).filter(Boolean),
             images: formData.images.length > 0 ? formData.images : [formData.image],
         };
@@ -209,6 +214,13 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
             console.error(err);
             alert('Error saving vehicle');
         }
+    };
+
+    const handleSaveDraft = () => handleSubmit('Draft');
+    const handleQuickPublish = async () => {
+        setPublishing(true);
+        await handleSubmit('Available');
+        setPublishing(false);
     };
 
     const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1));
@@ -259,7 +271,40 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
     return (
         <div className="admin-form-layout" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', alignItems: 'start' }}>
             <div style={{ backgroundColor: '#222', padding: 'clamp(1rem, 3vw, 2rem)', borderRadius: '8px', color: '#fff' }}>
-                <h2 style={{ marginBottom: '2rem' }}>{initialData ? 'Edit Vehicle' : 'Add New Vehicle'}</h2>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+                    <h2 style={{ margin: 0 }}>{initialData ? 'Edit Vehicle' : 'Add New Vehicle'}</h2>
+                    {initialData && (
+                        <button
+                            type="button"
+                            onClick={handleQuickPublish}
+                            disabled={publishing}
+                            style={{
+                                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                                padding: '0.55rem 1.25rem',
+                                backgroundColor: publishing ? 'rgba(16,185,129,0.08)' : 'rgba(16,185,129,0.15)',
+                                color: publishing ? '#444' : '#10b981',
+                                border: '1px solid rgba(16,185,129,0.35)',
+                                borderRadius: '7px',
+                                fontWeight: '700', fontSize: '0.8rem',
+                                cursor: publishing ? 'not-allowed' : 'pointer',
+                                textTransform: 'uppercase', letterSpacing: '1px',
+                                transition: 'all 0.15s',
+                            }}
+                        >
+                            {publishing ? (
+                                <>
+                                    <div style={{ width: '13px', height: '13px', border: '2px solid #333', borderTopColor: '#10b981', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                                    Publishing...
+                                </>
+                            ) : (
+                                <>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Quick Publish
+                                </>
+                            )}
+                        </button>
+                    )}
+                </div>
                 <FormSteps currentStep={currentStep} steps={STEPS} />
 
                 {/* STEP 1: BASIC INFO */}
@@ -271,12 +316,15 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                         <div><label>Make</label><input name="make" required value={formData.make} onChange={handleChange} className="form-input" /></div>
                         <div><label>Model</label><input name="model" required value={formData.model} onChange={handleChange} className="form-input" /></div>
                         <div><label>Year</label><input type="number" name="year" required value={formData.year} onChange={handleChange} className="form-input" /></div>
-                        <div><label>Price</label><input type="number" name="price" required value={formData.price} onChange={handleChange} className="form-input" /></div>
+                        <div><label>Price (Selling)</label><input type="number" name="price" required value={formData.price} onChange={handleChange} className="form-input" /></div>
+                        <div><label>Buy Cost</label><input type="number" name="buyCost" value={formData.buyCost} onChange={handleChange} className="form-input" placeholder="What you paid" /></div>
                         <div><label>Status</label>
                             <select name="status" value={formData.status} onChange={handleChange} className="form-input">
                                 <option value="Available">Available</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Sold">Sold</option>
+                                <option value="Coming Soon">Coming Soon</option>
+                                <option value="Draft">Draft</option>
                             </select>
                         </div>
                         <div><label>Trending</label>
@@ -561,13 +609,33 @@ export default function AdminVehicleForm({ initialData }: { initialData?: any })
                 )}
 
                 {/* Navigation Buttons */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2rem', borderTop: '1px solid #333', paddingTop: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
                     <button type="button" onClick={prevStep} disabled={currentStep === 0} className="btn" style={{ backgroundColor: '#444', color: '#fff', visibility: currentStep === 0 ? 'hidden' : 'visible' }}>Previous</button>
 
                     {currentStep < STEPS.length - 1 ? (
-                        <button type="button" onClick={nextStep} className="btn btn-accent">Next Step &rarr;</button>
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <button type="button" onClick={handleSaveDraft} className="btn" style={{ backgroundColor: '#333', color: '#aaa', border: '1px solid #555', fontSize: '0.85rem' }}>
+                                Save as Draft
+                            </button>
+                            {initialData && (
+                                <button type="button" onClick={handleQuickPublish} disabled={publishing} className="btn" style={{ backgroundColor: publishing ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.12)', color: publishing ? '#444' : '#10b981', border: '1px solid rgba(16,185,129,0.3)', fontWeight: 'bold', fontSize: '0.85rem', cursor: publishing ? 'not-allowed' : 'pointer' }}>
+                                    {publishing ? 'Publishing...' : 'Quick Publish'}
+                                </button>
+                            )}
+                            <button type="button" onClick={nextStep} className="btn btn-accent">Next Step &rarr;</button>
+                        </div>
                     ) : (
-                        <button type="button" onClick={handleSubmit} className="btn btn-accent" style={{ backgroundColor: 'green' }}>Complete & Publish</button>
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <button type="button" onClick={handleSaveDraft} className="btn" style={{ backgroundColor: '#333', color: '#aaa', border: '1px solid #555', fontSize: '0.85rem' }}>
+                                Save as Draft
+                            </button>
+                            {initialData && (
+                                <button type="button" onClick={handleQuickPublish} disabled={publishing} className="btn" style={{ backgroundColor: publishing ? 'rgba(16,185,129,0.06)' : 'rgba(16,185,129,0.12)', color: publishing ? '#444' : '#10b981', border: '1px solid rgba(16,185,129,0.3)', fontWeight: 'bold', fontSize: '0.85rem', cursor: publishing ? 'not-allowed' : 'pointer' }}>
+                                    {publishing ? 'Publishing...' : 'Quick Publish'}
+                                </button>
+                            )}
+                            <button type="button" onClick={() => handleSubmit()} className="btn btn-accent" style={{ backgroundColor: '#10b981', borderColor: '#10b981' }}>Save &amp; Publish</button>
+                        </div>
                     )}
                 </div>
             </div>

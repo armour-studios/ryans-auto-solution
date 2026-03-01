@@ -19,7 +19,7 @@ export default function FinancingPage() {
     };
 
     return (
-        <div style={{ padding: '0', color: '#fff', backgroundColor: '#050505', minHeight: '100vh' }}>
+        <div style={{ padding: '0', color: '#fff', background: 'linear-gradient(180deg, #111111 0%, #0d1520 50%, #111111 100%)', minHeight: '100vh' }}>
 
             {/* External Site Popup */}
             {popup && (

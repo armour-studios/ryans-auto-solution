@@ -18,7 +18,7 @@ export default async function AdminTestimonialsPage() {
         <div style={{ padding: '2rem 0', minHeight: '80vh', color: '#fff' }}>
             <div className="container">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', textTransform: 'uppercase', color: 'var(--primary-color)', margin: 0 }}>Testimonials</h1>
+                    <h1 style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Customer Reviews</h1>
                     <Link href="/admin/testimonials/add" className="btn btn-primary">
                         + Add New Testimonial
                     </Link>

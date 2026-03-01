@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { getSupabaseAdminClient } from '@/lib/supabase';
 import { getInventory, saveInventory, Vehicle } from '@/lib/inventory';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -34,10 +34,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
-        const { error } = await supabase
+        const supabaseAdmin = getSupabaseAdminClient();
+        const { error } = await supabaseAdmin
             .from('inventory')
             .delete()
-            .eq('id', id);
+            .eq('id', parseInt(id, 10));
 
         if (error) {
             throw new Error(`Supabase error: ${error.message}`);

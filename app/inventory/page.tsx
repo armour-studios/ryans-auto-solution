@@ -81,7 +81,7 @@ export default function InventoryPage() {
     const [yearRange, setYearRange] = useState({ min: '', max: '' });
     const [sortBy, setSortBy] = useState('newest');
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-    const [gridCols, setGridCols] = useState<2 | 3>(3);
+    const [gridCols, setGridCols] = useState<2 | 3>(2);
     const { theme, toggleTheme } = useTheme();
 
     // Finance defaults for est. monthly payment
@@ -95,7 +95,7 @@ export default function InventoryPage() {
 
     // Separate available & sold, then apply filters
     const { availableVehicles, soldVehicles } = useMemo(() => {
-        let available = vehicles.filter(v => v.status !== 'Sold');
+        let available = vehicles.filter(v => v.status !== 'Sold' && v.status !== 'Draft');
         let sold = vehicles.filter(v => v.status === 'Sold');
 
         // Apply shared filters to both groups

@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { Tinos } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import FacebookMessenger from '@/components/FacebookMessenger';
-import ThemeProvider from '@/components/ThemeProvider';
+import ConditionalShell from '@/components/ConditionalShell';
+import { Analytics } from '@vercel/analytics/next';
 
 const tinos = Tinos({
   subsets: ['latin'],
@@ -28,6 +26,11 @@ export const metadata: Metadata = {
   description: 'Quality used cars and trucks in Bemidji, Minnesota. Serving Northern Minnesota with reliable vehicles and financing assistance.',
   keywords: ['used cars', 'trucks', 'Bemidji', 'Minnesota', 'Ryan Auto Solution', 'financing', 'auto dealer'],
   authors: [{ name: "Ryan's Auto Solution" }],
+  icons: {
+    icon: '/uploads/rfav.png',
+    shortcut: '/uploads/rfav.png',
+    apple: '/uploads/rfav.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -43,12 +46,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={tinos.variable} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <ThemeProvider>
-          <Navbar />
-          <main style={{ flex: 1 }}>{children}</main>
-          <Footer />
-          <FacebookMessenger />
-        </ThemeProvider>
+        <ConditionalShell>
+          {children}
+        </ConditionalShell>
+        <Analytics />
       </body>
     </html>
   );

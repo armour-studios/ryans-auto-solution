@@ -1,4 +1,5 @@
 import { getVehicleById, getInventory } from '@/lib/inventory';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -6,11 +7,46 @@ import VehicleCard from '@/components/VehicleCard';
 import { getYouTubeEmbedUrl } from '@/lib/youtubeUtils';
 import ImageGallery from '@/components/ImageGallery';
 
+const BASE_URL = 'https://ryansautosolution.com';
+
 export async function generateStaticParams() {
     const inventory = await getInventory();
     return inventory.map((vehicle) => ({
         id: vehicle.id.toString(),
     }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params;
+    const vehicle = await getVehicleById(parseInt(id));
+    if (!vehicle) return {};
+
+    const title = `${vehicle.year} ${vehicle.make} ${vehicle.model} for Sale in Bemidji, MN`;
+    const description = vehicle.description
+        ? vehicle.description.slice(0, 155)
+        : `${vehicle.year} ${vehicle.make} ${vehicle.model} — ${vehicle.mileage.toLocaleString()} miles — $${vehicle.price.toLocaleString()}. Available at Ryan's Auto Solution in Bemidji, Minnesota.`;
+    const imageUrl = vehicle.image?.startsWith('http') ? vehicle.image : `${BASE_URL}${vehicle.image}`;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            url: `${BASE_URL}/inventory/${vehicle.id}`,
+            images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [imageUrl],
+        },
+        alternates: {
+            canonical: `${BASE_URL}/inventory/${vehicle.id}`,
+        },
+    };
 }
 
 export default async function VehicleDetailsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -21,6 +57,45 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
         notFound();
     }
 
+    // JSON-LD structured data for Google (Car schema)
+    const imageUrl = vehicle.image?.startsWith('http') ? vehicle.image : `${BASE_URL}${vehicle.image}`;
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Car',
+        name: `${vehicle.year} ${vehicle.make} ${vehicle.model}`,
+        description: vehicle.description,
+        brand: { '@type': 'Brand', name: vehicle.make },
+        model: vehicle.model,
+        modelDate: vehicle.year.toString(),
+        vehicleIdentificationNumber: vehicle.vin ?? undefined,
+        mileageFromOdometer: {
+            '@type': 'QuantitativeValue',
+            value: vehicle.mileage,
+            unitCode: 'SMI',
+        },
+        image: imageUrl,
+        url: `${BASE_URL}/inventory/${vehicle.id}`,
+        offers: {
+            '@type': 'Offer',
+            price: vehicle.price,
+            priceCurrency: 'USD',
+            availability: vehicle.status === 'Available'
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/SoldOut',
+            seller: {
+                '@type': 'AutoDealer',
+                name: "Ryan's Auto Solution",
+                url: BASE_URL,
+                address: {
+                    '@type': 'PostalAddress',
+                    addressLocality: 'Bemidji',
+                    addressRegion: 'MN',
+                    addressCountry: 'US',
+                },
+            },
+        },
+    };
+
     // specific type explicit cast for filtering
     const allInventory = await getInventory();
     const relatedVehicles = allInventory
@@ -29,6 +104,10 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
 
     return (
         <div style={{ padding: '2rem 0', color: 'var(--text-color)' }}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className="container">
                 {/* Breadcrumbs */}
                 <div style={{ marginBottom: '2rem', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
