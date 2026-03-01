@@ -449,9 +449,11 @@ export default function Navbar() {
           padding: 0.5rem 0.9rem;
           color: rgba(244,244,249,0.8);
           text-decoration: none;
+          font-family: var(--font-display, 'Eurostile', sans-serif);
           font-size: 0.78rem;
           font-weight: 700;
-          letter-spacing: 1.3px;
+          font-style: italic;
+          letter-spacing: 1.5px;
           text-transform: uppercase;
           border-radius: 6px;
           transition: color 0.2s, background 0.2s;
@@ -502,9 +504,11 @@ export default function Navbar() {
           background: linear-gradient(135deg, #0d65a0 0%, #0f71b1 50%, #1483cc 100%);
           color: #fff !important;
           text-decoration: none;
+          font-family: var(--font-display, 'Eurostile', sans-serif);
           font-size: 0.75rem;
           font-weight: 800;
-          letter-spacing: 1.1px;
+          font-style: italic;
+          letter-spacing: 1.3px;
           text-transform: uppercase;
           border-radius: 50px;
           border: 1px solid rgba(78,170,220,0.35);

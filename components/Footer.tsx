@@ -193,9 +193,11 @@ export default function Footer() {
                 }
 
                 .footer-col-heading {
-                    font-size: 0.7rem;
+                    font-family: var(--font-display, 'Eurostile', sans-serif);
+                    font-size: 0.72rem;
                     font-weight: 700;
-                    letter-spacing: 1.5px;
+                    font-style: italic;
+                    letter-spacing: 2px;
                     text-transform: uppercase;
                     color: #0f71b1;
                     padding-bottom: 0.5rem;
@@ -212,9 +214,11 @@ export default function Footer() {
                 }
 
                 .footer-link {
-                    font-size: 0.82rem;
-                    font-weight: 600;
-                    letter-spacing: 0.8px;
+                    font-family: var(--font-display, 'Eurostile', sans-serif);
+                    font-size: 0.78rem;
+                    font-weight: 700;
+                    font-style: italic;
+                    letter-spacing: 1px;
                     text-transform: uppercase;
                     color: rgba(244,244,249,0.7);
                     text-decoration: none;
