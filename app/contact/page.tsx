@@ -135,7 +135,7 @@ export default function ContactPage() {
 
                 {/* Directions CTA */}
                 <div style={{ marginTop: '5rem', textAlign: 'center' }}>
-                    <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="btn btn-primary cta-glow" style={{
+                    <a href="https://maps.app.goo.gl/6DmndURC1jqZ5xvx6" target="_blank" rel="noopener noreferrer" className="btn btn-primary cta-glow" style={{
                         padding: '1.5rem 4rem',
                         fontSize: '1.2rem',
                         borderRadius: '50px',

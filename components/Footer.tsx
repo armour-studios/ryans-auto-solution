@@ -85,7 +85,7 @@ export default function Footer() {
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f71b1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
                                 </svg>
-                                <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="footer-contact-link uppercase">
+                                <a href="https://maps.app.goo.gl/6DmndURC1jqZ5xvx6" target="_blank" rel="noopener noreferrer" className="footer-contact-link uppercase">
                                     {siteInfo.address}
                                 </a>
                             </li>

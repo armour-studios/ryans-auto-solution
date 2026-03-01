@@ -50,14 +50,14 @@ export default function Navbar() {
               (218) 469-0183
             </a>
             <span className="glass-topbar-separator" />
-            <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="glass-topbar-link">
+            <a href="https://maps.app.goo.gl/6DmndURC1jqZ5xvx6" target="_blank" rel="noopener noreferrer" className="glass-topbar-link">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
               325 Oak Hills Rd SE, Bemidji, MN
             </a>
-            <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="glass-topbar-directions">
+            <a href="https://maps.app.goo.gl/6DmndURC1jqZ5xvx6" target="_blank" rel="noopener noreferrer" className="glass-topbar-directions">
               Directions
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="3 11 22 2 13 21 11 13 3 11" />
@@ -87,14 +87,14 @@ export default function Navbar() {
               </svg>
               Call
             </a>
-            <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="glass-topbar-mobile-btn border-x">
+            <a href="https://maps.app.goo.gl/6DmndURC1jqZ5xvx6" target="_blank" rel="noopener noreferrer" className="glass-topbar-mobile-btn border-x">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
               Map
             </a>
-            <a href="https://maps.app.goo.gl/sfenz9gjqzi62AtK9" target="_blank" rel="noopener noreferrer" className="glass-topbar-mobile-btn">
+            <a href="https://maps.app.goo.gl/6DmndURC1jqZ5xvx6" target="_blank" rel="noopener noreferrer" className="glass-topbar-mobile-btn">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="3 11 22 2 13 21 11 13 3 11" />
               </svg>
