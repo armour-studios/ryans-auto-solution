@@ -127,16 +127,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {/* Footer */}
                 <div style={{ marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid #1e1e1e', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     <Link href="/admin/settings" style={{
-                        display: 'flex', alignItems: 'center', gap: '0.65rem',
-                        padding: '0.72rem 1rem', borderRadius: '8px', textDecoration: 'none',
-                        color: pathname.startsWith('/admin/settings') ? '#fff' : '#aaa',
-                        backgroundColor: pathname.startsWith('/admin/settings') ? 'rgba(15,113,177,0.12)' : 'transparent',
-                        fontWeight: pathname.startsWith('/admin/settings') ? '700' : '500',
-                        fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px',
-                        borderLeft: pathname.startsWith('/admin/settings') ? '3px solid #0f71b1' : '3px solid transparent',
-                        transition: 'all 0.15s',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                        padding: '0.65rem 1rem', borderRadius: '8px', textDecoration: 'none',
+                        color: '#fff',
+                        backgroundColor: pathname.startsWith('/admin/settings') ? '#0a5d96' : '#0f71b1',
+                        fontWeight: '700',
+                        fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px',
+                        transition: 'background-color 0.15s',
+                        boxShadow: '0 2px 8px rgba(15,113,177,0.35)',
                     }}>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={pathname.startsWith('/admin/settings') ? '#0f71b1' : '#555'} strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                         Site Settings
                     </Link>
                     <Link href="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', padding: '0.6rem', borderRadius: '8px', backgroundColor: '#fff', color: '#111', textDecoration: 'none', fontSize: '0.72rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', transition: 'opacity 0.2s' }}>
@@ -226,15 +226,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {/* Drawer footer */}
                 <div style={{ marginTop: 'auto', padding: '1.25rem 1rem 1.5rem', borderTop: '1px solid #1e1e1e', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     <Link href="/admin/settings" onClick={() => setIsSidebarOpen(false)} style={{
-                        display: 'flex', alignItems: 'center', gap: '0.75rem',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                         padding: '0.85rem 0.75rem', borderRadius: '8px', textDecoration: 'none',
-                        color: pathname.startsWith('/admin/settings') ? '#fff' : '#aaa',
-                        backgroundColor: pathname.startsWith('/admin/settings') ? 'rgba(15,113,177,0.12)' : 'transparent',
-                        fontWeight: '500', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1.2px',
-                        borderLeft: pathname.startsWith('/admin/settings') ? '3px solid #0f71b1' : '3px solid transparent',
-                        minHeight: '48px',
+                        color: '#fff',
+                        backgroundColor: pathname.startsWith('/admin/settings') ? '#0a5d96' : '#0f71b1',
+                        fontWeight: '700', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1.2px',
+                        minHeight: '48px', boxShadow: '0 2px 8px rgba(15,113,177,0.35)',
                     }}>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                         Site Settings
                     </Link>
                     <Link href="/" onClick={() => setIsSidebarOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', padding: '0.6rem', fontSize: '0.72rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', color: '#111', backgroundColor: '#fff', textDecoration: 'none', borderRadius: '8px' }}>
