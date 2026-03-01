@@ -8,23 +8,5 @@
     "defaultVehicleTemplate": "NEW ARRIVAL: {{year}} {{make}} {{model}}\n\nPrice: ${{price}}\n{{mileage}} miles\n\n{{description}}\n\nView details: {{url}}\n\nCall us: (218) 469-0183\n#UsedCars #Bemidji #Minnesota #RyansAutoSolution",
     "defaultBlogTemplate": "New Blog Post: {{title}}\n\n{{excerpt}}\n\nRead more: {{url}}\n\n#RyansAutoSolution #AutoTips #Bemidji"
   },
-  "queue": [
-    {
-      "id": 1772395933084,
-      "type": "vehicle",
-      "sourceId": 1771175030732,
-      "title": "2014 Chevy Impala Limited",
-      "content": "NEW ARRIVAL: 2014 Chevy Impala Limited\n\nPrice: $7,250\n106,000 miles\n\nMake: Chevrolet \nModel: Impala Limited LS \nYear: 2014 \nEngine: 3.6L V6 \nOdometer: 106,000 miles \nFue\n\nView details: https://ryansautosolution.com/inventory/1771175030732\n\nCall us: (218) 469-0183\n#UsedCars #Bemidji #Minnesota #RyansAutoSolution",
-      "image": "https://uczhqofiubewxvmctppn.supabase.co/storage/v1/object/public/images/1771174220507-20260203182729544iOS.jpg",
-      "platforms": [
-        "facebook"
-      ],
-      "status": "failed",
-      "scheduledAt": null,
-      "publishedAt": null,
-      "publishedIds": {},
-      "error": "facebook: (#200) The permission(s) pages_manage_posts are not available. It could because either they are deprecated or need to be approved by App Review.",
-      "createdAt": "2026-03-01T20:12:13.084Z"
-    }
-  ]
+  "queue": []
 }
