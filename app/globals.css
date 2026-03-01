@@ -1,4 +1,25 @@
+@font-face {
+  font-family: 'Eurostile';
+  src: url('/assets/Eurostile%20BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Serpentine';
+  src: url('/assets/Serpentine%20D%20Bold%20Italic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
+  /* Custom Fonts */
+  --font-display: 'Eurostile', 'Serpentine', Impact, sans-serif;
+  --font-body: var(--font-tinos, Georgia, serif);
+  --font-main: var(--font-body);
+
   /* Dark Mode Color Palette */
   --primary-color: #0f71b1;
   /* Updated Brand Blue */
@@ -350,18 +371,24 @@ a {
 }
 
 h1 {
+  font-family: var(--font-display);
   font-size: var(--font-size-h1);
   color: var(--heading-color);
+  font-style: italic;
 }
 
 h2 {
+  font-family: var(--font-display);
   font-size: var(--font-size-h2);
   color: var(--primary-color);
+  font-style: italic;
 }
 
 h3 {
+  font-family: var(--font-display);
   font-size: var(--font-size-h3);
   color: var(--heading-color);
+  font-style: italic;
 }
 
 img {
