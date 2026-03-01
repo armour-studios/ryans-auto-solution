@@ -452,7 +452,7 @@ export default function Navbar() {
           font-family: var(--font-display, 'Eurostile', sans-serif);
           font-size: 0.78rem;
           font-weight: 700;
-          font-style: italic;
+          font-style: normal;
           letter-spacing: 1.5px;
           text-transform: uppercase;
           border-radius: 6px;
@@ -507,7 +507,7 @@ export default function Navbar() {
           font-family: var(--font-display, 'Eurostile', sans-serif);
           font-size: 0.75rem;
           font-weight: 800;
-          font-style: italic;
+          font-style: normal;
           letter-spacing: 1.3px;
           text-transform: uppercase;
           border-radius: 50px;
