@@ -191,9 +191,15 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
-                                ${vehicle.price.toLocaleString()}
-                            </span>
+                            {vehicle.status === 'Sold' ? (
+                                <span style={{ fontSize: '1.75rem', fontWeight: 'bold', color: '#e53e3e', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                                    Sold
+                                </span>
+                            ) : (
+                                <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
+                                    ${vehicle.price.toLocaleString()}
+                                </span>
+                            )}
                         </div>
 
                         <div className="detail-specs-table" style={{ marginBottom: '2rem', backgroundColor: 'var(--subtle-bg)', padding: '1rem', borderRadius: '4px' }}>
@@ -235,9 +241,15 @@ export default async function VehicleDetailsPage({ params }: { params: Promise<{
                             {vehicle.year} {vehicle.make} {vehicle.model}
                         </h1>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
-                                ${vehicle.price.toLocaleString()}
-                            </span>
+                            {vehicle.status === 'Sold' ? (
+                                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#e53e3e', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                                    Sold
+                                </span>
+                            ) : (
+                                <span style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>
+                                    ${vehicle.price.toLocaleString()}
+                                </span>
+                            )}
                             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Stock: {vehicle.id}</span>
                         </div>
                     </div>
