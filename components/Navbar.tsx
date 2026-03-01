@@ -449,8 +449,8 @@ export default function Navbar() {
           padding: 0.5rem 0.9rem;
           color: rgba(244,244,249,0.8);
           text-decoration: none;
-          font-family: var(--font-display, 'Eurostile', sans-serif);
-          font-size: 0.78rem;
+          font-family: var(--font-barlow, 'Barlow', sans-serif);
+          font-size: 0.82rem;
           font-weight: 700;
           font-style: normal;
           letter-spacing: 1.5px;
