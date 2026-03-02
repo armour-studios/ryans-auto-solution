@@ -146,9 +146,27 @@ export default function AdminPortalPage() {
 
     return (
         <div style={{ padding: '2rem 0', minHeight: '80vh' }}>
+            <style>{`
+                .dash-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+                .dash-header-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+                .dash-kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
+                .dash-mid-grid { display: grid; grid-template-columns: 1fr 1fr; }
+                .dash-quick-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+                @media (max-width: 1024px) {
+                    .dash-kpi-grid { grid-template-columns: repeat(3, 1fr); }
+                }
+                @media (max-width: 640px) {
+                    .dash-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+                    .dash-mid-grid { grid-template-columns: 1fr; }
+                    .dash-quick-nav { grid-template-columns: 1fr; }
+                    .dash-kpi-card { padding: 1rem !important; }
+                    .dash-header-actions { width: 100%; }
+                    .dash-header-actions a { flex: 1 1 0; justify-content: center; min-width: 0; }
+                }
+            `}</style>
 
             {/* ── Header ─────────────────────────────────────────── */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2.5rem', paddingBottom: '2rem', borderBottom: '1px solid #222' }}>
+            <div className="dash-header" style={{ gap: '1rem', marginBottom: '2.5rem', paddingBottom: '2rem', borderBottom: '1px solid #222' }}>
                 <div>
                     <p style={{ fontSize: '0.72rem', color: '#555', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '0.4rem' }}>{today}</p>
                     <h1 style={{ fontSize: 'clamp(1.4rem, 4vw, 2.2rem)', color: '#fff', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px', lineHeight: 1.1 }}>
@@ -158,7 +176,7 @@ export default function AdminPortalPage() {
                         {userRole === 'superadmin' ? 'Super Admin' : 'Staff'} · Dealership Control Center
                     </p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <div className="dash-header-actions">
                     <Link href="/admin/inventory/add" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.25rem', backgroundColor: 'var(--primary-color)', color: '#fff', borderRadius: '6px', textDecoration: 'none', fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
                         Add Vehicle
@@ -171,10 +189,10 @@ export default function AdminPortalPage() {
             </div>
 
             {/* ── Primary KPI Row ─────────────────────────────────── */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.85rem', marginBottom: '2rem' }}>
+            <div className="dash-kpi-grid" style={{ gap: '0.85rem', marginBottom: '2rem' }}>
 
                 {/* Units Available */}
-                <div style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1e3028', borderTop: '3px solid #10b981', position: 'relative', overflow: 'hidden' }}>
+                <div className="dash-kpi-card" style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1e3028', borderTop: '3px solid #10b981', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '80px', background: 'radial-gradient(circle at top right, rgba(16,185,129,0.1), transparent 70%)', pointerEvents: 'none' }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
                         <span style={{ fontSize: '0.65rem', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.8 }}>Available</span>
@@ -182,12 +200,12 @@ export default function AdminPortalPage() {
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         </div>
                     </div>
-                    <div style={{ fontSize: '2.4rem', fontWeight: '800', color: '#10b981', lineHeight: 1, marginBottom: '0.5rem' }}>{stats.availableVehicles}</div>
+                    <div style={{ fontSize: 'clamp(1.5rem, 6vw, 2.4rem)', fontWeight: '800', color: '#10b981', lineHeight: 1, marginBottom: '0.5rem' }}>{stats.availableVehicles}</div>
                     <div style={{ fontSize: '0.75rem', color: '#666', lineHeight: 1.4 }}>of <strong style={{ color: '#888' }}>{stats.totalInventory}</strong> total units on lot</div>
                 </div>
 
                 {/* Units Sold */}
-                <div style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: '1px solid #2d1e1e', borderTop: '3px solid #ef4444', position: 'relative', overflow: 'hidden' }}>
+                <div className="dash-kpi-card" style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: '1px solid #2d1e1e', borderTop: '3px solid #ef4444', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '80px', background: 'radial-gradient(circle at top right, rgba(239,68,68,0.1), transparent 70%)', pointerEvents: 'none' }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
                         <span style={{ fontSize: '0.65rem', fontWeight: '700', color: '#ef4444', textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.8 }}>Units Sold</span>
@@ -195,12 +213,12 @@ export default function AdminPortalPage() {
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                         </div>
                     </div>
-                    <div style={{ fontSize: '2.4rem', fontWeight: '800', color: '#ef4444', lineHeight: 1, marginBottom: '0.5rem' }}>{stats.soldVehicles}</div>
+                    <div style={{ fontSize: 'clamp(1.5rem, 6vw, 2.4rem)', fontWeight: '800', color: '#ef4444', lineHeight: 1, marginBottom: '0.5rem' }}>{stats.soldVehicles}</div>
                     <div style={{ fontSize: '0.75rem', color: '#666', lineHeight: 1.4 }}><strong style={{ color: '#888' }}>${(stats.totalSales / 1000).toFixed(1)}k</strong> total sales revenue</div>
                 </div>
 
                 {/* Portfolio Value */}
-                <div style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1a2535', borderTop: '3px solid #0f71b1', position: 'relative', overflow: 'hidden' }}>
+                <div className="dash-kpi-card" style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: '1px solid #1a2535', borderTop: '3px solid #0f71b1', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '80px', background: 'radial-gradient(circle at top right, rgba(15,113,177,0.12), transparent 70%)', pointerEvents: 'none' }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
                         <span style={{ fontSize: '0.65rem', fontWeight: '700', color: '#0f71b1', textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.8 }}>Portfolio Value</span>
@@ -208,12 +226,12 @@ export default function AdminPortalPage() {
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0f71b1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
                         </div>
                     </div>
-                    <div style={{ fontSize: '2.4rem', fontWeight: '800', color: '#0f71b1', lineHeight: 1, marginBottom: '0.5rem' }}>${(stats.inventoryValue / 1000).toFixed(0)}k</div>
+                    <div style={{ fontSize: 'clamp(1.5rem, 6vw, 2.4rem)', fontWeight: '800', color: '#0f71b1', lineHeight: 1, marginBottom: '0.5rem' }}>${(stats.inventoryValue / 1000).toFixed(0)}k</div>
                     <div style={{ fontSize: '0.75rem', color: '#666', lineHeight: 1.4 }}>listed ask price on lot</div>
                 </div>
 
                 {/* Projected Profit */}
-                <div style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: stats.projectedProfit > 0 ? '1px solid #1f2a1a' : '1px solid #1e1e1e', borderTop: stats.projectedProfit > 0 ? '3px solid #84cc16' : '3px solid #252525', position: 'relative', overflow: 'hidden' }}>
+                <div className="dash-kpi-card" style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: stats.projectedProfit > 0 ? '1px solid #1f2a1a' : '1px solid #1e1e1e', borderTop: stats.projectedProfit > 0 ? '3px solid #84cc16' : '3px solid #252525', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '80px', background: stats.projectedProfit > 0 ? 'radial-gradient(circle at top right, rgba(132,204,22,0.08), transparent 70%)' : 'none', pointerEvents: 'none' }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
                         <span style={{ fontSize: '0.65rem', fontWeight: '700', color: stats.projectedProfit > 0 ? '#84cc16' : '#444', textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.9 }}>Proj. Profit</span>
@@ -221,7 +239,7 @@ export default function AdminPortalPage() {
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={stats.projectedProfit > 0 ? '#84cc16' : '#333'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                         </div>
                     </div>
-                    <div style={{ fontSize: '2.4rem', fontWeight: '800', color: stats.projectedProfit > 0 ? '#84cc16' : '#2a2a2a', lineHeight: 1, marginBottom: '0.5rem' }}>
+                    <div style={{ fontSize: 'clamp(1.5rem, 6vw, 2.4rem)', fontWeight: '800', color: stats.projectedProfit > 0 ? '#84cc16' : '#2a2a2a', lineHeight: 1, marginBottom: '0.5rem' }}>
                         {stats.projectedProfit > 0 ? `$${(stats.projectedProfit / 1000).toFixed(1)}k` : '—'}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: '#666', lineHeight: 1.4 }}>
@@ -230,7 +248,7 @@ export default function AdminPortalPage() {
                 </div>
 
                 {/* Realized Profit */}
-                <div style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: hasCostData ? '1px solid #1e3028' : '1px solid #1a1a1a', borderTop: hasCostData ? '3px solid #10b981' : '3px solid #252525', position: 'relative', overflow: 'hidden' }}>
+                <div className="dash-kpi-card" style={{ padding: '1.35rem', backgroundColor: '#111', borderRadius: '12px', border: hasCostData ? '1px solid #1e3028' : '1px solid #1a1a1a', borderTop: hasCostData ? '3px solid #10b981' : '3px solid #252525', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '80px', background: hasCostData ? 'radial-gradient(circle at top right, rgba(16,185,129,0.1), transparent 70%)' : 'none', pointerEvents: 'none' }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
                         <span style={{ fontSize: '0.65rem', fontWeight: '700', color: hasCostData ? '#10b981' : '#444', textTransform: 'uppercase', letterSpacing: '1.2px', opacity: 0.9 }}>Realized Profit</span>
@@ -238,7 +256,7 @@ export default function AdminPortalPage() {
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={hasCostData ? '#10b981' : '#333'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                         </div>
                     </div>
-                    <div style={{ fontSize: '2.4rem', fontWeight: '800', color: hasCostData ? (stats.totalProfit >= 0 ? '#10b981' : '#ef4444') : '#2a2a2a', lineHeight: 1, marginBottom: '0.5rem' }}>
+                    <div style={{ fontSize: 'clamp(1.5rem, 6vw, 2.4rem)', fontWeight: '800', color: hasCostData ? (stats.totalProfit >= 0 ? '#10b981' : '#ef4444') : '#2a2a2a', lineHeight: 1, marginBottom: '0.5rem' }}>
                         {hasCostData ? `$${(stats.totalProfit / 1000).toFixed(1)}k` : '—'}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: '#666', lineHeight: 1.4 }}>
@@ -249,7 +267,7 @@ export default function AdminPortalPage() {
             </div>
 
             {/* ── Mid Row: Inventory Breakdown + Revenue vs Cost ──── */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+            <div className="dash-mid-grid" style={{ gap: '1rem', marginBottom: '1rem' }}>
 
                 {/* Inventory Status Breakdown */}
                 <div style={{ backgroundColor: '#111', borderRadius: '12px', border: '1px solid #222', padding: '1.5rem' }}>
@@ -395,7 +413,7 @@ export default function AdminPortalPage() {
             </div>
 
             {/* ── Quick Navigation ────────────────────────────────── */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+            <div className="dash-quick-nav" style={{ gap: '0.75rem' }}>
                 {[
                     { label: 'Inventory Manager', href: '/admin/inventory', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>, count: `${stats.availableVehicles} active`, color: '#0f71b1' },
                     { label: 'Blog & News', href: '/admin/blog', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>, count: `${stats.totalPosts} posts`, color: '#10b981' },
