@@ -141,7 +141,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         Return to Site
                     </Link>
-                    <button onClick={handleLogout} style={{ width: '100%', padding: '0.65rem', backgroundColor: 'transparent', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', transition: 'background 0.2s' }}>
+                    <button onClick={handleLogout} style={{ width: '100%', padding: '0.65rem', backgroundColor: 'transparent', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '8px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', transition: 'background 0.2s', marginTop: '1.25rem' }}>
                         Sign Out
                     </button>
                 </div>
@@ -241,7 +241,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         Return to Site
                     </Link>
-                    <button onClick={handleLogout} style={{ width: '100%', padding: '0.78rem', backgroundColor: 'transparent', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '8px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    <button onClick={handleLogout} style={{ width: '100%', padding: '0.78rem', backgroundColor: 'transparent', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '8px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '1.25rem' }}>
                         Sign Out
                     </button>
                 </div>
