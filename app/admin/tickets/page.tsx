@@ -6,13 +6,13 @@ interface Ticket {
     id: string;
     title: string;
     description: string;
-    pageUrl: string;
+    page_url: string;
     category: 'bug' | 'glitch' | 'feature' | 'performance' | 'other';
     priority: 'low' | 'medium' | 'high' | 'critical';
     status: 'open' | 'in-progress' | 'resolved' | 'closed';
-    submittedBy: string;
-    createdAt: string;
-    updatedAt: string;
+    submitted_by: string;
+    created_at: string;
+    updated_at: string;
 }
 
 const PRIORITY_COLORS: Record<string, string> = {
@@ -374,19 +374,19 @@ export default function TicketsPage() {
                                     <div style={{ display: 'flex', gap: '1rem', marginTop: '0.6rem', flexWrap: 'wrap' }}>
                                         <span style={{ fontSize: '0.75rem', color: '#555' }}>{CATEGORY_LABELS[ticket.category]}</span>
                                         <span style={{ fontSize: '0.75rem', color: '#444' }}>{ticket.id}</span>
-                                        <span style={{ fontSize: '0.75rem', color: '#444' }}>by {ticket.submittedBy}</span>
-                                        <span style={{ fontSize: '0.75rem', color: '#444', marginLeft: 'auto' }}>{timeAgo(ticket.createdAt)}</span>
+                                        <span style={{ fontSize: '0.75rem', color: '#444' }}>by {ticket.submitted_by}</span>
+                                        <span style={{ fontSize: '0.75rem', color: '#444', marginLeft: 'auto' }}>{timeAgo(ticket.created_at)}</span>
                                     </div>
 
                                     {/* Expanded detail */}
                                     {selected?.id === ticket.id && (
                                         <div style={{ marginTop: '1.25rem', borderTop: '1px solid #1e1e1e', paddingTop: '1.25rem' }} onClick={e => e.stopPropagation()}>
                                             <p style={{ color: '#bbb', fontSize: '0.9rem', lineHeight: '1.7', whiteSpace: 'pre-wrap', margin: '0 0 1rem' }}>{ticket.description}</p>
-                                            {ticket.pageUrl && (
+                                            {ticket.page_url && (
                                                 <p style={{ margin: '0 0 1rem', fontSize: '0.82rem', color: '#555' }}>
                                                     <span style={{ color: '#444' }}>Page: </span>
-                                                    <a href={ticket.pageUrl.startsWith('http') ? ticket.pageUrl : `/${ticket.pageUrl}`} target="_blank" rel="noreferrer" style={{ color: '#0f71b1', textDecoration: 'none' }}>
-                                                        {ticket.pageUrl}
+                                                    <a href={ticket.page_url.startsWith('http') ? ticket.page_url : `/${ticket.page_url}`} target="_blank" rel="noreferrer" style={{ color: '#0f71b1', textDecoration: 'none' }}>
+                                                        {ticket.page_url}
                                                     </a>
                                                 </p>
                                             )}

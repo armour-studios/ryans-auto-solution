@@ -93,9 +93,10 @@ export default function InventoryPage() {
             .then(data => setVehicles(data));
     }, []);
 
-    // Separate available & sold, then apply filters
-    const { availableVehicles, soldVehicles } = useMemo(() => {
-        let available = vehicles.filter(v => v.status !== 'Sold' && v.status !== 'Draft');
+    // Separate available / coming-soon / sold, then apply filters
+    const { availableVehicles, comingSoonVehicles, soldVehicles } = useMemo(() => {
+        let available = vehicles.filter(v => v.status === 'Available' || v.status === 'Pending');
+        let comingSoon = vehicles.filter(v => v.status === 'Coming Soon');
         let sold = vehicles.filter(v => v.status === 'Sold');
 
         // Apply shared filters to both groups
@@ -132,6 +133,7 @@ export default function InventoryPage() {
 
         return {
             availableVehicles: applyFilters(available),
+            comingSoonVehicles: applyFilters(comingSoon),
             soldVehicles: applyFilters(sold)
         };
     }, [vehicles, searchQuery, filterMake, filterType, priceRange, yearRange, sortBy]);
@@ -306,6 +308,24 @@ export default function InventoryPage() {
                         </div>
                     )}
                 </section>
+
+                {/* ═══════════ COMING SOON ═══════════ */}
+                {comingSoonVehicles.length > 0 && (
+                    <section style={{ marginTop: '4rem' }}>
+                        <div className="inv-section-header">
+                            <h2 className="inv-section-title">
+                                <span className="inv-status-dot" style={{ backgroundColor: '#f39c12' }}></span>
+                                COMING SOON
+                            </h2>
+                            <span className="inv-section-count">{comingSoonVehicles.length} UNITS</span>
+                        </div>
+                        <div className="vehicle-results-grid" style={{ gridTemplateColumns: `repeat(${gridCols}, 1fr)` }}>
+                            {comingSoonVehicles.map(vehicle => (
+                                <VehicleCard key={vehicle.id} vehicle={vehicle} estPayment={getEstPayment(vehicle.price)} />
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* ═══════════ SOLD VEHICLES ═══════════ */}
                 {soldVehicles.length > 0 && (
