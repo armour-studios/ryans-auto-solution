@@ -640,10 +640,10 @@ export default function Navbar() {
           .glass-topbar-inner { display: none !important; }
           .glass-topbar-mobile { display: flex; }
           .glass-nav-links { display: none !important; }
-          .glass-hamburger { display: flex; }
+          .glass-hamburger { display: flex; margin-left: auto; }
           .glass-mobile-drawer { display: block; }
-          .glass-logo { border-right: none; padding-right: 0; margin-right: 0; }
-          .glass-nav-inner { padding: 0.5rem 0; }
+          .glass-logo { border-right: none; padding-right: 0; margin-right: 0; position: absolute; left: 50%; transform: translateX(-50%); }
+          .glass-nav-inner { padding: 0.5rem 1rem; position: relative; }
           .glass-mobile-drawer.open { max-height: 85vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
           .glass-mobile-link { padding: 1rem 1.5rem; font-size: 0.92rem; min-height: 48px; }
           .glass-mobile-cta { padding: 1rem; font-size: 0.92rem; min-height: 48px; }
