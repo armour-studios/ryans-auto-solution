@@ -8,7 +8,7 @@ const ALLOWED_ORIGINS = [
     'https://ryansautosolution.com',
 ];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     // ── CORS for API routes ──────────────────────────────────────────────────
     if (request.nextUrl.pathname.startsWith('/api')) {
         const origin = request.headers.get('origin') ?? '';
