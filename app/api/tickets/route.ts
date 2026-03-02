@@ -18,6 +18,9 @@ export interface Ticket {
     updated_at: string;
 }
 
+const SITE_URL = 'https://ryansautosolution.com';
+const LOGO_URL = 'https://ryansautosolution.com/uploads/ryansautoblack.png';
+
 async function sendDiscordWebhook(ticket: Ticket) {
     const priorityColors: Record<string, number> = {
         low: 0x27ae60,
@@ -25,11 +28,11 @@ async function sendDiscordWebhook(ticket: Ticket) {
         high: 0xe67e22,
         critical: 0xe74c3c,
     };
-    const priorityEmoji: Record<string, string> = {
-        low: '[LOW]',
-        medium: '[MEDIUM]',
-        high: '[HIGH]',
-        critical: '[CRITICAL]',
+    const priorityLabel: Record<string, string> = {
+        low: 'Low',
+        medium: 'Medium',
+        high: 'High',
+        critical: 'Critical',
     };
     const categoryLabel: Record<string, string> = {
         bug: 'Bug',
@@ -39,19 +42,30 @@ async function sendDiscordWebhook(ticket: Ticket) {
         other: 'Other',
     };
 
+    const affectedUrl = ticket.page_url
+        ? (ticket.page_url.startsWith('http') ? ticket.page_url : `${SITE_URL}${ticket.page_url.startsWith('/') ? '' : '/'}${ticket.page_url}`)
+        : SITE_URL;
+
     const embed = {
-        title: `${priorityEmoji[ticket.priority]} [${ticket.priority.toUpperCase()}] ${ticket.title}`,
+        author: {
+            name: "Ryan's Auto Solution",
+            url: SITE_URL,
+            icon_url: LOGO_URL,
+        },
+        title: `[${ticket.priority.toUpperCase()}] ${ticket.title}`,
+        url: affectedUrl,
         description: ticket.description,
         color: priorityColors[ticket.priority] ?? 0x0f71b1,
+        thumbnail: { url: LOGO_URL },
         fields: [
             { name: 'Category', value: categoryLabel[ticket.category] ?? ticket.category, inline: true },
-            { name: 'Priority', value: ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1), inline: true },
+            { name: 'Priority', value: priorityLabel[ticket.priority] ?? ticket.priority, inline: true },
             { name: 'Submitted By', value: ticket.submitted_by || 'Unknown', inline: true },
-            ...(ticket.page_url ? [{ name: 'Affected Page', value: ticket.page_url, inline: false }] : []),
+            ...(ticket.page_url ? [{ name: 'Affected Page', value: affectedUrl, inline: false }] : []),
             { name: 'Ticket ID', value: `\`${ticket.id}\``, inline: true },
             { name: 'Status', value: 'Open', inline: true },
         ],
-        footer: { text: "Ryan's Auto Solution - Bug Tracker" },
+        footer: { text: "Ryan's Auto Solution — Bug Tracker", icon_url: LOGO_URL },
         timestamp: ticket.created_at,
     };
 
