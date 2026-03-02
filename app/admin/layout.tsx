@@ -89,13 +89,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             }}>
                 {/* Brand */}
                 <div style={{ marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #1e1e1e', textAlign: 'center' }}>
-                    <Link href="/admin" style={{ display: 'block', textDecoration: 'none' }}>
-                        <div style={{ fontFamily: 'var(--font-barlow, \'Barlow\', sans-serif)', fontStyle: 'normal', lineHeight: 1.1 }}>
-                            <div style={{ fontSize: '1.35rem', fontWeight: '900', color: '#fff', letterSpacing: '1px', textTransform: 'uppercase' }}>Ryan&apos;s</div>
-                            <div style={{ fontSize: '0.95rem', fontWeight: '900', color: '#0f71b1', letterSpacing: '1px', textTransform: 'uppercase' }}>Auto Solution</div>
-                        </div>
+                    <Link href="/admin" style={{ display: 'flex', justifyContent: 'center', textDecoration: 'none' }}>
+                        <Image src="/uploads/ryansautowhite.png" alt="Ryan's Auto Solution" width={160} height={54} style={{ objectFit: 'contain' }} priority />
                     </Link>
-                    <div style={{ fontSize: '0.65rem', color: '#888', textTransform: 'uppercase', letterSpacing: '2px', marginTop: '0.5rem' }}>Admin Console</div>
+                    <div style={{ fontSize: '0.65rem', color: '#888', textTransform: 'uppercase', letterSpacing: '2px', marginTop: '0.75rem' }}>Admin Console</div>
                 </div>
 
                 {/* Nav */}
