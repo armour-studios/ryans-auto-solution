@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdminClient } from '@/lib/supabase';
 import { getInventory, saveInventory, Vehicle } from '@/lib/inventory';
+import { revalidatePath } from 'next/cache';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -21,6 +22,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
         inventory[index] = updatedVehicle;
         await saveInventory(inventory);
+
+        revalidatePath('/');
+        revalidatePath('/inventory');
+        revalidatePath(`/inventory/${id}`);
 
         return NextResponse.json(updatedVehicle);
     } catch (error) {
@@ -43,6 +48,11 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         if (error) {
             throw new Error(`Supabase error: ${error.message}`);
         }
+
+        revalidatePath('/');
+        revalidatePath('/inventory');
+        revalidatePath(`/inventory/${id}`);
+
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Error deleting vehicle:', error);

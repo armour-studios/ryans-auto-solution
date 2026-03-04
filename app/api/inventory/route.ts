@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getInventory, saveInventory, Vehicle } from '@/lib/inventory';
 import { postVehicleToFacebook } from '@/lib/facebook';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
     const inventory = await getInventory();
@@ -53,6 +54,10 @@ export async function POST(request: Request) {
                 facebookResult = { success: false, error: 'Failed to post to Facebook' };
             }
         }
+
+        revalidatePath('/');
+        revalidatePath('/inventory');
+        revalidatePath(`/inventory/${newVehicle.id}`);
 
         return NextResponse.json({
             ...newVehicle,
